@@ -455,7 +455,9 @@ class TsProto(object):
         to putting in ts.tseries.shape.
         """
 
-        if isinstance(self.tseries, list):
+        if self.tseries is None:
+            return None
+        elif isinstance(self.tseries, list):
             return np.array(self.tseries).shape
         else:
             return self.tseries.shape

@@ -344,6 +344,12 @@ class TestTsProto(unittest.TestCase):
         self.assertTupleEqual(self.ts.shape(), self.ts.tseries.shape)
 
         ts = TsProto()
+
+        # test blank TsProto
+        ts = TsProto()
+        self.assertIsNone(ts.shape(), None)
+
+        # now with data
         ts.dseries = np.arange(100)
         ts.tseries = np.arange(200).reshape(100, 2)
 

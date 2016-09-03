@@ -895,6 +895,18 @@ class TestTimeseries(unittest.TestCase):
         self.assertEqual('end-of-period: True', str_ts[5])
         self.assertEqual('shape: (10,)', str_ts[6])
 
+
+        # test blank Timeseries
+        ts = Timeseries()
+        str_ts = str(ts).split('\n')
+        self.assertEqual('<Timeseries>', str_ts[0])
+        self.assertEqual('key: ', str_ts[1])
+        self.assertEqual("columns: []", str_ts[2])
+        self.assertEqual('frequency: d', str_ts[3])
+        self.assertEqual("daterange: (None, None)", str_ts[4])
+        self.assertEqual('end-of-period: True', str_ts[5])
+        self.assertEqual('shape: None', str_ts[6])
+
     def test_timeseries_set_zeros(self):
         """ This function tests whether the timeseries can be set to zeros. """
         ts = self.ts.clone()
@@ -976,6 +988,11 @@ class TestTimeseries(unittest.TestCase):
             (
                 datetime(2016, 1, 1, 0, 0, 0),
                 datetime(2016, 1, 1, 0, 0, 19)))
+
+        # test blank Timeseries
+        ts = Timeseries()
+        self.assertTupleEqual(ts.daterange(), (None, None))
+
 
     def test_timeseries_years(self):
         """Tests returning the ending values by years in a dict."""

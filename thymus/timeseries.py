@@ -867,7 +867,11 @@ class Timeseries(TsProto):
                  datetime.datetime(2016, 1, 9, 0, 0))
 
         """
-        start_date, end_date = (self.dseries.min(), self.dseries.max())
+
+        if self.dseries is not None:
+            start_date, end_date = (self.dseries.min(), self.dseries.max())
+        else:
+            return (None, None)
 
         if fmt == 'str':
             dt_type = self.get_date_series_type()
