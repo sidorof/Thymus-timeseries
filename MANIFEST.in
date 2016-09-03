@@ -1,0 +1,14 @@
+include LICENSE.txt
+include README.md
+include README.html
+
+
+recursive-include thymus *
+recursive-include tests *
+
+recursive-exclude thymus .coverage
+
+exclude thymus/exclude
+
+prune __pycache__
+
