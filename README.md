@@ -2,7 +2,8 @@
 # Thymus-timeseries
 
 An intuitive library tracking dates and timeseries in common using numpy
-arrays. 
+arrays.
+
 When working with arrays of timeseries, the manipulation process can easily
 cause mismatching sets of arrays in time, arrays in the wrong order, slow down
 the analysis, and lead to generally spending more time to ensure consistency.
@@ -10,14 +11,17 @@ the analysis, and lead to generally spending more time to ensure consistency.
 This library attempts to address the problem in a way that enables ready access
 to the current date range, but stays out of your way most of the time.
 Essentially, this library is a wrapper around numpy arrays.
+
 This library grew out of the use of market and trading data. The
 timeseries is typically composed of regular intervals but with gaps
 such as weekends and holidays. In the case of intra-day data, there are
-interuptions due to periods when the market is closed or gaps in trading. 
+interuptions due to periods when the market is closed or gaps in trading.
+
 While the library grew from addressing issues associated with market
 data, the implementation does not preclude use in other venues. Direct
 access to the numpy arrays is expected and the point of being able to use the
-libary. 
+libary.
+
 ## Dependencies
 
 Other than NumPy being installed, there are no other requirements.
@@ -26,12 +30,13 @@ Other than NumPy being installed, there are no other requirements.
 
 sudo pip install thymus-timeseries
 
-    
-## A Brief Look at Capabilities. 
+## A Brief Look at Capabilities.
+
 ### Creating a Small Sample Timeseries Object
-        
+
 As a first look, we will create a small timeseries object and show a few ways
-that it can used. For this example, we will use daily data.<pre><code>
+that it can used. For this example, we will use daily data.
+<pre><code>
 
         from datetime import datetime
         import numpy as np
@@ -61,7 +66,8 @@ While normal usage of the timeseries object would involve pulling data from a
 database and inserting data into the timeseries object, we will use a
 quick-and-dirty method of inputting some data. Dates are stored as either
 ordinals or timestamps, avoiding clogging up memory with large sets of datetime
-objects. Because it is daily data, ordinals will be used for this example. <pre><code>
+objects. Because it is daily data, ordinals will be used for this example.
+<pre><code>
 
         ts = Timeseries()
     
@@ -81,8 +87,10 @@ either __dseries__ (the dates) and a numpy array to __tseries__ (the values).
 The use of the __make_arrays()__ function converts the date series to an int32
 array (because they are ordinal values) and __tseries__ to a float64 array. The
 idea is that the data might often enter the timeseries object as lists, but
-then be converted to arrays of appropriate format for use. 
-The completed timeseries object is: <pre><code>
+then be converted to arrays of appropriate format for use.
+
+The completed timeseries object is:
+<pre><code>
 
         print(ts)
     
@@ -97,11 +105,13 @@ The completed timeseries object is: <pre><code>
 You can see that the date range contained in the date series. The shape refers
 to the shape of the __tseries__ array. __key__ and __columns__ are free-form,
 available to update as appropriate to identify the timeseries and content of
-the columns. Again, the __end-of-period__ flag can be ignored right now. 
+the columns. Again, the __end-of-period__ flag can be ignored right now.
+
 ## Selection
 
 Selection of elements is the same as numpy arrays. Currently, our sample has
-10 elements. <pre><code>
+10 elements.
+<pre><code>
 
         print(ts[:5])
         <Timeseries>
@@ -112,14 +122,16 @@ Selection of elements is the same as numpy arrays. Currently, our sample has
         end-of-period: True
         shape: (5,)    
 </code></pre>
-Note how the date range above reflects the selected elements.<pre><code>
+Note how the date range above reflects the selected elements.
+<pre><code>
 
         ts1 = ts % 2 == 0
         ts1.tseries
         [ True False  True False  True False  True False  True False]    
 </code></pre>
 
-We can isolate the dates of even numbers:<pre><code>
+We can isolate the dates of even numbers:
+<pre><code>
 
     
         # note that tseries not the timeseries obj is explicitly used with
@@ -140,7 +152,8 @@ We can isolate the dates of even numbers:<pre><code>
 ## Date-based Selection
 
 So let us use a slightly larger timeseries. 1000 rows 2 columns of data. And,
-use random values to ensure uselessness.<pre><code>
+use random values to ensure uselessness.
+<pre><code>
 
         ts = Timeseries()
     
@@ -164,7 +177,8 @@ use random values to ensure uselessness.<pre><code>
 
 You can select on the basis of date ranges, but first we will use a row number
 technique that is based on slicing. This function is called __trunc()__ for
-truncation.<pre><code>
+truncation.
+<pre><code>
 
         # normal truncation -- you will end up with a timeseries with row 100
         # through 499. This provides in-place execution.
@@ -174,7 +188,8 @@ truncation.<pre><code>
         ts1 = ts.trunc(start=100, finish=500, new=True)
 </code></pre>
 But suppose you want to select a specific date range? This leads to the next
-function, __truncdate()__.<pre><code>
+function, __truncdate()__.
+<pre><code>
 
         # select using datetime objects
         ts1 = ts.truncdate(
@@ -198,8 +213,10 @@ __truncdate()__ it selects everything within the date range inclusive of the
 ending date as well. The idea is to avoid having to always find one day after
 the date range that you want to select to accommodate slicing behavior. This
 way is more convenient.
+
 You can also convert data from a higer frequency to a lower frequency. Suppose
-we needed monthly data for 2017 from our timeseries. <pre><code>
+we needed monthly data for 2017 from our timeseries.
+<pre><code>
 
         start = datetime(2017, 1, 1)
         finish = datetime(2017, 12, 31)
@@ -207,47 +224,51 @@ we needed monthly data for 2017 from our timeseries. <pre><code>
     
         print(ts1.items('str'))
     
-        ('2017-01-31', '[0.47040689481584597, 0.7422603897542626]')
-        ('2017-02-28', '[0.9345208083622927, 0.8949809543716019]')
-        ('2017-03-31', '[0.36145737413840884, 0.7706176096309583]')
-        ('2017-04-30', '[0.5763166829818849, 0.06518337991617973]')
-        ('2017-05-31', '[0.05362603372934627, 0.0783761719379894]')
-        ('2017-06-30', '[0.4429818128222949, 0.20645214988169247]')
-        ('2017-07-31', '[0.8872466507388754, 0.431064988279641]')
-        ('2017-08-31', '[0.76510558146622, 0.2339111191567288]')
-        ('2017-09-30', '[0.44611590324881056, 0.7770797930057873]')
-        ('2017-10-31', '[0.35037909320460137, 0.8064880435953224]')
-        ('2017-11-30', '[0.5913911215829671, 0.40568922575480215]')
-        ('2017-12-31', '[0.13923869486105367, 0.35915120475069917]')
+        ('2017-01-31', '[0.5337592260772105, 0.7457151485660168]')
+        ('2017-02-28', '[0.7117597144696576, 0.15450646267211043]')
+        ('2017-03-31', '[0.007293618566164839, 0.1966124518900303]')
+        ('2017-04-30', '[0.7978595162004343, 0.9082499272317017]')
+        ('2017-05-31', '[0.1682305662614494, 0.24902296287114545]')
+        ('2017-06-30', '[0.21397105218241852, 0.5133422962765793]')
+        ('2017-07-31', '[0.608808266432149, 0.0822199411010196]')
+        ('2017-08-31', '[0.03887216268006155, 0.2990277183039416]')
+        ('2017-09-30', '[0.9753160397694753, 0.2950712689750776]')
+        ('2017-10-31', '[0.1919822796809233, 0.034837679421470646]')
+        ('2017-11-30', '[0.853937974649159, 0.2687882704482163]')
+        ('2017-12-31', '[0.30908173514741344, 0.6793133458006015]')
 </code></pre>
 Or yearly. In this case, we use a flag that governs whether to include the partial period
 leading up to the last year. The default includes it. However, when unwanted the flag,
-__include_partial__ can be set to False.<pre><code>
+__include_partial__ can be set to False.
+<pre><code>
 
         ts1 = ts.convert('y', include_partial=True)
     
         print(ts1.items('str'))
     
-        ('2015-12-31', '[0.043902176593994424, 0.6814247684687539]')
-        ('2016-12-31', '[0.27776865149150975, 0.24116400197083976]')
-        ('2017-12-31', '[0.13923869486105367, 0.35915120475069917]')
-        ('2018-09-25', '[0.6206295579166512, 0.13350564040815882]')
+        ('2015-12-31', '[0.5005782826520331, 0.7758827135543059]')
+        ('2016-12-31', '[0.13158592887511067, 0.3312351253363547]')
+        ('2017-12-31', '[0.30908173514741344, 0.6793133458006015]')
+        ('2018-09-25', '[0.5075429368290051, 0.6102325212242873]')
     
         ts2 = ts.convert('y', include_partial=False)
     
         print(ts2.items('str'))
     
-        ('2015-12-31', '[[0.043902176593994424, 0.6814247684687539]]')
-        ('2016-12-31', '[[0.27776865149150975, 0.24116400197083976]]')
-        ('2017-12-31', '[[0.13923869486105367, 0.35915120475069917]]') 
+        ('2015-12-31', '[[0.5005782826520331, 0.7758827135543059]]')
+        ('2016-12-31', '[[0.13158592887511067, 0.3312351253363547]]')
+        ('2017-12-31', '[[0.30908173514741344, 0.6793133458006015]]') 
 </code></pre>
 ## Combining Timeseries
+
 Suppose you want to combine multiple timeseries together that are of different
 lengths? In this case we assume that the two timeseries end on the same date,
 but one has a longer tail than the other. However, the operation that you need
 requires common dates.
+
 By __combine__ we mean instead of two timeseries make one timeseries that has
-the columns of both.<pre><code>
+the columns of both.
+<pre><code>
 
         ts_short = Timeseries()
         ts_long = Timeseries()
@@ -281,7 +302,8 @@ the columns of both.<pre><code>
 The combine function has a couple variations. While it can be helpful to automatically discard the
 unwanted rows, you can also enforce that combining does not take place if the number of rows do not
 match. Also, you can build out the missing information with padding to create a timeseries that has
-the length of the longest timeseries.<pre><code>
+the length of the longest timeseries.
+<pre><code>
 
         # this would raise an error -- the two are different lengths
         ts_combine = ts_short.combine(ts_long discard=False)
@@ -301,7 +323,8 @@ the length of the longest timeseries.<pre><code>
         ('2016-12-23', '[99.0, 1.0]')
         ('2016-12-22', '[99.0, 1.0]')
 </code></pre>
-The combining can also receive multiple timeseries.<pre><code>
+The combining can also receive multiple timeseries.
+<pre><code>
 
     
         ts_combine = ts_short.combine([ts_long, ts_long, ts_long])
@@ -319,7 +342,8 @@ In some ways it would make sense to have mirror the __combine()__ function
 with a __split()__ from an aesthetic standpoint. However, splitting is very
 straight-forward without such a function. For example, suppose you want a
 timeseries that only has the second column from our previous example. As you
-can see in the ts_split tseries, the first two columns were taken. <pre><code>
+can see in the ts_split tseries, the first two columns were taken.
+<pre><code>
 
         ts_split = ts_combine[:, :2]
     
@@ -342,7 +366,9 @@ adding together are arrays that have exactly the same dateseries, and
 therefore the same length, and we assume they have exactly the same number of
 columns, then the whole question becomes trivial. If we relax those
 constraints, then some choices need to be made.
-We will use the long and short timeseries from the previous example.<pre><code>
+
+We will use the long and short timeseries from the previous example.
+<pre><code>
 
         # this will fail due to dissimilar lengths
         ts_added = ts_short.add(ts_long, match=True)
@@ -388,7 +414,8 @@ if you were add two arrays together that end at the same date, you would want
 to sort them latest date to earliest date using the function
 __sort_by_date()__.
 
-### Examples <pre><code>
+### Examples
+<pre><code>
 
         # starting tseries
         ts.tseries
@@ -405,7 +432,8 @@ __sort_by_date()__.
         5 * ts.tseries
         [  0.   5.  10.  15.  20.  25.  30.  35.  40.  45.]    
 </code></pre>
-Also, in-place operations. But first, we will make a copy.<pre><code>
+Also, in-place operations. But first, we will make a copy.
+<pre><code>
 
         ts1 = ts.clone()
         ts1.tseries /= 3
@@ -450,7 +478,8 @@ Also, in-place operations. But first, we will make a copy.<pre><code>
 
 In other words, the normal container functions you can use with numpy arrays
 are available to the timeseries objects. The following container functions for
-arrays are supported.<pre><code>
+arrays are supported.
+<pre><code>
 
         __pow__ __add__ __rsub__ __sub__    __eq__      __ge__   __gt__   __le__
         __lt__  __mod__ __mul__  __ne__     __radd__    __rmod__ __rmul__ __rpow__
@@ -477,7 +506,8 @@ comparing the list of functions for the timeseries object versus a numpy array. 
 functions of the timeseries object is related to handling the commonality of date series with
 time series. You can see that the bulk of the thymus functions relate to maintenance of the
 coordination betwee the date series and timeseries. The meat of the functions still lie with the
-numpy arrays. <pre><code>
+numpy arrays.
+<pre><code>
 
     # timeseries members and functions:
     ts.add                   ts.daterange             ts.get_pcdiffs           ts.series_direction
@@ -515,7 +545,8 @@ numpy arrays. <pre><code>
 </code></pre>
 ### Other Date Functions
 
-Variations on a theme:<pre><code>
+Variations on a theme:
+<pre><code>
 
         # truncation
         ts.truncdate(
@@ -548,7 +579,8 @@ Variations on a theme:<pre><code>
         ts.truncdate(
             [datetime(2017, 1, 1), datetime(2017, 12, 31)])
 </code></pre>
-## Assorted Date Functions <pre><code>
+## Assorted Date Functions
+<pre><code>
 
         # native format
         ts.daterange()
@@ -577,7 +609,8 @@ Variations on a theme:<pre><code>
 Sometimes it is helpful to find a particular row based on the date. Also, that date might not be in
 the dateseries, and so, the closest date will suffice.
 
-We will create a sample timeseries to illustrate. <pre><code>
+We will create a sample timeseries to illustrate.
+<pre><code>
 
         ts = Timeseries()
         ts.dseries = []
@@ -1058,4 +1091,3 @@ We will create a sample timeseries to illustrate. <pre><code>
 
         This is just a stub to suggest a viable name for saving data to a
         database.
-
