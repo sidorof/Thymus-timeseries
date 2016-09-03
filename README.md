@@ -28,7 +28,7 @@ Other than NumPy being installed, there are no other requirements.
 
 ## Installation
 
-sudo pip install thymus-timeseries
+pip install thymus-timeseries
 
 ## A Brief Look at Capabilities.
 
@@ -77,13 +77,13 @@ objects. Because it is daily data, ordinals will be used for this example.
     ts.make_arrays() 
 ```
 We created an initial timeseries object. It starts at the end of
-2015 and continues for 10 days. Setting the values in __dseries__ and
-__tseries__
+2015 and continues for 10 days. Setting the values in **dseries** and
+**tseries**
 can be somewhat sloppy. For example, a list could be assigned initially to
-either __dseries__ (the dates) and a numpy array to __tseries__ (the values).
+either **dseries** (the dates) and a numpy array to **tseries** (the values).
 
-The use of the __make_arrays()__ function converts the date series to an int32
-array (because they are ordinal values) and __tseries__ to a float64 array. The
+The use of the **make_arrays()** function converts the date series to an int32
+array (because they are ordinal values) and **tseries** to a float64 array. The
 idea is that the data might often enter the timeseries object as lists, but
 then be converted to arrays of appropriate format for use.
 
@@ -99,10 +99,10 @@ The completed timeseries object is:
     end-of-period: True
     shape: (10,)    
 ```
-You can see that the date range contained in the date series. The shape refers
-to the shape of the __tseries__ array. __key__ and __columns__ are free-form,
+You can see the date range contained in the date series. The shape refers
+to the shape of the **tseries** array. **key** and **columns** are free-form,
 available to update as appropriate to identify the timeseries and content of
-the columns. Again, the __end-of-period__ flag can be ignored right now.
+the columns. Again, the **end-of-period** flag can be ignored right now.
 
 ## Selection
 
@@ -167,7 +167,7 @@ use random values to ensure uselessness.
 ```
 
 You can select on the basis of date ranges, but first we will use a row number
-technique that is based on slicing. This function is called __trunc()__ for
+technique that is based on slicing. This function is called **trunc()** for
 truncation.
 ```
     # normal truncation -- you will end up with a timeseries with row 100
@@ -178,7 +178,7 @@ truncation.
     ts1 = ts.trunc(start=100, finish=500, new=True)
 ```
 But suppose you want to select a specific date range? This leads to the next
-function, __truncdate()__.
+function, **truncdate()**.
 ```
     # select using datetime objects
     ts1 = ts.truncdate(
@@ -198,7 +198,7 @@ function, __truncdate()__.
 ```
 As you might expect, the timeseries object has a date range of all the days
 during 2017. But see how this is slightly different than slicing. When you use
-__truncdate()__ it selects everything within the date range inclusive of the
+**truncdate()** it selects everything within the date range inclusive of the
 ending date as well. The idea is to avoid having to always find one day after
 the date range that you want to select to accommodate slicing behavior. This
 way is more convenient.
@@ -212,39 +212,39 @@ we needed monthly data for 2017 from our timeseries.
 
     print(ts1.items('str'))
 
-    ('2017-01-31', '[0.4256221399499366, 0.04176365931891657]')
-    ('2017-02-28', '[0.9144077452223854, 0.5343117901229699]')
-    ('2017-03-31', '[0.9596466746106321, 0.2070648390184583]')
-    ('2017-04-30', '[0.309557840633624, 0.2639990140940277]')
-    ('2017-05-31', '[0.7915865932582928, 0.8650812988418615]')
-    ('2017-06-30', '[0.21879542169808108, 0.5641550504535612]')
-    ('2017-07-31', '[0.3553378711468155, 0.6068557699475634]')
-    ('2017-08-31', '[0.21370390816180107, 0.6042837264554088]')
-    ('2017-09-30', '[0.3910265903510459, 0.28271915935227565]')
-    ('2017-10-31', '[0.6562571273950928, 0.08006476170327237]')
-    ('2017-11-30', '[0.07445905823238141, 0.6473052498587456]')
-    ('2017-12-31', '[0.7968003919418539, 0.6830512672338194]')
+    ('2017-01-31', '[0.21158897978398172, 0.4313314664901444]')
+    ('2017-02-28', '[0.18207341300079893, 0.676565520485715]')
+    ('2017-03-31', '[0.822235720127606, 0.38832568196191664]')
+    ('2017-04-30', '[0.7942378014390812, 0.39768037561661906]')
+    ('2017-05-31', '[0.5238083526871986, 0.31442711401681733]')
+    ('2017-06-30', '[0.6806671169510289, 0.3854388699501724]')
+    ('2017-07-31', '[0.5061413467294482, 0.507763922780628]')
+    ('2017-08-31', '[0.2932525993217573, 0.061995760173915615]')
+    ('2017-09-30', '[0.6696681406550001, 0.8065982739468669]')
+    ('2017-10-31', '[0.5056226390319796, 0.7697960206392382]')
+    ('2017-11-30', '[0.9606233829395509, 0.05008324732662095]')
+    ('2017-12-31', '[0.8742608596194315, 0.144285758801444]')
 ```
 Or yearly. In this case, we use a flag that governs whether to include the partial period
 leading up to the last year. The default includes it. However, when unwanted the flag,
-__include_partial__ can be set to False.
+**include_partial** can be set to False.
 ```
     ts1 = ts.convert('y', include_partial=True)
 
     print(ts1.items('str'))
 
-    ('2015-12-31', '[0.7949480609276547, 0.15500866744309139]')
-    ('2016-12-31', '[0.9437060609862634, 0.2701170929402912]')
-    ('2017-12-31', '[0.7968003919418539, 0.6830512672338194]')
-    ('2018-09-25', '[0.7148532531463696, 0.5502112772242548]')
+    ('2015-12-31', '[0.19389766090092142, 0.9661767885897646]')
+    ('2016-12-31', '[0.4437487325777194, 0.8245917570477388]')
+    ('2017-12-31', '[0.8742608596194315, 0.144285758801444]')
+    ('2018-09-25', '[0.21377919491582664, 0.3018928620306651]')
 
     ts2 = ts.convert('y', include_partial=False)
 
     print(ts2.items('str'))
 
-    ('2015-12-31', '[[0.7949480609276547, 0.15500866744309139]]')
-    ('2016-12-31', '[[0.9437060609862634, 0.2701170929402912]]')
-    ('2017-12-31', '[[0.7968003919418539, 0.6830512672338194]]') 
+    ('2015-12-31', '[[0.19389766090092142, 0.9661767885897646]]')
+    ('2016-12-31', '[[0.4437487325777194, 0.8245917570477388]]')
+    ('2017-12-31', '[[0.8742608596194315, 0.144285758801444]]') 
 ```
 ## Combining Timeseries
 
@@ -253,7 +253,7 @@ lengths? In this case we assume that the two timeseries end on the same date,
 but one has a longer tail than the other. However, the operation that you need
 requires common dates.
 
-By __combine__ we mean instead of two timeseries make one timeseries that has
+By **combine** we mean instead of two timeseries make one timeseries that has
 the columns of both.
 ```
     ts_short = Timeseries()
@@ -321,8 +321,8 @@ The combining can also receive multiple timeseries.
 ```
 ## Splitting Timeseries
 
-In some ways it would make sense to mirror the __combine()__ function
-with a __split()__ from an aesthetic standpoint. However, splitting is very
+In some ways it would make sense to mirror the **combine()** function
+with a **split()** from an aesthetic standpoint. However, splitting is very
 straight-forward without such a function. For example, suppose you want a
 timeseries that only has the the first two columns from our previous example.
 As you can see in the ts_split tseries, the first two columns were taken.
@@ -343,7 +343,7 @@ addition, we looked at the issue of mismatched lengths. Now we will look at
 arithmetic approaches and some of the design decisions and tradeoffs associated
 with mathematical operations.
 
-We will start with the __add()__ function. First, if we assume that all we are
+We will start with the **add()** function. First, if we assume that all we are
 adding together are arrays that have exactly the same dateseries, and
 therefore the same length, and we assume they have exactly the same number of
 columns, then the whole question becomes trivial. If we relax those
@@ -359,11 +359,11 @@ We will use the long and short timeseries from the previous example.
 
     [ 1.  1.  1.  1.  1.  1.  1.  1.  1.  1.]    
 ```
-The __add()__ function checks to see if the number of columns match. If they do
-not an error is raised. If the __match__ flag is True, then it also checks
+The **add()** function checks to see if the number of columns match. If they do
+not an error is raised. If the **match** flag is True, then it also checks
 that all the dates in both timeseries match prior to the operation.
 
-If __match__ is False, then as long as the columns are compatible, the
+If **match** is False, then as long as the columns are compatible, the
 operation can take place. It also supports the concept of sparse arrays as
 well. For example, suppose you have a timeseries that is primary, but you would
 like to add in a timeseries values from only a few dates within the range. This
@@ -371,7 +371,7 @@ function will find the appropriate dates adding in the values at just those
 rows.
 
 To summarize, all dates in common to both timeseries will be included in the
-new timeseries if __match__ is False.
+new timeseries if **match** is False.
 
 Because the previous function is somewhat specialized, you can assume that the
 checking of common dates and creating the new timeseries can be somewhat slower
@@ -389,11 +389,11 @@ all the dates for the periods in common to the timeseries match.
 If we accept those assumptions, then a number of operations become quite easy.
 
 The timeseries object can accept simple arithmetic as if it is an array. It
-automatically passes the values on to the __tseries__ array. If the two arrays
+automatically passes the values on to the **tseries** array. If the two arrays
 are not the same length the longer array is truncated to the shorter length. So
 if you were add two arrays together that end at the same date, you would want
 to sort them latest date to earliest date using the function
-__sort_by_date()__.
+**sort_by_date()**.
 
 ### Examples
 ```
@@ -478,7 +478,7 @@ arrays are supported.
 The purpose the timeseries objects is to implement an intuitive usage of
 timeseries objects in a fashion that is consistent with NumPy. However, it is
 not intended to replace functions that are better handled explicitly with
-the __dseries__ and __tseries__ arrays directly. The difference will be clear
+the **dseries** and **tseries** arrays directly. The difference will be clear
 by
 comparing the list of functions for the timeseries object versus a numpy array. Most of the
 functions of the timeseries object is related to handling the commonality of date series with
@@ -853,7 +853,7 @@ We will create a sample timeseries to illustrate.
             self.truncdate(start=None, finish=None, new=False)
 
         start and finish are dates, input as either datetime or the actual
-        internal format of the __dseries__ (ordinals or timestamps).
+        internal format of the **dseries** (ordinals or timestamps).
 
         If the dates are not actually in the list, the starting date will
         be the next viable date after the start date requested. If the finish
@@ -1032,7 +1032,7 @@ We will create a sample timeseries to illustrate.
 #### ts.get_datetime(date)
 
         This function returns a date as a datetime object.
-        This takes into account the type of date stored in __dseries__.
+        This takes into account the type of date stored in **dseries**.
 
         Usage:
             self.get_datetime(date)

@@ -55,10 +55,11 @@ setup(
         'Topic :: Adaptive Technologies',
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering',
-        'Topic :: Software Development :: Libraries :: Python Modules'
+        'Topic :: Software Development :: Libraries :: Python Modules',
 
         # Pick your license as you wish (should match "license" above)
         'License :: OSI Approved :: MIT License',
+
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
