@@ -1,0 +1,211 @@
+"""
+This module tests the TssList class
+"""
+
+from datetime import datetime
+import numpy as np
+
+import unittest
+
+from thymus.timeseries import Timeseries
+from thymus.tsslist import TssList
+from thymus.tssdict import TssDict
+
+
+class TestTssDict(unittest.TestCase):
+    """ This class tests the class TssDict. """
+    def setUp(self):
+
+        # three timeseries
+        self.ts = Timeseries()
+        self.ts.key = 'Main'
+        self.ts.columns = ['F1']
+
+        start_date = datetime(2015, 12, 31).toordinal()
+        self.ts.dseries = start_date + np.arange(10)
+        self.ts.tseries = np.arange(10)
+        self.ts.make_arrays()
+
+        # longer timeseries
+        self.ts_long = Timeseries()
+        self.ts_long.key = 'Long'
+        start_date = datetime(2015, 12, 31).toordinal()
+        self.ts_long.dseries = start_date + np.arange(20)
+        self.ts_long.tseries = np.arange(20)
+        self.ts_long.make_arrays()
+
+        # shorter timeseries
+        self.ts_short = Timeseries()
+        self.ts_short.key = 'Short'
+        start_date = datetime(2015, 12, 31).toordinal()
+        self.ts_short.dseries = start_date + np.arange(5)
+        self.ts_short.tseries = np.arange(5)
+        self.ts_short.make_arrays()
+
+        self.tssdict = TssDict([self.ts, self.ts_long, self.ts_short])
+
+    def test_class_init_(self):
+        """Test class initialization."""
+
+        self.assertEqual(len(self.tssdict), 3)
+
+        tmp_ts0 = Timeseries()
+        tmp_ts1 = Timeseries()
+        tmp_ts2 = Timeseries()
+
+        tmp_ts0.key = 'ts0'
+        tmp_ts1.key = 'ts1'
+        tmp_ts2.key = 'ts2'
+
+        tssdict = TssDict([tmp_ts0, tmp_ts1, tmp_ts2])
+
+        self.assertEqual(len(tssdict), 3)
+
+        tssdict = TssDict()
+
+        tssdict['ts0'] = tmp_ts0
+        tssdict['ts1'] = tmp_ts1
+        tssdict['ts2'] = tmp_ts2
+
+        self.assertEqual(len(tssdict), 3)
+
+        tssdict = TssDict({
+            tmp_ts0.key: tmp_ts0,
+            tmp_ts1.key: tmp_ts1,
+            tmp_ts2.key: tmp_ts2})
+
+        self.assertEqual(len(tssdict), 3)
+
+    def test_tssdict_min_date(self):
+        """Tests min date """
+
+        # First add a timeseries that is earlier than the others
+        tmp_ts0 = Timeseries()
+        tmp_ts0.key = 'First'
+
+        tmp_ts0.dseries = datetime(2014, 12, 31).toordinal() - np.arange(10)
+        tmp_ts0.tseries = np.arange(10)
+        tmp_ts0.make_arrays()
+
+        self.tssdict[tmp_ts0.key] = tmp_ts0
+
+        self.assertTupleEqual(
+            self.tssdict.min_date(), (datetime(2014, 12, 22), 'First'))
+
+    def test_tssdict_max_date(self):
+        """Tests max date """
+
+        self.assertTupleEqual(
+            self.tssdict.max_date(), (datetime(2016, 1, 19), 'Long'))
+
+    def test_tssdict_combine(self):
+        """
+        A batch of tests combining columns to one timeseries.
+
+        Tests check to see whether the parameters are passed down properly to
+        each timeseries.
+        """
+
+        # combine(self, discard=True, pad=None)
+        ts_new, keys = self.tssdict.combine(discard=True, pad=None)
+
+        # shape corresponds to the shortest length
+        self.assertEqual(
+            ts_new.tseries.shape[0],
+            self.ts_short.tseries.shape[0])
+
+        self.assertEqual(ts_new.tseries.shape[1], 3)
+
+        # combine(self, discard=False, pad=0)
+        ts_new, keys = self.tssdict.combine(discard=False, pad=0)
+
+        # shape corresponds to the longest length
+        self.assertEqual(
+            ts_new.tseries.shape[0],
+            self.ts_long.tseries.shape[0])
+
+        self.assertEqual(ts_new.tseries.shape[1], 3)
+
+
+        # test with TssList
+        tmp_ts0 = Timeseries()
+        tmp_ts0.key = 'First'
+
+        tmp_ts0.dseries = datetime(2014, 12, 31).toordinal() - np.arange(10)
+        tmp_ts0.tseries = np.arange(10)
+        tmp_ts0.make_arrays()
+
+        tmp_ts1 = Timeseries()
+        tmp_ts1.key = 'Second'
+
+        tmp_ts1.dseries = datetime(2014, 12, 31).toordinal() - np.arange(10)
+        tmp_ts1.tseries = np.arange(10)
+        tmp_ts1.make_arrays()
+
+        tssdict = TssDict(TssList([tmp_ts0, tmp_ts1]))
+
+        ts, keys = tssdict.combine()
+
+        self.assertTupleEqual(ts.tseries.shape, (10, 2))
+
+        # test with TssDict
+        tssdict = TssDict(TssDict([tmp_ts0, tmp_ts1]))
+
+        ts, keys = tssdict.combine()
+        self.assertTupleEqual(ts.tseries.shape, (10, 2))
+
+
+    def test_tssdict_get_values(self):
+        """ Tests the ability to locate the correct row of data. """
+
+        date1 = datetime(2016, 1, 4)    # existing date within date series
+        date2 = datetime(2016, 1, 16)   # date falling on a weekend
+
+        # get data from existing date
+        self.assertTupleEqual(
+            self.tssdict.get_values(
+                date=date1, keys=['Main', 'Long', 'Short']),
+            ((4.0, 4.0, 4.0), ('Main', 'Long', 'Short')))
+
+        # attempt to get data from date not present, with notify
+        self.assertRaises(
+            ValueError,
+            self.tssdict.get_values, date2, notify=True)
+
+        # attempt to get data from date not present, no notify
+        self.assertTupleEqual(
+            self.tssdict.get_values(
+                date=date2, keys=['Main', 'Long', 'Short']),
+            ((None, 16.0, None), ('Main', 'Long', 'Short')))
+
+    def test_clone(self):
+        """Verifies that a copy is made."""
+        tssdict = self.tssdict.clone()
+
+        # is it a separate object
+        for key, ts_new in tssdict.items():
+            ts_orig = self.tssdict[key]
+            self.assertNotEqual(ts_new, ts_orig)
+
+        # do the characteristics match up?
+        self.assertEqual(len(tssdict), 3)
+
+    def Test_as_list(self):
+        "Can it return a dict from the list?"
+
+        self.assertTrue(ValueError, self.tss.as_dict)
+
+        test_dict = {}
+        for i in range(len(self.tss)):
+            ts = self.tss[i]
+            ts.key = 'key_%i' % (i)
+            test_dict[ts.key] = ts
+
+        self.assertDictEqual(self.tss.as_dict, test_dict)
+
+    def test_tssdict_do_func(self):
+        pass
+
+
+if __name__ == '__main__':
+    unittest.main()
