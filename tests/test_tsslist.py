@@ -46,10 +46,6 @@ class TestTssList(unittest.TestCase):
 
         self.assertEqual(len(self.tss), 3)
 
-        tmp_ts0 = Timeseries()
-        tmp_ts1 = Timeseries()
-        tmp_ts2 = Timeseries()
-
         tss = TssList()
 
         self.assertEqual(len(tss), 0)
@@ -141,7 +137,6 @@ class TestTssList(unittest.TestCase):
         for i in range(len(tss)):
             ts_orig = self.tss[i]
             ts_new = tss[i]
-            #self.assertEqual(ts_new, ts_orig)
             self.assertNotEqual(ts_new, ts_orig)
 
         # do the characteristics match up?

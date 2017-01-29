@@ -100,7 +100,6 @@ class Timeseries(TsProto):
         else:
             raise ValueError("Invalid date format fmt: %s" % fmt)
 
-
     def end_date(self, fmt=None):
         """
         This funtcion returns the ending date of the timeseries in its native
@@ -884,7 +883,7 @@ class Timeseries(TsProto):
             #   either timestamp or ordinal, pass through as is
             pass
         else:
-            raise ValueError("Invalid response type: %s" % (response))
+            raise ValueError("Invalid fmt type: %s" % (fmt))
 
         return (start_date, end_date)
 

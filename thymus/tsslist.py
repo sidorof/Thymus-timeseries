@@ -6,7 +6,6 @@ This module implements a class derived from lists for working with timeseries.
 from copy import deepcopy
 
 
-
 class TssList(list):
     """
     This class is a way of handling some the routine tasks for groups
@@ -45,7 +44,6 @@ class TssList(list):
             return min(dates)
         else:
             return None
-
 
     def max_date(self):
         """
@@ -121,7 +119,6 @@ class TssList(list):
 
         return dict([(ts_tmp.key, ts_tmp) for ts_tmp in self])
 
-
     # def do_func(self, func, **kwargs):
     #    """
     #    This function accepts and **kwargs and runs that function on each
@@ -132,4 +129,3 @@ class TssList(list):
 
     #    for ts1 in self:
     #        ts1.do_func(func, kwargs)
-

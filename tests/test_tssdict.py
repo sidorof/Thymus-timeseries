@@ -126,7 +126,6 @@ class TestTssDict(unittest.TestCase):
 
         self.assertEqual(ts_new.tseries.shape[1], 3)
 
-
         # test with TssList
         tmp_ts0 = Timeseries()
         tmp_ts0.key = 'First'
@@ -153,7 +152,6 @@ class TestTssDict(unittest.TestCase):
 
         ts, keys = tssdict.combine()
         self.assertTupleEqual(ts.tseries.shape, (10, 2))
-
 
     def test_tssdict_get_values(self):
         """ Tests the ability to locate the correct row of data. """

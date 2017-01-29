@@ -895,7 +895,6 @@ class TestTimeseries(unittest.TestCase):
         self.assertEqual('end-of-period: True', str_ts[5])
         self.assertEqual('shape: (10,)', str_ts[6])
 
-
         # test blank Timeseries
         ts = Timeseries()
         str_ts = str(ts).split('\n')
@@ -993,6 +992,8 @@ class TestTimeseries(unittest.TestCase):
         ts = Timeseries()
         self.assertTupleEqual(ts.daterange(), (None, None))
 
+        # test invalid format flag
+        self.assertRaises(ValueError, self.ts.daterange, fmt='wrong')
 
     def test_timeseries_years(self):
         """Tests returning the ending values by years in a dict."""
