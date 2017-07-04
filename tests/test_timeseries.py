@@ -3,6 +3,7 @@ This module tests the implementation of the timeseries class.
 """
 
 from datetime import datetime, timedelta
+import json
 import numpy as np
 
 import unittest
@@ -38,6 +39,16 @@ class TestTimeseries(unittest.TestCase):
         self.ts_short.dseries = start_date + np.arange(5)
         self.ts_short.tseries = np.arange(5)
         self.ts_short.make_arrays()
+
+        # timeseries with multiple columns
+        self.ts_mult = Timeseries()
+        self.ts_mult.key = 'ts_mult_key'
+        start_date = datetime(2015, 12, 31).toordinal()
+        self.ts_mult.dseries = start_date + np.arange(5)
+        self.ts_mult.tseries = np.arange(10).reshape((5, 2))
+        self.ts_mult.make_arrays()
+
+
 
     def test_class_init_(self):
         """Test class initialization."""
@@ -158,12 +169,12 @@ class TestTimeseries(unittest.TestCase):
             datetime(2015, 12, 31, 0, 0, 0),
             self.ts.get_datetime(date))
 
-    def test_timeseries_as_dict(self):
+    def test_timeseries_to_dict(self):
         """Tests conversion of dates and values to a dict."""
-        tdict = self.ts.as_dict()
+        tdict = self.ts.to_dict()
 
         self.assertDictEqual(
-            tdict,
+            tdict['data'],
             {
                 '735963': 0.0,
                 '735964': 1.0,
@@ -177,10 +188,15 @@ class TestTimeseries(unittest.TestCase):
                 '735972': 9.0
             })
 
-    def test_timeseries_as_list(self):
+        print('to_dict: needs test for header')
+        print('to_dict: needs test for datetime series')
+        print('to_dict: needs test for string dates')
+
+
+    def test_timeseries_to_list(self):
         """Tests conversion of dates and values to a list."""
 
-        tlist = self.ts.as_list()
+        tlist = self.ts.to_list()
 
         self.assertListEqual(
             tlist,
@@ -195,6 +211,92 @@ class TestTimeseries(unittest.TestCase):
                 ('735970', 7.0),
                 ('735971', 8.0),
                 ('735972', 9.0)
+            ])
+
+    def test_timeseries_to_json(self):
+        """
+        Tests conversion of dates and values to json format.
+
+        """
+        print('to_json: only one example tested')
+
+        json_test = self.ts_mult.to_json(dt_fmt='str')
+
+        self.maxDiff = None
+
+        self.assertDictEqual(
+            json.loads(json_test)['header'],
+                {
+                    "end_of_period": True,
+                    "key": "ts_mult_key",
+                    "columns": [],
+                    "frequency": "d"
+                })
+
+        self.assertListEqual(
+            json.loads(json_test)['data'],
+                    [
+                        ["2015-12-31", [0.0, 1.0]],
+                        ["2016-01-01", [2.0, 3.0]],
+                        ["2016-01-02", [4.0, 5.0]],
+                        ["2016-01-03", [6.0, 7.0]],
+                        ["2016-01-04", [8.0, 9.0]]
+                    ],
+                )
+
+    def test_timeseries_from_json(self):
+        """
+        Tests loading a json formatted string to a timeseries object.
+
+        """
+        print('from_json: only one example tested')
+        json_test = """
+            {
+                "data": [
+                    ["2015-12-31", [0.0, 1.0]],
+                    ["2016-01-01", [2.0, 3.0]],
+                    ["2016-01-02", [4.0, 5.0]],
+                    ["2016-01-03", [6.0, 7.0]],
+                    ["2016-01-04", [8.0, 9.0]]
+                ],
+                "header": {
+                    "key": "test_key",
+                    "columns": ["test"],
+                    "frequency": "d",
+                    "end_of_period": true
+                }
+            }
+        """
+
+        ts_tmp = Timeseries()
+
+        ts_tmp.from_json(json_test)
+
+        # header
+        self.assertEqual(ts_tmp.key, 'test_key')
+        self.assertListEqual(ts_tmp.columns, ['test'] )
+        self.assertEqual(ts_tmp.frequency, 'd')
+        self.assertTrue(ts_tmp.end_of_period)
+
+        # dseries
+        self.assertListEqual(
+            ts_tmp.date_string_series(),
+            [
+                "2015-12-31",
+                "2016-01-01",
+                "2016-01-02",
+                "2016-01-03",
+                "2016-01-04"
+           ])
+
+        self.assertListEqual(
+            ts_tmp.tseries.tolist(),
+            [
+                [0.0, 1.0],
+                [2.0, 3.0],
+                [4.0, 5.0],
+                [6.0, 7.0],
+                [8.0, 9.0]
             ])
 
     def test_timeseries_extend(self):
@@ -938,7 +1040,7 @@ class TestTimeseries(unittest.TestCase):
         self.assertDictEqual(
             header_dict,
             {
-                'freqency': 'd',
+                'frequency': 'd',
                 'key': 'Test Key',
                 'columns': ['F1'],
                 'end_of_period': True})

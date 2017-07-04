@@ -3,6 +3,7 @@ This module tests the TssList class
 """
 
 from datetime import datetime
+import json
 import numpy as np
 
 import unittest
@@ -184,6 +185,39 @@ class TestTssList(unittest.TestCase):
             test_dict[ts.key] = ts
 
         self.assertDictEqual(self.tss.as_dict(), test_dict)
+
+    def test_to_json(self):
+        """
+        This function tests sending a TssList to a json format.
+
+        Using a cheap assumption that since it is simply a list, that as long
+        as the timeseries are converted, the list is what is needed to check.
+
+        More needs to be checked.
+        """
+
+        json_str = self.tss.to_json()
+
+        self.assertIsInstance(json.loads(json_str), list)
+
+    def test_from_json(self):
+        """
+        This function tests building back a tsslist from json fmt string.
+
+        This relies heavily on the test for Timeseries.from_json.
+        """
+        json_str = self.tss.to_json()
+
+        tsslist = TssList()
+
+        tsslist.from_json(json_str)
+
+        self.assertEqual(len(tsslist), 3)
+
+        # did it come back in the right order?
+        self.assertTupleEqual(tsslist[0].shape(), self.ts.shape())
+        self.assertTupleEqual(tsslist[1].shape(), self.ts_long.shape())
+        self.assertTupleEqual(tsslist[2].shape(), self.ts_short.shape())
 
     def test_tsslist_do_func(self):
         pass

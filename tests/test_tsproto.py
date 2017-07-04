@@ -96,6 +96,12 @@ class TestTsProto(unittest.TestCase):
                 self.assertTrue(np.array_equal(a_series, b_series))
                 self.assertTrue(ts.if_dseries_match(ts_a))
 
+        # specific tests
+        # decide what to do here. future warning that it will
+        #    be eventually elementwise
+        self.assertTrue(ts_other == None)
+        self.assertTrue(ts_other != None)
+
         for func in unary_flist:
             ts = self.ts.clone()
             ts_a = getattr(ts, func)()

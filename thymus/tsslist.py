@@ -4,6 +4,9 @@ This module implements a class derived from lists for working with timeseries.
 """
 
 from copy import deepcopy
+import json
+
+from .timeseries import Timeseries
 
 
 class TssList(list):
@@ -14,7 +17,7 @@ class TssList(list):
     Assumption:
         This is a list of timeseries of common interest
 
-    Useage:
+    Usage:
         tss = TssList(tss=None)  # where tss is a list of timeseries
 
 
@@ -119,13 +122,38 @@ class TssList(list):
 
         return dict([(ts_tmp.key, ts_tmp) for ts_tmp in self])
 
-    # def do_func(self, func, **kwargs):
-    #    """
-    #    This function accepts and **kwargs and runs that function on each
-    #    timeseries in the list.
+    def to_json(self, indent=2, dt_fmt='str', data_list=True):
+        """
+        This function returns the timeseries list in JSON format.
 
-    #    This does not work yet due to final design incomplete.
-    #    """
+        Usage:
+            self.to_json(indent=2, dt_fmt='str', data_list=True)
 
-    #    for ts1 in self:
-    #        ts1.do_func(func, kwargs)
+        indent: indenting in the JSON output
+        dt_fmt: formatting of the dates. Look at help for
+                    Timeseries.to_dict
+        data_list: Whether data uses a dict for dates as keys or
+                   simply a list.
+                   Default is for a list. Otherwise, sorting the
+                   timeseries in the list would be required.
+
+        """
+        outlist = []
+
+        for ts in self:
+            outlist.append(ts.to_dict(dt_fmt=dt_fmt, data_list=True))
+
+        return json.dumps(outlist, indent=indent)
+
+    def from_json(self, json_str):
+        """
+        This function loads a JSON string and applies it to the object.
+        """
+        self.clear()
+
+        tss_tmp = json.loads(json_str)
+
+        for item in tss_tmp:
+            self.append(Timeseries().from_dict(item))
+
+        return self

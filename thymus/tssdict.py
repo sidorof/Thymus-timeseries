@@ -4,6 +4,7 @@ This module implements a class derived from dicts for working with timeseries.
 """
 
 from copy import deepcopy
+import json
 
 from .tsslist import TssList
 from .timeseries import Timeseries
@@ -19,7 +20,7 @@ class TssDict(dict):
         could be a dict of keys that hold lists of timeseries with some
         commonality.
 
-    Useage:
+    Usage:
         tssdict = TssDict(values=None)
 
     values can be a dict, list, using the key from each timeseries as the
@@ -316,3 +317,54 @@ class TssDict(dict):
         """
 
         return deepcopy(self)
+
+    def to_json(self, indent=2):
+        """This function returns the timeseries dict in JSON format.
+        """
+        outdict = {}
+
+        for key, ts in self.items():
+            outdict[key] = ts.as_json()
+
+        return json.dumps(outdict, indent=indent)
+
+    def to_json(self, indent=2, dt_fmt='str', data_list=True):
+        """
+        This function returns the timeseries dict in JSON format.
+
+        Usage:
+            self.to_json(indent=2, dt_fmt='str', data_list=True)
+
+        indent: indenting in the JSON output
+        dt_fmt: formatting of the dates. Look at help for
+                    Timeseries.to_dict
+        data_list: Whether data uses a dict for dates as keys or
+                   simply a list.
+                   Default is for a list. Otherwise, sorting the
+                   timeseries in the list would be required.
+
+        """
+        outdict = {}
+
+        for key, ts in self.items():
+            outdict[key] = ts.to_dict(dt_fmt=dt_fmt, data_list=True)
+
+        return json.dumps(outdict, indent=indent)
+
+    def from_json(self, json_str):
+        """
+        This function loads a JSON string and applies it to the object.
+        """
+        self.clear()
+
+        tss_tmp = json.loads(json_str)
+
+        if isinstance(tss_tmp, dict):
+
+            for key, value in tss_tmp.items():
+                self[key] = (Timeseries().from_dict(value))
+
+        else:
+            ValueError("Incoming JSON string does not start with a dict.")
+
+        return self

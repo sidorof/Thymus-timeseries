@@ -289,7 +289,12 @@ class TsProto(object):
                 tmp_ts, other = self.common_length(tmp_ts, other)
 
             if other is None:
-                tmp_ts.tseries = getattr(tmp_ts.tseries, func)()
+                # there may be others that should be in this list.
+                #   at the moment, fixing a problem.
+                if func in ('__eq__', '__ne__'):
+                    tmp_ts.tseries = getattr(tmp_ts.tseries, func)(other)
+                else:
+                    tmp_ts.tseries = getattr(tmp_ts.tseries, func)()
             else:
                 if isinstance(other, TsProto):
                     tmp_ts.tseries = getattr(

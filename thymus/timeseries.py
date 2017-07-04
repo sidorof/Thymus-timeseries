@@ -15,8 +15,8 @@ from thymus.freq_conversions import convert
 
 from thymus.tsproto import TsProto
 
-FMT_DATE = '%F'
-FMT_IDATE = '%F %T'
+FMT_DATE = '%Y-%m-%d'
+FMT_IDATE = '%Y-%m-%d %H:%M:%S'
 
 
 class Timeseries(TsProto):
@@ -79,7 +79,7 @@ class Timeseries(TsProto):
         native value, timestamp or ordinal.
 
         If fmt is 'str' returns in string format
-        If fmt is 'datetime' returns in string format
+        If fmt is 'datetime' returns as datetime object
 
         Note: look at consolidating return date formats:
             end_date, get_datetime
@@ -106,7 +106,7 @@ class Timeseries(TsProto):
         value, timestamp or ordinal.
 
         If fmt is 'str' returns in string format
-        If fmt is 'datetime' returns in string format
+        If fmt is 'datetime' returns as datetime object
         """
         if self.series_direction() == 1:
             row_no = -1
@@ -141,32 +141,179 @@ class Timeseries(TsProto):
             raise ValueError("Unknown, dateseries type. %s" % (
                 date_series_type))
 
-    def as_dict(self):
-        """ Returns the time series as a dict with the date as the key. """
+    def to_dict(self, dt_fmt=None, data_list=False):
+        """
+        Returns the time series as a dict with the date as the key.
 
-        return dict([
-            (str(self.dseries[i]), deepcopy(self.tseries[i]))
-            for i in range(self.shape()[0])
-            ])
+        Usage:
+            self.to_dict(dt_fmt=None, data_list=False)
 
-    def as_list(self):
+        This has been reworked to include all fields of the timeseries
+        rather than just dates and times, So header informtion is now included.
+
+        Also, for flexibility, the date can be formatted in various ways:
+            dt_fmt=None       -- native format depending on frequency
+                                 but converted to string
+            dt_fmt='datetime' -- datetime objects
+            dt_fmt='str'      -- converts dates to string using
+                                 FMT_DATE or FMT_IDATE, depending on the
+                                 timeseries type
+        The point of data_list is to signal whether dates should be used
+        as keys in a dict for the values, or whether the dates and values
+        are output as a list.
+
+        This matters because some operations are necessary to target
+        specific dates, but it does not preserve order. Or, if data_list
+        is True, then the combination of dates and values are output as
+        a list and order is maintained.
+
+        """
+        new_dict = {}
+        new_dict['header'] = self.header()
+
+        if dt_fmt is None:
+            # native format, but converted to a string
+            dseries = [str(date) for date in self.dseries.tolist()]
+        elif dt_fmt == 'datetime':
+            dseries = self.datetime_series()
+        elif dt_fmt == 'str':
+            dseries = self.date_string_series()
+        else:
+            raise ValueError("Unsupported dt_fmt: %s" % (dt_fmt))
+
+        tseries = self.tseries.tolist()
+        if data_list:
+            data = [
+                (dseries[i], tseries[i]) for i in range(len(self.tseries))]
+        else:
+            data = dict([
+                (dseries[i], tseries[i]) for i in range(len(self.tseries))])
+
+        new_dict['data'] = data
+
+        return new_dict
+
+    def from_dict(self, ts_dict):
+        """
+        This function accepts a dict and assembles a timeseries.
+
+        Usage:
+            self.from_dict(ts_dict)
+
+        The dict must be:
+            {
+                "header": {
+                     items
+                 },
+                "data": [
+                    [date1, value1],
+                    [date2, value2]
+                ]
+
+        Or, data can be in the form of a dict with the date as the key.
+        The date formatting uses the same rules as creation in self.to_dict.
+
+        If the data portion is a dict rather than a list, the timeseries is
+        sorted in reverse data order by default.
+
+        It loads in-place, but also returns self for use with chaining.
+        """
+        # header
+        header = ts_dict['header']
+        for key, value in header.items():
+            self.__setattr__(key, value)
+
+        data = ts_dict['data']
+
+        do_sort = False
+        if isinstance(data, dict):
+            do_sort = True
+            data = list(data.items())
+
+        # dseries
+        for date, value in data:
+            if self.get_date_series_type() == TS_ORDINAL:
+                fmt = FMT_DATE
+                self.dseries = [
+                    datetime.strptime(item[0], fmt).toordinal()
+                    for item in data]
+            elif self.get_date_series_type() == TS_TIMESTAMP:
+                fmt = FMT_IDATE
+                self.dseries = [
+                    datetime.strptime(item[0], fmt).timestamp()
+                    for item in dstrings]
+            else:
+                raise ValueError("undefined frequency: %s" % self.frequency)
+
+        # tseries
+        self.tseries = [item[1] for item in data]
+
+        self.make_arrays()
+
+        if do_sort:
+            self.sort_by_date(reverse=True, force=True)
+
+        return self
+
+
+    def to_list(self):
         """ Returns the timeseries as a list. """
 
         return [
             (str(self.dseries[i]), deepcopy(self.tseries[i]))
             for i in range(self.shape()[0])]
 
-    def as_json(self, indent=2):
-        """This function returns the timeseries in JSON format.
+    def to_json(self, indent=2, dt_fmt=None, data_list=True):
         """
-        new_dict = {}
-        new_dict['header:'] = self.header()
-        new_dict['data'] = {
-            'dates': self.date_string_series(),
-            'values': self.tseries.tolist()
-            }
+        This function returns the timeseries in JSON format.
 
-        return json.dumps(new_dict, indent=indent)
+        Usage:
+            self.as_json(indent=2, dt_fmt=None, data_list=True)
+
+        dt_fmt options are the same as for to_dict
+
+        """
+        return json.dumps(self.to_dict(dt_fmt, data_list=data_list), indent=indent)
+
+    def from_json(self, json_str):
+        """
+        This function loads a string in JSON format to inhabit a Timeseries
+        object.
+
+        Usage:
+            self.from_json(json_str)
+
+        It looks for a format similar to the following:
+        {
+            "header": {
+                "end_of_period": True,
+                "key": "",
+                "columns": [],
+                "frequency": "d"
+            },
+            "data": [
+                ["2015-12-31", 0.0],
+                ["2016-01-01", 1.0],
+                ["2016-01-02", 2.0],
+                ["2016-01-03", 3.0],
+                ["2016-01-04", 4.0]
+            ]
+        }
+
+        """
+        tmpdict = json.loads(json_str)
+
+        self.from_dict(tmpdict)
+        ## header
+        #header = tmpdict['header']
+        #self.key = header['key']
+        #self.columns = header['columns']
+        #self.frequency = header['frequency']
+        #self.end_of_period = header['end_of_period']
+
+        #data = tmpdict['data']
+
+        return self
 
     def extend(self, ts, overlay=True):
         """
@@ -190,8 +337,8 @@ class Timeseries(TsProto):
         else:
             reverse = False
 
-        self_dict = self.as_dict()
-        ts_dict = ts.as_dict()
+        self_dict = self.to_dict()['data']
+        ts_dict = ts.to_dict()['data']
 
         for tdate in ts_dict.keys():
             if tdate in self_dict.keys():
@@ -247,10 +394,14 @@ class Timeseries(TsProto):
 
         else:
             #   Dates do not have to match up. return an aglomeration of both
-            dates = self_ts.as_dict()
-            dates1 = tmp_ts.as_dict()
+            dates = self_ts.to_dict()['data']
+            dates1 = tmp_ts.to_dict()['data']
             for pdate, value in dates1.items():
-                dates.setdefault(pdate, np.zeros(value.shape))
+                if isinstance(value, float):
+                     dates.setdefault(pdate, 0)
+                else:
+                     shape = len(value)
+                     dates.setdefault(pdate, np.zeros((shape)))
                 dates[pdate] += value
 
             self_ts.dseries = []
@@ -288,8 +439,8 @@ class Timeseries(TsProto):
         self_ts = self.clone()
         tmp_ts = ts.clone()
 
-        self_dates = self_ts.as_dict()
-        ts_dates = tmp_ts.as_dict()
+        self_dates = self_ts.to_dict()['data']
+        ts_dates = tmp_ts.to_dict()['data']
 
         if match:
             for date, value in ts_dates.items():
@@ -437,7 +588,7 @@ class Timeseries(TsProto):
             dseries = []
             tseries = []
             for date, values in sorted(
-                    self.as_dict().items(), reverse=reverse):
+                    self.to_dict()['data'].items(), reverse=reverse):
                 dseries.append(date)
                 tseries.append(values)
             self.dseries = dseries
@@ -829,7 +980,7 @@ class Timeseries(TsProto):
         return {
             'key': self.key,
             'columns': self.columns,
-            'freqency': self.frequency,
+            'frequency': self.frequency,
             'end_of_period': self.end_of_period}
 
     def date_native(self, date):
