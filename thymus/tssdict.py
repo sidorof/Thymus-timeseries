@@ -36,7 +36,7 @@ class TssDict(dict):
             for key, values in values.items():
                 self[key] = values
         elif isinstance(values, list):
-            for i in range(len(values)):
+            for i, ts_tmp in enumerate(values):
                 ts_tmp = values[i]
                 self[ts_tmp.key] = ts_tmp
         else:
@@ -318,16 +318,6 @@ class TssDict(dict):
 
         return deepcopy(self)
 
-    def to_json(self, indent=2):
-        """This function returns the timeseries dict in JSON format.
-        """
-        outdict = {}
-
-        for key, ts in self.items():
-            outdict[key] = ts.as_json()
-
-        return json.dumps(outdict, indent=indent)
-
     def to_json(self, indent=2, dt_fmt='str', data_list=True):
         """
         This function returns the timeseries dict in JSON format.
@@ -347,7 +337,7 @@ class TssDict(dict):
         outdict = {}
 
         for key, ts in self.items():
-            outdict[key] = ts.to_dict(dt_fmt=dt_fmt, data_list=True)
+            outdict[key] = ts.to_dict(dt_fmt=dt_fmt, data_list=data_list)
 
         return json.dumps(outdict, indent=indent)
 

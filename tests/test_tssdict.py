@@ -1,12 +1,12 @@
 """
 This module tests the TssList class
 """
+import unittest
 
 from datetime import datetime
 import json
 import numpy as np
 
-import unittest
 
 from thymus.timeseries import Timeseries
 from thymus.tsslist import TssList
@@ -108,7 +108,7 @@ class TestTssDict(unittest.TestCase):
         """
 
         # combine(self, discard=True, pad=None)
-        ts_new, keys = self.tssdict.combine(discard=True, pad=None)
+        ts_new, _ = self.tssdict.combine(discard=True, pad=None)
 
         # shape corresponds to the shortest length
         self.assertEqual(
@@ -118,7 +118,7 @@ class TestTssDict(unittest.TestCase):
         self.assertEqual(ts_new.tseries.shape[1], 3)
 
         # combine(self, discard=False, pad=0)
-        ts_new, keys = self.tssdict.combine(discard=False, pad=0)
+        ts_new, _ = self.tssdict.combine(discard=False, pad=0)
 
         # shape corresponds to the longest length
         self.assertEqual(
@@ -144,14 +144,14 @@ class TestTssDict(unittest.TestCase):
 
         tssdict = TssDict(TssList([tmp_ts0, tmp_ts1]))
 
-        ts, keys = tssdict.combine()
+        ts, _ = tssdict.combine()
 
         self.assertTupleEqual(ts.tseries.shape, (10, 2))
 
         # test with TssDict
         tssdict = TssDict(TssDict([tmp_ts0, tmp_ts1]))
 
-        ts, keys = tssdict.combine()
+        ts, _ = tssdict.combine()
         self.assertTupleEqual(ts.tseries.shape, (10, 2))
 
     def test_tssdict_get_values(self):
@@ -189,19 +189,6 @@ class TestTssDict(unittest.TestCase):
         # do the characteristics match up?
         self.assertEqual(len(tssdict), 3)
 
-    def Test_as_list(self):
-        "Can it return a dict from the list?"
-
-        self.assertTrue(ValueError, self.tss.as_dict)
-
-        test_dict = {}
-        for i in range(len(self.tss)):
-            ts = self.tss[i]
-            ts.key = 'key_%i' % (i)
-            test_dict[ts.key] = ts
-
-        self.assertDictEqual(self.tss.as_dict, test_dict)
-
     def test_to_json(self):
         """
         This function tests sending a TssList to a json format.
@@ -235,6 +222,7 @@ class TestTssDict(unittest.TestCase):
         self.assertTupleEqual(tssdict['Short'].shape(), self.ts_short.shape())
 
     def test_tssdict_do_func(self):
+        """Placeholder for future function."""
         pass
 
 

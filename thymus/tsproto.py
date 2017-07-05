@@ -472,17 +472,11 @@ class TsProto(object):
         This function returns True if the date series are the same.
         """
 
-        if np.array_equal(self.dseries, ts.dseries):
-            return True
-        else:
-            return False
+        return np.array_equal(self.dseries, ts.dseries)
 
     def if_tseries_match(self, ts):
         """
         This function returns True if the time series are the same.
         """
 
-        if np.array_equal(self.tseries, ts.tseries):
-            return True
-        else:
-            return False
+        return np.array_equal(self.tseries, ts.tseries)

@@ -1,11 +1,10 @@
 """
 This module tests the prototype timeseries class.
 """
+import unittest
 
 from datetime import datetime
 import numpy as np
-
-import unittest
 
 from thymus.constants import FREQ_D, FREQ_SEC
 from thymus.tsproto import TsProto
@@ -99,8 +98,7 @@ class TestTsProto(unittest.TestCase):
         # specific tests
         # decide what to do here. future warning that it will
         #    be eventually elementwise
-        self.assertTrue(ts_other == None)
-        self.assertTrue(ts_other != None)
+        self.assertIsNotNone(ts_other)
 
         for func in unary_flist:
             ts = self.ts.clone()

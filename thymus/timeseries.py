@@ -231,19 +231,18 @@ class Timeseries(TsProto):
             data = list(data.items())
 
         # dseries
-        for date, value in data:
-            if self.get_date_series_type() == TS_ORDINAL:
-                fmt = FMT_DATE
-                self.dseries = [
-                    datetime.strptime(item[0], fmt).toordinal()
-                    for item in data]
-            elif self.get_date_series_type() == TS_TIMESTAMP:
-                fmt = FMT_IDATE
-                self.dseries = [
-                    datetime.strptime(item[0], fmt).timestamp()
-                    for item in dstrings]
-            else:
-                raise ValueError("undefined frequency: %s" % self.frequency)
+        if self.get_date_series_type() == TS_ORDINAL:
+            fmt = FMT_DATE
+            self.dseries = [
+                datetime.strptime(item[0], fmt).toordinal()
+                for item in data]
+        elif self.get_date_series_type() == TS_TIMESTAMP:
+            fmt = FMT_IDATE
+            self.dseries = [
+                datetime.strptime(item[0], fmt).timestamp()
+                for item in dstrings]
+        else:
+            raise ValueError("undefined frequency: %s" % self.frequency)
 
         # tseries
         self.tseries = [item[1] for item in data]
@@ -254,7 +253,6 @@ class Timeseries(TsProto):
             self.sort_by_date(reverse=True, force=True)
 
         return self
-
 
     def to_list(self):
         """ Returns the timeseries as a list. """
@@ -273,7 +271,8 @@ class Timeseries(TsProto):
         dt_fmt options are the same as for to_dict
 
         """
-        return json.dumps(self.to_dict(dt_fmt, data_list=data_list), indent=indent)
+        return json.dumps(
+            self.to_dict(dt_fmt, data_list=data_list), indent=indent)
 
     def from_json(self, json_str):
         """
@@ -304,14 +303,6 @@ class Timeseries(TsProto):
         tmpdict = json.loads(json_str)
 
         self.from_dict(tmpdict)
-        ## header
-        #header = tmpdict['header']
-        #self.key = header['key']
-        #self.columns = header['columns']
-        #self.frequency = header['frequency']
-        #self.end_of_period = header['end_of_period']
-
-        #data = tmpdict['data']
 
         return self
 
@@ -398,10 +389,10 @@ class Timeseries(TsProto):
             dates1 = tmp_ts.to_dict()['data']
             for pdate, value in dates1.items():
                 if isinstance(value, float):
-                     dates.setdefault(pdate, 0)
+                    dates.setdefault(pdate, 0)
                 else:
-                     shape = len(value)
-                     dates.setdefault(pdate, np.zeros((shape)))
+                    shape = len(value)
+                    dates.setdefault(pdate, np.zeros((shape)))
                 dates[pdate] += value
 
             self_ts.dseries = []
@@ -510,7 +501,7 @@ class Timeseries(TsProto):
                 ts_ref = tss[max_lens.index(max_len)]
                 ts_ref_len = ts_ref.tseries.shape[0]
 
-                for i in range(len(tss)):
+                for i, tmp_ts in enumerate(tss):
                     tmp_ts = tss[i].clone()
                     ts_len = tmp_ts.tseries.shape[0]
 

@@ -1,12 +1,11 @@
 """
 This module tests the TssList class
 """
+import unittest
 
 from datetime import datetime
 import json
 import numpy as np
-
-import unittest
 
 from thymus.timeseries import Timeseries
 from thymus.tsslist import TssList
@@ -135,9 +134,9 @@ class TestTssList(unittest.TestCase):
         tss = self.tss.clone()
 
         # is it a separate object
-        for i in range(len(tss)):
+        for i, ts_new in enumerate(tss):
             ts_orig = self.tss[i]
-            ts_new = tss[i]
+            self.assertIsInstance(ts_orig, Timeseries)
             self.assertNotEqual(ts_new, ts_orig)
 
         # do the characteristics match up?
@@ -220,6 +219,7 @@ class TestTssList(unittest.TestCase):
         self.assertTupleEqual(tsslist[2].shape(), self.ts_short.shape())
 
     def test_tsslist_do_func(self):
+        """Placeholder for future function."""
         pass
 
 

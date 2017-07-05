@@ -48,8 +48,6 @@ class TestTimeseries(unittest.TestCase):
         self.ts_mult.tseries = np.arange(10).reshape((5, 2))
         self.ts_mult.make_arrays()
 
-
-
     def test_class_init_(self):
         """Test class initialization."""
         tmp_ts = Timeseries()
@@ -192,7 +190,6 @@ class TestTimeseries(unittest.TestCase):
         print('to_dict: needs test for datetime series')
         print('to_dict: needs test for string dates')
 
-
     def test_timeseries_to_list(self):
         """Tests conversion of dates and values to a list."""
 
@@ -226,23 +223,22 @@ class TestTimeseries(unittest.TestCase):
 
         self.assertDictEqual(
             json.loads(json_test)['header'],
-                {
-                    "end_of_period": True,
-                    "key": "ts_mult_key",
-                    "columns": [],
-                    "frequency": "d"
-                })
+            {
+                "end_of_period": True,
+                "key": "ts_mult_key",
+                "columns": [],
+                "frequency": "d"
+            })
 
         self.assertListEqual(
             json.loads(json_test)['data'],
-                    [
-                        ["2015-12-31", [0.0, 1.0]],
-                        ["2016-01-01", [2.0, 3.0]],
-                        ["2016-01-02", [4.0, 5.0]],
-                        ["2016-01-03", [6.0, 7.0]],
-                        ["2016-01-04", [8.0, 9.0]]
-                    ],
-                )
+            [
+                ["2015-12-31", [0.0, 1.0]],
+                ["2016-01-01", [2.0, 3.0]],
+                ["2016-01-02", [4.0, 5.0]],
+                ["2016-01-03", [6.0, 7.0]],
+                ["2016-01-04", [8.0, 9.0]]
+            ])
 
     def test_timeseries_from_json(self):
         """
@@ -274,7 +270,7 @@ class TestTimeseries(unittest.TestCase):
 
         # header
         self.assertEqual(ts_tmp.key, 'test_key')
-        self.assertListEqual(ts_tmp.columns, ['test'] )
+        self.assertListEqual(ts_tmp.columns, ['test'])
         self.assertEqual(ts_tmp.frequency, 'd')
         self.assertTrue(ts_tmp.end_of_period)
 
@@ -286,8 +282,7 @@ class TestTimeseries(unittest.TestCase):
                 "2016-01-01",
                 "2016-01-02",
                 "2016-01-03",
-                "2016-01-04"
-           ])
+                "2016-01-04"])
 
         self.assertListEqual(
             ts_tmp.tseries.tolist(),
