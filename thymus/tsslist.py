@@ -122,6 +122,19 @@ class TssList(list):
 
         return dict([(ts_tmp.key, ts_tmp) for ts_tmp in self])
 
+    def to_list(self, dt_fmt='str', data_list=True):
+        """
+        This function builds a list of timeseries that are in the form of
+        dict objects for use when build JSON formatted file.
+        """
+
+        outlist = []
+
+        for ts in self:
+            outlist.append(ts.to_dict(dt_fmt=dt_fmt, data_list=data_list))
+
+        return outlist
+
     def to_json(self, indent=2, dt_fmt='str', data_list=True):
         """
         This function returns the timeseries list in JSON format.
@@ -138,12 +151,9 @@ class TssList(list):
                    timeseries in the list would be required.
 
         """
-        outlist = []
-
-        for ts in self:
-            outlist.append(ts.to_dict(dt_fmt=dt_fmt, data_list=True))
-
-        return json.dumps(outlist, indent=indent)
+        return json.dumps(
+            self.to_list(dt_fmt=dt_fmt, data_list=data_list),
+            indent=indent)
 
     def from_json(self, json_str):
         """
