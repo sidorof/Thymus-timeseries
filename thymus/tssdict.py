@@ -318,6 +318,35 @@ class TssDict(dict):
 
         return deepcopy(self)
 
+    def to_dict(self, dt_fmt='str', data_list=True):
+        """
+        This function outputs the entirety of the object as a dict with
+        the timeseries components as a dict as well.
+
+        This enables building JSON formatted files from objects that include
+        TssDict objects.
+
+        Usage:
+            self.to_dict(dt_fmt='str', data_list=True)
+        """
+        outdict = {}
+
+        for key, ts in self.items():
+            outdict[key] = ts.to_dict(dt_fmt=dt_fmt, data_list=data_list)
+
+        return outdict
+
+    def from_dict(self, tssdict):
+        """
+        This function loads from a dict.
+        """
+        self.clear()
+
+        for key, value in tssdict.items():
+            self[key] = Timeseries().from_dict(value)
+
+        return self
+
     def to_json(self, indent=2, dt_fmt='str', data_list=True):
         """
         This function returns the timeseries dict in JSON format.
@@ -334,12 +363,9 @@ class TssDict(dict):
                    timeseries in the list would be required.
 
         """
-        outdict = {}
-
-        for key, ts in self.items():
-            outdict[key] = ts.to_dict(dt_fmt=dt_fmt, data_list=data_list)
-
-        return json.dumps(outdict, indent=indent)
+        return json.dumps(
+            self.to_dict(dt_fmt=dt_fmt, data_list=data_list),
+            indent=indent)
 
     def from_json(self, json_str):
         """
