@@ -371,6 +371,7 @@ class Timeseries(TsProto):
 
         self_ts = self.clone()
         tmp_ts = ts.clone()
+        shape = tmp_ts.shape()
         if match:
 
             if len(self_ts.tseries) != len(tmp_ts.tseries):
@@ -387,12 +388,19 @@ class Timeseries(TsProto):
             #   Dates do not have to match up. return an aglomeration of both
             dates = self_ts.to_dict()['data']
             dates1 = tmp_ts.to_dict()['data']
+
+            if len(shape) > 1:
+                # convert back to np arrays for the addition
+                for key, value in list(dates.items()):
+                    dates[key] = np.array(value)
+                for key, value in list(dates1.items()):
+                    dates1[key] = np.array(value)
+
             for pdate, value in dates1.items():
                 if isinstance(value, float):
                     dates.setdefault(pdate, 0)
                 else:
-                    shape = len(value)
-                    dates.setdefault(pdate, np.zeros((shape)))
+                    dates.setdefault(pdate, np.zeros(shape))
                 dates[pdate] += value
 
             self_ts.dseries = []

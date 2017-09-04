@@ -370,6 +370,18 @@ class TestTimeseries(unittest.TestCase):
         self.assertEqual(ts_new.tseries[5], 5)
         self.assertEqual(ts_new.tseries[6], 6)
 
+        # add timeseries with more than one column
+        ts_new = ts_new.combine(ts_new)
+        ts_new1 = ts_new.add(ts_new)
+
+        print(ts_new1.tseries)
+        selef.assertListEqual(
+            ts_new1.tseries.tolist(),
+            [
+                [0., 0.], [4., 4.], [8., 8.], [12., 12.], [16., 16.],
+                [10., 10.], [12., 12.], [14., 14.], [16., 16.], [18., 18.]
+            ])
+
     def test_timeseries_replace(self):
         """Tests replacing values in a timeseries."""
 
