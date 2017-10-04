@@ -266,7 +266,7 @@ class Timeseries(TsProto):
         This function returns the timeseries in JSON format.
 
         Usage:
-            self.as_json(indent=2, dt_fmt=None, data_list=True)
+            self.as_json(indent=2, dt_fmt=str, data_list=True)
 
         dt_fmt options are the same as for to_dict
 
