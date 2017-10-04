@@ -375,7 +375,7 @@ class TestTimeseries(unittest.TestCase):
         ts_new1 = ts_new.add(ts_new)
 
         print(ts_new1.tseries)
-        selef.assertListEqual(
+        self.assertListEqual(
             ts_new1.tseries.tolist(),
             [
                 [0., 0.], [4., 4.], [8., 8.], [12., 12.], [16., 16.],

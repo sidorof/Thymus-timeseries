@@ -25,10 +25,12 @@ class TssList(list):
     def __init__(self, tss=None):
 
         list.__init__(self)   # only did this to satisfy pylint
-
-        if isinstance(tss, list):
-
+        if tss is None:
+            pass
+        elif isinstance(tss, list):
             self.extend(tss)
+        else:
+            raise ValueError('Initialization requires either a list or None')
 
     def min_date(self):
         """
@@ -99,7 +101,7 @@ class TssList(list):
         if len(self) > 1:
             return self[0].combine(self[1:], discard=discard, pad=pad)
         else:
-            return self[1]
+            return self[0].clone()
 
     def clone(self):
         """

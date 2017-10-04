@@ -56,6 +56,10 @@ class TestTssList(unittest.TestCase):
 
         self.assertEqual(len(tss), 3)
 
+        # initialize with something other than a list
+        # could expand this to verifying the contents of the list
+        self.assertRaises(ValueError, TssList, 3)
+
     def test_tsslist_min_date(self):
         """Tests min date """
         self.assertEqual(self.tss.min_date(), self.ts.start_date('datetime'))
@@ -112,6 +116,14 @@ class TestTssList(unittest.TestCase):
             self.ts_long.tseries.shape[0])
 
         self.assertEqual(ts_new.tseries.shape[1], 3)
+
+        # test instance of single timeseries in list, should return a clone
+        tsslist = TssList([self.ts])
+        print(ts_new)
+        ts_new = tsslist.combine()
+        self.assertNotEqual(ts_new, self.ts)
+        self.assertListEqual(ts_new.tseries.tolist(), self.ts.tseries.tolist())
+        self.assertListEqual(ts_new.dseries.tolist(), self.ts.dseries.tolist())
 
     def test_tsslist_get_values(self):
         """ Tests the ability to locate the correct row of data. """
