@@ -109,6 +109,8 @@ def convert(ts, new_freq, include_partial=True, **kwargs):
     This function converts a timeseries to another frequency. Conversion only
     works from a higher frequency to a lower frequency, for example daily to
     monthly.
+
+    NOTE: add a gatekeeper for invalid kwargs.
     """
 
     new_ts = ts.clone()
@@ -136,12 +138,15 @@ def convert(ts, new_freq, include_partial=True, **kwargs):
         raise ValueError("Invalid date series type: %s" % (date_series_type))
 
     if selected.shape[0] > 0:
+
         if new_ts.end_of_period:
             selected += 1  # shift to start of next period
 
         if include_partial or freq_idx > daily_idx:
             if selected[0] != 0:
                 # insert most recent date
+                #selected = np.insert(selected, 0, 0)
+                # np.insert(arr, obj, values, axis=None)
                 selected = np.insert(selected, 0, 0)
 
         if freq_idx > daily_idx:
@@ -149,7 +154,7 @@ def convert(ts, new_freq, include_partial=True, **kwargs):
             if selected[-1] != len(dates) - 1:
                 selected = np.append(selected, len(dates) - 1)
 
-    new_ts.tseries = new_ts.tseries[selected]
+    new_ts.tseries = new_ts.tseries[selected.flatten()]
 
     new_ts.frequency = new_freq
 
@@ -160,6 +165,8 @@ def convert(ts, new_freq, include_partial=True, **kwargs):
             dtype=np.int32)
     else:
         new_ts.dseries = new_ts.dseries[selected]
+
+    new_ts.dseries = new_ts.dseries.flatten()
 
     if series_dir != new_ts.series_direction():
         new_ts.reverse()

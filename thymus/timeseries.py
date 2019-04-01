@@ -321,6 +321,8 @@ class Timeseries(TsProto):
 
         If overlay is True then the incoming timeseries will overlay
         any values that are duplicated.
+
+        NOTE: add a check to prevent unwanted overlays
         """
         series_dir = self.series_direction()
         if series_dir == -1:
@@ -335,6 +337,10 @@ class Timeseries(TsProto):
             if tdate in self_dict.keys():
                 if overlay:
                     self_dict[tdate] = ts_dict[tdate]
+                else:
+                    raise ValueError(
+                        'Duplicate dates, overlay parameter is False: %s' % (
+                            tdate))
             else:
                 self_dict[tdate] = ts_dict[tdate]
 
@@ -485,6 +491,7 @@ class Timeseries(TsProto):
 
         Returns the new ts.
         """
+        series_dir = self.series_direction()
         if isinstance(tss, Timeseries):
             # A single, make into a list of timeseries
             tss = [tss]
@@ -540,6 +547,11 @@ class Timeseries(TsProto):
         base_ts.tseries = np.hstack(
             [ts_tmp.tseries for ts_tmp in tss])
 
+        # force a sort
+        if series_dir == 1:
+            base_ts.sort_by_date(force=True)
+        else:
+            base_ts.sort_by_date(reverse=True, force=True)
         return base_ts
 
     def date_string_series(self, dt_fmt=None):

@@ -409,6 +409,13 @@ class TestTsProto(unittest.TestCase):
         self.assertTrue(isinstance(ts.dseries[0], np.float64))
         self.assertTrue(isinstance(ts.tseries[0], np.float64))
 
+        # verify that dseries is flattened
+        ts.dseries = [[i] for i in range(100)]
+        ts.tseries = [i for i in range(100)]
+
+        ts.make_arrays()
+        self.assertEqual(len(ts.dseries.shape), 1)
+
     def test_timeseries__make_array(self):
         """Tests making a numpy array to a specific type."""
 

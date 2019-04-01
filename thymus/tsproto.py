@@ -364,9 +364,9 @@ class TsProto(object):
         self.tseries = self._make_array(self.tseries, np.float64)
 
         if self.get_date_series_type() == TS_ORDINAL:
-            self.dseries = self._make_array(self.dseries, np.int32)
+            self.dseries = self._make_array(self.dseries, np.int32).flatten()
         else:
-            self.dseries = self._make_array(self.dseries, np.float64)
+            self.dseries = self._make_array(self.dseries, np.float64).flatten()
 
     @staticmethod
     def _make_array(convert_list, numtype):
