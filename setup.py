@@ -22,7 +22,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 setup(
     name='thymus-timeseries',
 
-    version='0.1.2',
+    version='0.1.3',
 
     description='An intuitive library tracking dates and timeseries in common using NumPy arrays. ',
     long_description=long_description,
@@ -64,6 +64,7 @@ setup(
         # that you indicate whether you support Python 2, Python 3 or both.
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
 
     # What does your project relate to?
