@@ -7,13 +7,13 @@ from copy import deepcopy
 import json
 import numpy as np
 
-from thymus.constants import TS_ORDINAL, FREQ_D, FREQ_M
-from thymus.constants import TS_TIMESTAMP
-from thymus.constants import FREQ_DAYTYPES, FREQ_IDAYTYPES
+from .constants import TS_ORDINAL, FREQ_D, FREQ_M
+from .constants import TS_TIMESTAMP
+from .constants import FREQ_DAYTYPES, FREQ_IDAYTYPES
 
-from thymus.freq_conversions import convert
+from .freq_conversions import convert
 
-from thymus.tsproto import TsProto
+from .tsproto import TsProto
 
 FMT_DATE = '%Y-%m-%d'
 FMT_IDATE = '%Y-%m-%d %H:%M:%S'
@@ -240,7 +240,7 @@ class Timeseries(TsProto):
             fmt = FMT_IDATE
             self.dseries = [
                 datetime.strptime(item[0], fmt).timestamp()
-                for item in dstrings]
+                for item in data]
         else:
             raise ValueError("undefined frequency: %s" % self.frequency)
 

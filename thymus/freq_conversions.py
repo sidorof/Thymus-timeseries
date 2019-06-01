@@ -6,9 +6,9 @@ This module converts timeseries from one type to another.
 
 import numpy as np
 
-from thymus.constants import FREQ_D, FREQ_M, FREQ_Q, FREQ_Y
-from thymus.constants import FREQ_H, FREQ_MIN, FREQ_SEC
-from thymus.constants import TS_ORDINAL, TS_TIMESTAMP
+from .constants import FREQ_D, FREQ_M, FREQ_Q, FREQ_Y
+from .constants import FREQ_H, FREQ_MIN, FREQ_SEC
+from .constants import TS_ORDINAL, TS_TIMESTAMP
 
 HIERARCHY = (FREQ_SEC, FREQ_MIN, FREQ_H, FREQ_D, FREQ_M, FREQ_Q, FREQ_Y)
 
