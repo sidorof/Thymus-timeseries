@@ -686,7 +686,7 @@ class TestFreqConversions(unittest.TestCase):
         """
 
         ts = self.ts_seconds.clone()
-        print(ts.daterange())
+
         ts.end_of_period = False
 
         ts1 = convert(ts, new_freq=FREQ_D)

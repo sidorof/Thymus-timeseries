@@ -119,7 +119,7 @@ class TestTssList(unittest.TestCase):
 
         # test instance of single timeseries in list, should return a clone
         tsslist = TssList([self.ts])
-        print(ts_new)
+
         ts_new = tsslist.combine()
         self.assertNotEqual(ts_new, self.ts)
         self.assertListEqual(ts_new.tseries.tolist(), self.ts.tseries.tolist())

@@ -186,9 +186,9 @@ class TestTimeseries(unittest.TestCase):
                 '735972': 9.0
             })
 
-        print('to_dict: needs test for header')
-        print('to_dict: needs test for datetime series')
-        print('to_dict: needs test for string dates')
+        # NOTE: to_dict: needs test for header
+        # NOTE: to_dict: needs test for datetime series
+        # NOTE: 'to_dict: needs test for string dates
 
     def test_timeseries_to_list(self):
         """Tests conversion of dates and values to a list."""
@@ -215,7 +215,7 @@ class TestTimeseries(unittest.TestCase):
         Tests conversion of dates and values to json format.
 
         """
-        print('to_json: only one example tested')
+        # NOTE: to_json: only one example tested
 
         json_test = self.ts_mult.to_json(dt_fmt='str')
 
@@ -245,7 +245,7 @@ class TestTimeseries(unittest.TestCase):
         Tests loading a json formatted string to a timeseries object.
 
         """
-        print('from_json: only one example tested')
+        # NOTE: from_json: only one example tested
         json_test = """
             {
                 "data": [
@@ -306,22 +306,13 @@ class TestTimeseries(unittest.TestCase):
 
         ts_copy = self.ts.clone()
 
-        self.ts.extend(ts, overlay=False)
-
-        self.assertEqual(self.ts.end_date('datetime'), datetime(2016, 1, 14))
+        self.assertRaises(
+            ValueError,
+            self.ts.extend, ts, overlay=False)
 
         # [ 0.  1.  2.  3.  4.  5.  6.  7.  8.  9.]
         #
         #                     [ 10. 11. 12. 13. 14. 15.  16.  17.  18.  19.]
-
-        self.assertEqual(self.ts.tseries[4], 4)
-        self.assertEqual(self.ts.tseries[5], 5)
-        self.assertEqual(self.ts.tseries[6], 6)
-        self.assertEqual(self.ts.tseries[7], 7)
-        self.assertEqual(self.ts.tseries[8], 8)
-        self.assertEqual(self.ts.tseries[9], 9)
-        self.assertEqual(self.ts.tseries[10], 15)
-        self.assertEqual(self.ts.tseries[11], 16)
 
         ts_copy.extend(ts, overlay=True)
 
@@ -374,7 +365,6 @@ class TestTimeseries(unittest.TestCase):
         ts_new = ts_new.combine(ts_new)
         ts_new1 = ts_new.add(ts_new)
 
-        print(ts_new1.tseries)
         self.assertListEqual(
             ts_new1.tseries.tolist(),
             [
