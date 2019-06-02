@@ -16,7 +16,7 @@ setup(
     description='An intuitive library tracking dates and timeseries in common using NumPy arrays. ',
     long_description=long_description,
 
-    url='https://sidorof.github.io/Thymus-timeseries/'
+    url='https://sidorof.github.io/Thymus-timeseries/',
 
     author='Don Smiley',
     author_email='ds@sidorof.com',
@@ -43,7 +43,7 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
 
-    keywords=['timeseries', 'time series']
+    keywords=['timeseries', 'time series'],
 
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
 
