@@ -2,7 +2,7 @@
 This module tests the implementation of the timeseries class.
 """
 
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 import json
 import numpy as np
 
@@ -91,7 +91,7 @@ class TestTimeseries(unittest.TestCase):
 
         # get as datetime from ordinal
         self.assertEqual(
-            datetime(2015, 12, 31),
+            date(2015, 12, 31),
             self.ts.start_date('datetime'))
 
         # get as timestamp
@@ -110,7 +110,7 @@ class TestTimeseries(unittest.TestCase):
 
         # get as datetime from timestamp
         self.assertEqual(
-            datetime(2015, 12, 31),
+            date(2015, 12, 31),
             self.ts.start_date('datetime'))
 
     def test_timeseries_end_date(self):
@@ -125,7 +125,7 @@ class TestTimeseries(unittest.TestCase):
 
         # get as datetime from ordinal
         self.assertEqual(
-            datetime(2016, 1, 9),
+            date(2016, 1, 9),
             self.ts.end_date('datetime'))
 
         # get as timestamp
@@ -151,21 +151,21 @@ class TestTimeseries(unittest.TestCase):
     def test_timeseries_get_datetime(self):
         """Tests conversion to datetime from ordinal/timestamps"""
 
-        date = self.ts.start_date()
+        tmp_date = self.ts.start_date()
 
         self.assertEqual(
-            datetime(2015, 12, 31, 0, 0, 0),
-            self.ts.get_datetime(date))
+            date(2015, 12, 31),
+            self.ts.get_datetime(tmp_date))
 
         ts = Timeseries(frequency='sec')
 
         ts.dseries = datetime(2015, 12, 31).timestamp() + np.arange(10)
         ts.tseries = np.arange(10)
 
-        date = self.ts.start_date()
+        tmp_date = self.ts.start_date()
         self.assertEqual(
-            datetime(2015, 12, 31, 0, 0, 0),
-            self.ts.get_datetime(date))
+            date(2015, 12, 31),
+            self.ts.get_datetime(tmp_date))
 
     def test_timeseries_to_dict(self):
         """Tests conversion of dates and values to a dict."""
@@ -913,7 +913,7 @@ class TestTimeseries(unittest.TestCase):
             ts.row_no, rowdate=date4, closest=1, no_error=False)
 
     def test_timeseries_datetime_series(self):
-        """ Tests returning a date series converted to datetime objects. """
+        """ Tests returning a date series converted to date/datetime objects. """
 
         ord_list = datetime(2016, 1, 1).toordinal() + np.arange(20)
         tstamp_list = datetime(2016, 1, 1).timestamp() + np.arange(20)
@@ -923,7 +923,7 @@ class TestTimeseries(unittest.TestCase):
         ts.tseries = np.arange(20)      # gilding the lily
 
         dt_list = [
-            datetime(2016, 1, 1) + timedelta(days=i) for i in range(20)]
+            date(2016, 1, 1) + timedelta(days=i) for i in range(20)]
 
         self.assertListEqual(ts.datetime_series(), dt_list)
 
@@ -1058,7 +1058,7 @@ class TestTimeseries(unittest.TestCase):
         # ordinal daterange as datetimes
         self.assertTupleEqual(
             self.ts.daterange('datetime'),
-            (datetime(2015, 12, 31), datetime(2016, 1, 9)))
+            (date(2015, 12, 31), date(2016, 1, 9)))
 
         # timestamp
         tstamp_list = datetime(2016, 1, 1).timestamp() + np.arange(20)
@@ -1192,16 +1192,16 @@ class TestTimeseries(unittest.TestCase):
         """This function returns a combined date and values list."""
 
         items = [
-            (datetime(2015, 12, 31, 0, 0), 0.0),
-            (datetime(2016, 1, 1, 0, 0), 1.0),
-            (datetime(2016, 1, 2, 0, 0), 2.0),
-            (datetime(2016, 1, 3, 0, 0), 3.0),
-            (datetime(2016, 1, 4, 0, 0), 4.0),
-            (datetime(2016, 1, 5, 0, 0), 5.0),
-            (datetime(2016, 1, 6, 0, 0), 6.0),
-            (datetime(2016, 1, 7, 0, 0), 7.0),
-            (datetime(2016, 1, 8, 0, 0), 8.0),
-            (datetime(2016, 1, 9, 0, 0), 9.0)]
+            (date(2015, 12, 31), 0.0),
+            (date(2016, 1, 1), 1.0),
+            (date(2016, 1, 2), 2.0),
+            (date(2016, 1, 3), 3.0),
+            (date(2016, 1, 4), 4.0),
+            (date(2016, 1, 5), 5.0),
+            (date(2016, 1, 6), 6.0),
+            (date(2016, 1, 7), 7.0),
+            (date(2016, 1, 8), 8.0),
+            (date(2016, 1, 9), 9.0)]
 
         self.assertListEqual(self.ts.items(), items)
 

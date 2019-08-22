@@ -3,7 +3,7 @@ This module tests the TssList class
 """
 import unittest
 
-from datetime import datetime
+from datetime import date, datetime
 import json
 import numpy as np
 
@@ -72,12 +72,12 @@ class TestTssList(unittest.TestCase):
 
         self.tss.append(tmp_ts0)
 
-        self.assertEqual(self.tss.min_date(), datetime(2014, 12, 31))
+        self.assertEqual(self.tss.min_date(), date(2014, 12, 31))
 
     def test_tsslist_max_date(self):
         """Tests max date """
 
-        self.assertEqual(self.tss.max_date(), datetime(2016, 1, 19))
+        self.assertEqual(self.tss.max_date(), date(2016, 1, 19))
 
         tmp_ts0 = Timeseries()
 
@@ -87,7 +87,7 @@ class TestTssList(unittest.TestCase):
 
         self.tss.append(tmp_ts0)
 
-        self.assertEqual(self.tss.max_date(), datetime(2018, 12, 31))
+        self.assertEqual(self.tss.max_date(), date(2018, 12, 31))
 
     def test_tsslist_combine(self):
         """

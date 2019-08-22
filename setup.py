@@ -11,7 +11,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 setup(
     name='thymus-timeseries',
 
-    version='0.1.4',
+    version='0.2.0',
 
     description='An intuitive library tracking dates and timeseries in common using NumPy arrays. ',
     long_description=long_description,
