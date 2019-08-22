@@ -3,7 +3,7 @@ This module tests the TssList class
 """
 import unittest
 
-from datetime import datetime
+from datetime import date, datetime
 import json
 import numpy as np
 
@@ -91,13 +91,13 @@ class TestTssDict(unittest.TestCase):
         self.tssdict[tmp_ts0.key] = tmp_ts0
 
         self.assertTupleEqual(
-            self.tssdict.min_date(), (datetime(2014, 12, 22), 'First'))
+            self.tssdict.min_date(), (date(2014, 12, 22), 'First'))
 
     def test_tssdict_max_date(self):
         """Tests max date """
 
         self.assertTupleEqual(
-            self.tssdict.max_date(), (datetime(2016, 1, 19), 'Long'))
+            self.tssdict.max_date(), (date(2016, 1, 19), 'Long'))
 
     def test_tssdict_combine(self):
         """

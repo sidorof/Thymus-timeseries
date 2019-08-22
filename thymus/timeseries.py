@@ -2,7 +2,7 @@
 This module implements the class Timeseries
 
 """
-from datetime import datetime
+import datetime as dt
 from copy import deepcopy
 import json
 import numpy as np
@@ -15,8 +15,8 @@ from .freq_conversions import convert
 
 from .tsproto import TsProto
 
-FMT_DATE = '%Y-%m-%d'
-FMT_IDATE = '%Y-%m-%d %H:%M:%S'
+FMT_DATE = "%Y-%m-%d"
+FMT_IDATE = "%Y-%m-%d %H:%M:%S"
 
 
 class Timeseries(TsProto):
@@ -36,20 +36,26 @@ class Timeseries(TsProto):
                                 values
             )
     """
+
     def __init__(
-            self, frequency=FREQ_D, end_of_period=None, key='', columns=None,
-            **kwargs):
+        self,
+        frequency=FREQ_D,
+        end_of_period=None,
+        key="",
+        columns=None,
+        **kwargs
+    ):
 
         TsProto.__init__(self)
 
         self.frequency = frequency
         self.key = key
 
-        if 'tseries' in kwargs:
-            self.tseries = kwargs['tseries']
+        if "tseries" in kwargs:
+            self.tseries = kwargs["tseries"]
 
-        if 'dseries' in kwargs:
-            self.dseries = kwargs['dseries']
+        if "dseries" in kwargs:
+            self.dseries = kwargs["dseries"]
 
         if end_of_period is not None:
             self.end_of_period = end_of_period
@@ -81,6 +87,10 @@ class Timeseries(TsProto):
         If fmt is 'str' returns in string format
         If fmt is 'datetime' returns as datetime object
 
+        CHANGE: this now returns
+            a date object if ordinal
+            a datetime if timestamp
+
         Note: look at consolidating return date formats:
             end_date, get_datetime
         """
@@ -91,11 +101,11 @@ class Timeseries(TsProto):
 
         if fmt is None:
             return self.dseries[row_no]
-        elif fmt == 'str':
+        elif fmt == "str":
             return self.fmt_date(
-                self.dseries[row_no],
-                dt_type=self.get_date_series_type())
-        elif fmt == 'datetime':
+                self.dseries[row_no], dt_type=self.get_date_series_type()
+            )
+        elif fmt == "datetime":
             return self.get_datetime(self.dseries[row_no])
         else:
             raise ValueError("Invalid date format fmt: %s" % fmt)
@@ -115,11 +125,11 @@ class Timeseries(TsProto):
 
         if fmt is None:
             return self.dseries[row_no]
-        elif fmt == 'str':
+        elif fmt == "str":
             return self.fmt_date(
-                self.dseries[row_no],
-                dt_type=self.get_date_series_type())
-        elif fmt == 'datetime':
+                self.dseries[row_no], dt_type=self.get_date_series_type()
+            )
+        elif fmt == "datetime":
             return self.get_datetime(self.dseries[row_no])
         else:
             raise ValueError("Invalid date format fmt: %s" % fmt)
@@ -134,12 +144,13 @@ class Timeseries(TsProto):
         """
         date_series_type = self.get_date_series_type()
         if date_series_type == TS_ORDINAL:
-            return datetime.fromordinal(date)
+            return dt.date.fromordinal(date)
         elif date_series_type == TS_TIMESTAMP:
-            return datetime.fromtimestamp(date)
+            return dt.datetime.fromtimestamp(date)
         else:
-            raise ValueError("Unknown, dateseries type. %s" % (
-                date_series_type))
+            raise ValueError(
+                "Unknown, dateseries type. %s" % (date_series_type)
+            )
 
     def to_dict(self, dt_fmt=None, data_list=False):
         """
@@ -169,27 +180,27 @@ class Timeseries(TsProto):
 
         """
         new_dict = {}
-        new_dict['header'] = self.header()
+        new_dict["header"] = self.header()
 
         if dt_fmt is None:
             # native format, but converted to a string
             dseries = [str(date) for date in self.dseries.tolist()]
-        elif dt_fmt == 'datetime':
+        elif dt_fmt == "datetime":
             dseries = self.datetime_series()
-        elif dt_fmt == 'str':
+        elif dt_fmt == "str":
             dseries = self.date_string_series()
         else:
             raise ValueError("Unsupported dt_fmt: %s" % (dt_fmt))
 
         tseries = self.tseries.tolist()
         if data_list:
-            data = [
-                (dseries[i], tseries[i]) for i in range(len(self.tseries))]
+            data = [(dseries[i], tseries[i]) for i in range(len(self.tseries))]
         else:
-            data = dict([
-                (dseries[i], tseries[i]) for i in range(len(self.tseries))])
+            data = dict(
+                [(dseries[i], tseries[i]) for i in range(len(self.tseries))]
+            )
 
-        new_dict['data'] = data
+        new_dict["data"] = data
 
         return new_dict
 
@@ -219,11 +230,11 @@ class Timeseries(TsProto):
         It loads in-place, but also returns self for use with chaining.
         """
         # header
-        header = ts_dict['header']
+        header = ts_dict["header"]
         for key, value in header.items():
             self.__setattr__(key, value)
 
-        data = ts_dict['data']
+        data = ts_dict["data"]
 
         do_sort = False
         if isinstance(data, dict):
@@ -234,13 +245,13 @@ class Timeseries(TsProto):
         if self.get_date_series_type() == TS_ORDINAL:
             fmt = FMT_DATE
             self.dseries = [
-                datetime.strptime(item[0], fmt).toordinal()
-                for item in data]
+                dt.datetime.strptime(item[0], fmt).toordinal() for item in data
+            ]
         elif self.get_date_series_type() == TS_TIMESTAMP:
             fmt = FMT_IDATE
             self.dseries = [
-                datetime.strptime(item[0], fmt).timestamp()
-                for item in data]
+                dt.datetime.strptime(item[0], fmt).timestamp() for item in data
+            ]
         else:
             raise ValueError("undefined frequency: %s" % self.frequency)
 
@@ -259,9 +270,10 @@ class Timeseries(TsProto):
 
         return [
             (str(self.dseries[i]), deepcopy(self.tseries[i]))
-            for i in range(self.shape()[0])]
+            for i in range(self.shape()[0])
+        ]
 
-    def to_json(self, indent=2, dt_fmt='str', data_list=True):
+    def to_json(self, indent=2, dt_fmt="str", data_list=True):
         """
         This function returns the timeseries in JSON format.
 
@@ -272,7 +284,8 @@ class Timeseries(TsProto):
 
         """
         return json.dumps(
-            self.to_dict(dt_fmt, data_list=data_list), indent=indent)
+            self.to_dict(dt_fmt, data_list=data_list), indent=indent
+        )
 
     def from_json(self, json_str):
         """
@@ -330,8 +343,8 @@ class Timeseries(TsProto):
         else:
             reverse = False
 
-        self_dict = self.to_dict()['data']
-        ts_dict = ts.to_dict()['data']
+        self_dict = self.to_dict()["data"]
+        ts_dict = ts.to_dict()["data"]
 
         for tdate in ts_dict.keys():
             if tdate in self_dict.keys():
@@ -339,8 +352,9 @@ class Timeseries(TsProto):
                     self_dict[tdate] = ts_dict[tdate]
                 else:
                     raise ValueError(
-                        'Duplicate dates, overlay parameter is False: %s' % (
-                            tdate))
+                        "Duplicate dates, overlay parameter is False: %s"
+                        % (tdate)
+                    )
             else:
                 self_dict[tdate] = ts_dict[tdate]
 
@@ -381,10 +395,10 @@ class Timeseries(TsProto):
         if match:
 
             if len(self_ts.tseries) != len(tmp_ts.tseries):
-                raise ValueError('Timeseries do not have the same length.')
+                raise ValueError("Timeseries do not have the same length.")
 
             if self.if_dseries_match(ts) is False:
-                raise ValueError('Dateseries do not have the same dates.')
+                raise ValueError("Dateseries do not have the same dates.")
 
             #   ok
             self_ts.tseries += tmp_ts.tseries
@@ -392,8 +406,8 @@ class Timeseries(TsProto):
 
         else:
             #   Dates do not have to match up. return an aglomeration of both
-            dates = self_ts.to_dict()['data']
-            dates1 = tmp_ts.to_dict()['data']
+            dates = self_ts.to_dict()["data"]
+            dates1 = tmp_ts.to_dict()["data"]
 
             if len(shape) > 1:
                 # convert back to np arrays for the addition
@@ -444,8 +458,8 @@ class Timeseries(TsProto):
         self_ts = self.clone()
         tmp_ts = ts.clone()
 
-        self_dates = self_ts.to_dict()['data']
-        ts_dates = tmp_ts.to_dict()['data']
+        self_dates = self_ts.to_dict()["data"]
+        ts_dates = tmp_ts.to_dict()["data"]
 
         if match:
             for date, value in ts_dates.items():
@@ -523,16 +537,18 @@ class Timeseries(TsProto):
                     # ready to pad
                     if ts_ref_len - ts_len > 0:
                         col_count = tmp_ts.tseries.shape[1]
-                        pad_values = np.ones(
-                            (ts_ref_len - ts_len, col_count)) * pad
+                        pad_values = (
+                            np.ones((ts_ref_len - ts_len, col_count)) * pad
+                        )
 
                         # dates added to the end
                         if ts_len < max_len:
                             tmp_ts.tseries = np.append(
-                                tmp_ts.tseries, pad_values).reshape(
-                                    (-1, col_count))
+                                tmp_ts.tseries, pad_values
+                            ).reshape((-1, col_count))
                             tmp_ts.dseries = np.append(
-                                tmp_ts.dseries, ts_ref.dseries[ts_len:])
+                                tmp_ts.dseries, ts_ref.dseries[ts_len:]
+                            )
 
                         # put it back
                         tss[i] = tmp_ts
@@ -544,8 +560,7 @@ class Timeseries(TsProto):
 
         # all timeseries same length
         base_ts = tss[0]
-        base_ts.tseries = np.hstack(
-            [ts_tmp.tseries for ts_tmp in tss])
+        base_ts.tseries = np.hstack([ts_tmp.tseries for ts_tmp in tss])
 
         # force a sort
         if series_dir == 1:
@@ -572,8 +587,7 @@ class Timeseries(TsProto):
             else:
                 dt_fmt = FMT_IDATE
 
-        return [
-            self.fmt_date(date, dt_type, dt_fmt) for date in self.dseries]
+        return [self.fmt_date(date, dt_type, dt_fmt) for date in self.dseries]
 
     def sort_by_date(self, reverse=False, force=False):
         """
@@ -599,7 +613,8 @@ class Timeseries(TsProto):
             dseries = []
             tseries = []
             for date, values in sorted(
-                    self.to_dict()['data'].items(), reverse=reverse):
+                self.to_dict()["data"].items(), reverse=reverse
+            ):
                 dseries.append(date)
                 tseries.append(values)
             self.dseries = dseries
@@ -642,11 +657,11 @@ class Timeseries(TsProto):
         corresponds to the the datetime.weekday() function.
         """
         if new_freq not in FREQ_IDAYTYPES + FREQ_DAYTYPES:
-            raise ValueError(
-                "Invalid new frequency: %s" % new_freq)
+            raise ValueError("Invalid new frequency: %s" % new_freq)
 
         return convert(
-            self, new_freq, include_partial=include_partial, **kwargs)
+            self, new_freq, include_partial=include_partial, **kwargs
+        )
 
     def get_diffs(self):
         """
@@ -682,7 +697,8 @@ class Timeseries(TsProto):
             tmp_ts.reverse()
 
         tmp_ts.tseries = (
-            ((tmp_ts.tseries[:-1] / tmp_ts.tseries[1:]) - 1.) * 100.)
+            (tmp_ts.tseries[:-1] / tmp_ts.tseries[1:]) - 1.0
+        ) * 100.0
         tmp_ts.dseries = tmp_ts.dseries[:-1]
 
         if series_dir == 1:
@@ -698,14 +714,16 @@ class Timeseries(TsProto):
         if fmt == 'str':
             the dates are output as strings
         """
-        if fmt == 'str':
+        if fmt == "str":
             return [
-                (date, value.tolist()) for date, value in zip(
-                    self.date_string_series(), self.tseries)]
+                (date, value.tolist())
+                for date, value in zip(self.date_string_series(), self.tseries)
+            ]
         else:
             return [
-                (date, value) for date, value in zip(
-                    self.datetime_series(), self.tseries)]
+                (date, value)
+                for date, value in zip(self.datetime_series(), self.tseries)
+            ]
 
     def trunc(self, start=None, finish=None, new=False):
         """
@@ -779,7 +797,7 @@ class Timeseries(TsProto):
             finish_row = self.row_no(finish, closest=-1)
 
             if new:
-                tmp_ts = self[start_row:finish_row + 1]
+                tmp_ts = self[start_row : finish_row + 1]
             else:
                 self.trunc(start=start_row, finish=finish_row + 1)
 
@@ -796,7 +814,7 @@ class Timeseries(TsProto):
             finish_row = self.row_no(finish, closest=-1)
 
             if new:
-                tmp_ts = self[:finish_row + 1]
+                tmp_ts = self[: finish_row + 1]
             else:
                 self.trunc(finish=finish_row + 1)
 
@@ -832,7 +850,7 @@ class Timeseries(TsProto):
 
         series_dir = self.series_direction()
 
-        if isinstance(rowdate, datetime):
+        if isinstance(rowdate, dt.datetime) or isinstance(rowdate, dt.date):
             rdate = self.date_native(rowdate)
         else:
             # assume it is appropriate
@@ -850,8 +868,8 @@ class Timeseries(TsProto):
                     row_no = row_error
                 else:
                     raise ValueError(
-                        "%s not found in %s timeseries" % (
-                            rowdate, self.key))
+                        "%s not found in %s timeseries" % (rowdate, self.key)
+                    )
             else:
                 row_no = selected[0][0]
 
@@ -863,8 +881,8 @@ class Timeseries(TsProto):
                     row_no = row_error
                 else:
                     raise ValueError(
-                        "%s not found in %s timeseries" % (
-                            rowdate, self.key))
+                        "%s not found in %s timeseries" % (rowdate, self.key)
+                    )
 
             if series_dir == 1:
                 row_no = selected.max()
@@ -879,8 +897,8 @@ class Timeseries(TsProto):
                     row_no = row_error
                 else:
                     raise ValueError(
-                        "%s not found in %s timeseries" % (
-                            rowdate, self.key))
+                        "%s not found in %s timeseries" % (rowdate, self.key)
+                    )
 
             if series_dir == 1:
                 row_no = selected.min()
@@ -895,9 +913,9 @@ class Timeseries(TsProto):
         datetime objects.
         """
         if self.get_date_series_type() == TS_ORDINAL:
-            return [datetime.fromordinal(int(i)) for i in self.dseries]
+            return [dt.date.fromordinal(int(i)) for i in self.dseries]
         elif self.get_date_series_type() == TS_TIMESTAMP:
-            return [datetime.fromtimestamp(int(i)) for i in self.dseries]
+            return [dt.datetime.fromtimestamp(int(i)) for i in self.dseries]
         else:
             raise ValueError("timeseries must have a defined frequency")
 
@@ -910,11 +928,11 @@ class Timeseries(TsProto):
         if dt_type == TS_ORDINAL:
             if dt_fmt is None:
                 dt_fmt = FMT_DATE
-            return datetime.fromordinal(int(numericdate)).strftime(dt_fmt)
+            return dt.date.fromordinal(int(numericdate)).strftime(dt_fmt)
         elif dt_type == TS_TIMESTAMP:
             if dt_fmt is None:
                 dt_fmt = FMT_IDATE
-            return datetime.fromtimestamp(numericdate).strftime(dt_fmt)
+            return dt.datetime.fromtimestamp(numericdate).strftime(dt_fmt)
         else:
             raise ValueError("Unknown dt_type: %s" % dt_type)
 
@@ -922,15 +940,17 @@ class Timeseries(TsProto):
         """
         This function returns a representation of the class.
         """
-        output = '\n'.join([
-            '<Timeseries>',
-            'key: ' + self.key,
-            'columns: %s' % self.columns,
-            'frequency: %s' % self.frequency,
-            'daterange: %s' % str(self.daterange('str')),
-            'end-of-period: %s' % self.end_of_period,
-            'shape: %s' % str(self.shape())
-            ])
+        output = "\n".join(
+            [
+                "<Timeseries>",
+                "key: " + self.key,
+                "columns: %s" % self.columns,
+                "frequency: %s" % self.frequency,
+                "daterange: %s" % str(self.daterange("str")),
+                "end-of-period: %s" % self.end_of_period,
+                "shape: %s" % str(self.shape()),
+            ]
+        )
 
         return output
 
@@ -989,17 +1009,18 @@ class Timeseries(TsProto):
     def header(self):
         """This function returns a dict of the non-timeseries data."""
         return {
-            'key': self.key,
-            'columns': self.columns,
-            'frequency': self.frequency,
-            'end_of_period': self.end_of_period}
+            "key": self.key,
+            "columns": self.columns,
+            "frequency": self.frequency,
+            "end_of_period": self.end_of_period,
+        }
 
     def date_native(self, date):
         """
         This awkwardly named function returns a date in the native format of
         of the timeseries, namely ordinal or timestamp.
         """
-        if isinstance(date, datetime):
+        if isinstance(date, dt.datetime) or isinstance(date, dt.date):
             datetype = self.get_date_series_type()
 
             if datetype == TS_ORDINAL:
@@ -1034,11 +1055,11 @@ class Timeseries(TsProto):
         else:
             return (None, None)
 
-        if fmt == 'str':
+        if fmt == "str":
             dt_type = self.get_date_series_type()
             start_date = self.fmt_date(start_date, dt_type)
             end_date = self.fmt_date(end_date, dt_type)
-        elif fmt == 'datetime':
+        elif fmt == "datetime":
             start_date = self.get_datetime(start_date)
             end_date = self.get_datetime(end_date)
         elif fmt is None:
@@ -1063,7 +1084,8 @@ class Timeseries(TsProto):
             returns a dict with year as keys
         """
         ts_years = convert(
-            self, new_freq=FREQ_M, include_partial=include_partial)
+            self, new_freq=FREQ_M, include_partial=include_partial
+        )
 
         year_dict = {}
 
@@ -1090,7 +1112,8 @@ class Timeseries(TsProto):
             returns a dict with year-month as keys
         """
         ts_months = convert(
-            self, new_freq=FREQ_M, include_partial=include_partial)
+            self, new_freq=FREQ_M, include_partial=include_partial
+        )
 
         month_dict = {}
 
@@ -1099,7 +1122,7 @@ class Timeseries(TsProto):
 
         for i in range(tseries.shape[0]):
             date = ts_months.get_datetime(dseries[i])
-            month = '%s-%02d' % (date.year, date.month)
+            month = "%s-%02d" % (date.year, date.month)
 
             month_dict[month] = tseries[i]
 
@@ -1137,8 +1160,9 @@ class Timeseries(TsProto):
             dict_dates.setdefault(odate, 0)
             dict_dates[odate] += 1
 
-        return [[odate, count] for odate, count in dict_dates.items()
-                if count > 1]
+        return [
+            [odate, count] for odate, count in dict_dates.items() if count > 1
+        ]
 
     def get_fromDB(self, **kwargs):
         """
