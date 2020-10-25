@@ -17,7 +17,7 @@ class TsProto(object):
     By separating the these functions the code base can be broken into more
     managable chunks.
 
-    Most of these functions are handed of the container functions in arrays.
+    Most of these functions are handed off the container functions in arrays.
     """
 
     def __init__(self):
@@ -28,153 +28,124 @@ class TsProto(object):
         self.dseries = None
         self.end_of_period = True
 
-        self.key = ''
+        self.key = ""
         self.columns = []
 
     def __iadd__(self, other):
         """ts += other"""
-        return self._proc_func(
-            new=False, func='__iadd__', other=other)
+        return self._proc_func(new=False, func="__iadd__", other=other)
 
     def __irshift__(self, other):
         """'Return self>>=value."""
-        return self._proc_func(
-            new=False, func='__irshift__', other=other)
+        return self._proc_func(new=False, func="__irshift__", other=other)
 
     def __iand__(self, other):
         """Return self&=value."""
-        return self._proc_func(
-            new=False, func='__iand__', other=other)
+        return self._proc_func(new=False, func="__iand__", other=other)
 
     def __isub__(self, other):
         """ts -= other"""
-        return self._proc_func(
-            new=False, func='__isub__', other=other)
+        return self._proc_func(new=False, func="__isub__", other=other)
 
     def __ifloordiv__(self, other):
         """ts /= other"""
-        return self._proc_func(
-            new=False, func='__ifloordiv__', other=other)
+        return self._proc_func(new=False, func="__ifloordiv__", other=other)
 
     def __ilshift__(self, other):
         """Return self<<=value."""
-        return self._proc_func(
-            new=False, func='__ilshift__', other=other)
+        return self._proc_func(new=False, func="__ilshift__", other=other)
 
     def __itruediv__(self, other):
         """ts /= other"""
-        return self._proc_func(
-            new=False, func='__itruediv__', other=other)
+        return self._proc_func(new=False, func="__itruediv__", other=other)
 
     def __imod__(self, other):
         """ts %= other"""
-        return self._proc_func(
-            new=False, func='__imod__', other=other)
+        return self._proc_func(new=False, func="__imod__", other=other)
 
     def __ior__(self, other):
         """Return self|=value."""
-        return self._proc_func(
-            new=False, func='__ior__', other=other)
+        return self._proc_func(new=False, func="__ior__", other=other)
 
     def __ixor__(self, other):
         """Return self^=value."""
-        return self._proc_func(
-            new=False, func='__ixor__', other=other)
+        return self._proc_func(new=False, func="__ixor__", other=other)
 
     def __imul__(self, other):
         """ts *= other"""
-        return self._proc_func(
-            new=False, func='__imul__', other=other)
+        return self._proc_func(new=False, func="__imul__", other=other)
 
     def __ipow__(self, other):
         """ts **= other"""
-        return self._proc_func(
-            new=False, func='__ipow__', other=other)
+        return self._proc_func(new=False, func="__ipow__", other=other)
 
     def __radd__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__radd__', other=other)
+        return self._proc_func(new=True, func="__radd__", other=other)
 
     def __rtruediv__(self, other):
         """Return other / ts."""
-        return self._proc_func(
-            new=True, func='__rtruediv__', other=other)
+        return self._proc_func(new=True, func="__rtruediv__", other=other)
 
     def __rand__(self, other):
         """Return other & ts."""
-        return self._proc_func(
-            new=True, func='__rand__', other=other)
+        return self._proc_func(new=True, func="__rand__", other=other)
 
     def __rxor__(self, other):
         """Return value^self."""
-        return self._proc_func(
-            new=True, func='__rxor__', other=other)
+        return self._proc_func(new=True, func="__rxor__", other=other)
 
     def __rdivmod__(self, other):
         """Return divmod(value, self)"""
-        return self._proc_func(
-            new=True, func='__rdivmod__', other=other)
+        return self._proc_func(new=True, func="__rdivmod__", other=other)
 
     def __rmod__(self, other):
         """Return other % ts."""
-        return self._proc_func(
-            new=True, func='__rmod__', other=other)
+        return self._proc_func(new=True, func="__rmod__", other=other)
 
     def __rmul__(self, other):
         """Return other * ts."""
-        return self._proc_func(
-            new=True, func='__rmul__', other=other)
+        return self._proc_func(new=True, func="__rmul__", other=other)
 
     def __rfloordiv__(self, other):
         """Return value//self."""
-        return self._proc_func(
-            new=True, func='__rfloordiv__', other=other)
+        return self._proc_func(new=True, func="__rfloordiv__", other=other)
 
     def __rlshift__(self, other):
         """Return self<<value."""
-        return self._proc_func(
-            new=True, func='__rlshift__', other=other)
+        return self._proc_func(new=True, func="__rlshift__", other=other)
 
     def __rsub__(self, other):
         """Return other - ts."""
-        return self._proc_func(
-            new=True, func='__rsub__', other=other)
+        return self._proc_func(new=True, func="__rsub__", other=other)
 
     def __ror__(self, other):
         """Return value|self"""
-        return self._proc_func(
-            new=True, func='__ror__', other=other)
+        return self._proc_func(new=True, func="__ror__", other=other)
 
     def __rpow__(self, other):
         """Return other ** ts."""
-        return self._proc_func(
-            new=True, func='__rpow__', other=other)
+        return self._proc_func(new=True, func="__rpow__", other=other)
 
     def __rrshift__(self, other):
         """Return value>>self."""
-        return self._proc_func(
-            new=True, func='__rrshift__', other=other)
+        return self._proc_func(new=True, func="__rrshift__", other=other)
 
     def __abs__(self):
         """Return abs(ts)."""
-        return self._proc_func(
-            new=True, func='__abs__', other=None)
+        return self._proc_func(new=True, func="__abs__", other=None)
 
     def __pos__(self):
         """Return +ts."""
-        return self._proc_func(
-            new=True, func='__pos__', other=None)
+        return self._proc_func(new=True, func="__pos__", other=None)
 
     def __neg__(self):
         """Return -ts."""
-        return self._proc_func(
-            new=True, func='__neg__', other=None)
+        return self._proc_func(new=True, func="__neg__", other=None)
 
     def __invert__(self):
         """not ts."""
-        return self._proc_func(
-            new=True, func='__invert__', other=None)
+        return self._proc_func(new=True, func="__invert__", other=None)
 
     def __add__(self, other):
         """ts + other.
@@ -182,103 +153,84 @@ class TsProto(object):
         Related functions:
             add()
         """
-        return self._proc_func(
-            new=True, func='__add__', other=other)
+        return self._proc_func(new=True, func="__add__", other=other)
 
     def __pow__(self, other):
         """Return ts ** other."""
-        return self._proc_func(
-            new=True, func='__pow__', other=other)
+        return self._proc_func(new=True, func="__pow__", other=other)
 
     def __and__(self, other):
         """Return ts & other."""
-        return self._proc_func(
-            new=True, func='__and__', other=other)
+        return self._proc_func(new=True, func="__and__", other=other)
 
     def __divmod__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__divmod__', other=other)
+        return self._proc_func(new=True, func="__divmod__", other=other)
 
     def __eq__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__eq__', other=other)
+        return self._proc_func(new=True, func="__eq__", other=other)
 
     def __floordiv__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__floordiv__', other=other)
+        return self._proc_func(new=True, func="__floordiv__", other=other)
 
     def __ge__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__ge__', other=other)
+        return self._proc_func(new=True, func="__ge__", other=other)
 
     def __sub__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__sub__', other=other)
+        return self._proc_func(new=True, func="__sub__", other=other)
 
     def __truediv__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__truediv__', other=other)
+        return self._proc_func(new=True, func="__truediv__", other=other)
 
     def __gt__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__gt__', other=other)
+        return self._proc_func(new=True, func="__gt__", other=other)
 
     def __xor__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__xor__', other=other)
+        return self._proc_func(new=True, func="__xor__", other=other)
 
     def __le__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__le__', other=other)
+        return self._proc_func(new=True, func="__le__", other=other)
 
     def __rshift__(self, other):
         """Return self>>value."""
-        return self._proc_func(
-            new=True, func='__rshift__', other=other)
+        return self._proc_func(new=True, func="__rshift__", other=other)
 
     def __lshift__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__lshift__', other=other)
+        return self._proc_func(new=True, func="__lshift__", other=other)
 
     def __lt__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__lt__', other=other)
+        return self._proc_func(new=True, func="__lt__", other=other)
 
     def __mod__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__mod__', other=other)
+        return self._proc_func(new=True, func="__mod__", other=other)
 
     def __mul__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__mul__', other=other)
+        return self._proc_func(new=True, func="__mul__", other=other)
 
     def __ne__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__ne__', other=other)
+        return self._proc_func(new=True, func="__ne__", other=other)
 
     def __or__(self, other):
         """Return other + ts."""
-        return self._proc_func(
-            new=True, func='__or__', other=other)
+        return self._proc_func(new=True, func="__or__", other=other)
 
     def _proc_func(self, new, func, other=None):
-        """ Processes container function.
+        """Processes container function.
 
-            Reorganize this.
+        Reorganize this.
         """
 
         if new:
@@ -291,21 +243,22 @@ class TsProto(object):
             if other is None:
                 # there may be others that should be in this list.
                 #   at the moment, fixing a problem.
-                if func in ('__eq__', '__ne__'):
+                if func in ("__eq__", "__ne__"):
                     tmp_ts.tseries = getattr(tmp_ts.tseries, func)(other)
                 else:
                     tmp_ts.tseries = getattr(tmp_ts.tseries, func)()
             else:
                 if isinstance(other, TsProto):
-                    tmp_ts.tseries = getattr(
-                        tmp_ts.tseries, func)(other.tseries)
+                    tmp_ts.tseries = getattr(tmp_ts.tseries, func)(
+                        other.tseries
+                    )
                 else:
                     tmp_ts.tseries = getattr(tmp_ts.tseries, func)(other)
 
             return tmp_ts
         else:
             if other is None:
-                self.tseries = getattr(self.tseries, func)(),
+                self.tseries = (getattr(self.tseries, func)(),)
                 return self
             else:
                 if isinstance(other, TsProto):
@@ -323,15 +276,12 @@ class TsProto(object):
         do not match.
         """
         status = False
-        if len(ts1.tseries.shape) == 2 \
-                and len(ts2.tseries.shape) != 2:
+        if len(ts1.tseries.shape) == 2 and len(ts2.tseries.shape) != 2:
             status = True
-        elif len(ts1.tseries.shape) != 2 \
-                and len(ts2.tseries.shape) == 2:
+        elif len(ts1.tseries.shape) != 2 and len(ts2.tseries.shape) == 2:
             status = True
 
-        elif len(ts1.tseries.shape) == 2 \
-                and len(ts2.tseries.shape) == 2:
+        elif len(ts1.tseries.shape) == 2 and len(ts2.tseries.shape) == 2:
             if ts1.tseries.shape[1] != ts2.tseries.shape[1]:
                 status = True
 
@@ -339,11 +289,12 @@ class TsProto(object):
             pass
 
         if status:
-            raise ValueError(' '.join([
-                "Both timeseries must have the same columns:",
-                "%s vs %s"]) % (
-                    ts1.tseries.shape,
-                    ts2.tseries.shape))
+            raise ValueError(
+                " ".join(
+                    ["Both timeseries must have the same columns:", "%s vs %s"]
+                )
+                % (ts1.tseries.shape, ts2.tseries.shape)
+            )
 
     @staticmethod
     def _array_size_check(ts1, ts2):
@@ -351,11 +302,12 @@ class TsProto(object):
         if np.array_equal(ts1, ts2):
             return True
         else:
-            raise ValueError(' '.join([
-                "Sizes of the timeseries are different:",
-                "%s vs %s"]) % (
-                    ts1.tseries.shape,
-                    ts2.tseries.shape))
+            raise ValueError(
+                " ".join(
+                    ["Sizes of the timeseries are different:", "%s vs %s"]
+                )
+                % (ts1.tseries.shape, ts2.tseries.shape)
+            )
 
     def make_arrays(self):
         """
@@ -450,9 +402,7 @@ class TsProto(object):
         else:
             length = min(length1, length2)
 
-            return (
-                ts1[:length],
-                ts2[:length])
+            return (ts1[:length], ts2[:length])
 
     def shape(self):
         """

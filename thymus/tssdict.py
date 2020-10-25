@@ -28,9 +28,10 @@ class TssDict(dict):
 
 
     """
+
     def __init__(self, values=None):
 
-        dict.__init__(self)   # only did this to satisfy pylint
+        dict.__init__(self)  # only did this to satisfy pylint
 
         if isinstance(values, dict):
             for key, values in values.items():
@@ -53,7 +54,7 @@ class TssDict(dict):
         for key, values in self.items():
 
             if isinstance(values, Timeseries):
-                date = values.start_date('datetime')
+                date = values.start_date("datetime")
                 if min_date is not None:
                     if date < min_date:
                         min_date = date
@@ -101,7 +102,7 @@ class TssDict(dict):
         for key, values in self.items():
 
             if isinstance(values, Timeseries):
-                date = values.end_date('datetime')
+                date = values.end_date("datetime")
                 if max_date is not None:
                     date = date
                     if date > max_date:
@@ -237,7 +238,8 @@ class TssDict(dict):
                 except ValueError:
                     if notify:
                         raise ValueError(
-                            "ts %s does not have a value on %s" % (key, date))
+                            "ts %s does not have a value on %s" % (key, date)
+                        )
                     else:
                         all_values.append(None)
 
@@ -292,7 +294,8 @@ class TssDict(dict):
                     ts1.combine(
                         item.combine(discard=discard, pad=pad),
                         discard=discard,
-                        pad=pad)
+                        pad=pad,
+                    )
 
             else:
                 raise ValueError("Unsupported type in for \n%s" % (item))
@@ -318,7 +321,7 @@ class TssDict(dict):
 
         return deepcopy(self)
 
-    def to_dict(self, dt_fmt='str', data_list=True):
+    def to_dict(self, dt_fmt="str", data_list=True):
         """
         This function outputs the entirety of the object as a dict with
         the timeseries components as a dict as well.
@@ -347,7 +350,7 @@ class TssDict(dict):
 
         return self
 
-    def to_json(self, indent=2, dt_fmt='str', data_list=True):
+    def to_json(self, indent=2, dt_fmt="str", data_list=True):
         """
         This function returns the timeseries dict in JSON format.
 
@@ -364,8 +367,8 @@ class TssDict(dict):
 
         """
         return json.dumps(
-            self.to_dict(dt_fmt=dt_fmt, data_list=data_list),
-            indent=indent)
+            self.to_dict(dt_fmt=dt_fmt, data_list=data_list), indent=indent
+        )
 
     def from_json(self, json_str):
         """
@@ -378,7 +381,7 @@ class TssDict(dict):
         if isinstance(tss_tmp, dict):
 
             for key, value in tss_tmp.items():
-                self[key] = (Timeseries().from_dict(value))
+                self[key] = Timeseries().from_dict(value)
 
         else:
             ValueError("Incoming JSON string does not start with a dict.")

@@ -14,12 +14,13 @@ from thymus.timeseries import Timeseries, TS_TIMESTAMP, TS_ORDINAL
 
 class TestTimeseries(unittest.TestCase):
     """ This class tests the base class of Timeseries. """
+
     def setUp(self):
 
         # three timeseries
         self.ts = Timeseries()
-        self.ts.key = 'Test Key'
-        self.ts.columns = ['F1']
+        self.ts.key = "Test Key"
+        self.ts.columns = ["F1"]
 
         start_date = datetime(2015, 12, 31).toordinal()
         self.ts.dseries = start_date + np.arange(10)
@@ -42,7 +43,7 @@ class TestTimeseries(unittest.TestCase):
 
         # timeseries with multiple columns
         self.ts_mult = Timeseries()
-        self.ts_mult.key = 'ts_mult_key'
+        self.ts_mult.key = "ts_mult_key"
         start_date = datetime(2015, 12, 31).toordinal()
         self.ts_mult.dseries = start_date + np.arange(5)
         self.ts_mult.tseries = np.arange(10).reshape((5, 2))
@@ -56,13 +57,13 @@ class TestTimeseries(unittest.TestCase):
         # self.assertIsInstance(tmp_ts.dseries, list)
         # self.assertIsInstance(tmp_ts.tseries, list)
         self.assertIsInstance(tmp_ts.columns, list)
-        self.assertEqual(tmp_ts.frequency, 'd')
+        self.assertEqual(tmp_ts.frequency, "d")
 
         # no particular error checking on frequency values
         # however, will fail during frequency conversions
-        tmp_ts = Timeseries('m')
+        tmp_ts = Timeseries("m")
 
-        self.assertEqual(tmp_ts.frequency, 'm')
+        self.assertEqual(tmp_ts.frequency, "m")
 
     @unittest.skip
     def test_setup(self):
@@ -90,14 +91,12 @@ class TestTimeseries(unittest.TestCase):
         self.assertEqual(self.ts.dseries[-1], self.ts.start_date())
 
         # get as datetime from ordinal
-        self.assertEqual(
-            date(2015, 12, 31),
-            self.ts.start_date('datetime'))
+        self.assertEqual(date(2015, 12, 31), self.ts.start_date("datetime"))
 
         # get as timestamp
-        ts = Timeseries(frequency='sec')
+        ts = Timeseries(frequency="sec")
 
-        self.assertEqual('timestamp', ts.get_date_series_type())
+        self.assertEqual("timestamp", ts.get_date_series_type())
 
         ts.dseries = datetime(2015, 12, 31).timestamp() + np.arange(10)
         ts.tseries = np.arange(10)
@@ -109,9 +108,7 @@ class TestTimeseries(unittest.TestCase):
         self.assertEqual(ts.dseries[-1], ts.start_date())
 
         # get as datetime from timestamp
-        self.assertEqual(
-            date(2015, 12, 31),
-            self.ts.start_date('datetime'))
+        self.assertEqual(date(2015, 12, 31), self.ts.start_date("datetime"))
 
     def test_timeseries_end_date(self):
         """Tests end date regardless of date sorts and types."""
@@ -124,17 +121,16 @@ class TestTimeseries(unittest.TestCase):
         self.assertEqual(self.ts.dseries[0], self.ts.end_date())
 
         # get as datetime from ordinal
-        self.assertEqual(
-            date(2016, 1, 9),
-            self.ts.end_date('datetime'))
+        self.assertEqual(date(2016, 1, 9), self.ts.end_date("datetime"))
 
         # get as timestamp
-        ts = Timeseries(frequency='sec')
+        ts = Timeseries(frequency="sec")
 
-        self.assertEqual('timestamp', ts.get_date_series_type())
+        self.assertEqual("timestamp", ts.get_date_series_type())
 
-        ts.dseries = datetime(2015, 12, 31, 0, 0, 0).timestamp() \
-            + np.arange(10)
+        ts.dseries = datetime(2015, 12, 31, 0, 0, 0).timestamp() + np.arange(
+            10
+        )
         ts.tseries = np.arange(10)
 
         self.assertEqual(ts.dseries[-1], ts.end_date())
@@ -145,46 +141,43 @@ class TestTimeseries(unittest.TestCase):
 
         # get as datetime from timestamp
         self.assertEqual(
-            datetime(2015, 12, 31, 0, 0, 9),
-            ts.end_date('datetime'))
+            datetime(2015, 12, 31, 0, 0, 9), ts.end_date("datetime")
+        )
 
     def test_timeseries_get_datetime(self):
         """Tests conversion to datetime from ordinal/timestamps"""
 
         tmp_date = self.ts.start_date()
 
-        self.assertEqual(
-            date(2015, 12, 31),
-            self.ts.get_datetime(tmp_date))
+        self.assertEqual(date(2015, 12, 31), self.ts.get_datetime(tmp_date))
 
-        ts = Timeseries(frequency='sec')
+        ts = Timeseries(frequency="sec")
 
         ts.dseries = datetime(2015, 12, 31).timestamp() + np.arange(10)
         ts.tseries = np.arange(10)
 
         tmp_date = self.ts.start_date()
-        self.assertEqual(
-            date(2015, 12, 31),
-            self.ts.get_datetime(tmp_date))
+        self.assertEqual(date(2015, 12, 31), self.ts.get_datetime(tmp_date))
 
     def test_timeseries_to_dict(self):
         """Tests conversion of dates and values to a dict."""
         tdict = self.ts.to_dict()
 
         self.assertDictEqual(
-            tdict['data'],
+            tdict["data"],
             {
-                '735963': 0.0,
-                '735964': 1.0,
-                '735965': 2.0,
-                '735966': 3.0,
-                '735967': 4.0,
-                '735968': 5.0,
-                '735969': 6.0,
-                '735970': 7.0,
-                '735971': 8.0,
-                '735972': 9.0
-            })
+                "735963": 0.0,
+                "735964": 1.0,
+                "735965": 2.0,
+                "735966": 3.0,
+                "735967": 4.0,
+                "735968": 5.0,
+                "735969": 6.0,
+                "735970": 7.0,
+                "735971": 8.0,
+                "735972": 9.0,
+            },
+        )
 
         # NOTE: to_dict: needs test for header
         # NOTE: to_dict: needs test for datetime series
@@ -198,17 +191,18 @@ class TestTimeseries(unittest.TestCase):
         self.assertListEqual(
             tlist,
             [
-                ('735963', 0.0),
-                ('735964', 1.0),
-                ('735965', 2.0),
-                ('735966', 3.0),
-                ('735967', 4.0),
-                ('735968', 5.0),
-                ('735969', 6.0),
-                ('735970', 7.0),
-                ('735971', 8.0),
-                ('735972', 9.0)
-            ])
+                ("735963", 0.0),
+                ("735964", 1.0),
+                ("735965", 2.0),
+                ("735966", 3.0),
+                ("735967", 4.0),
+                ("735968", 5.0),
+                ("735969", 6.0),
+                ("735970", 7.0),
+                ("735971", 8.0),
+                ("735972", 9.0),
+            ],
+        )
 
     def test_timeseries_to_json(self):
         """
@@ -217,28 +211,30 @@ class TestTimeseries(unittest.TestCase):
         """
         # NOTE: to_json: only one example tested
 
-        json_test = self.ts_mult.to_json(dt_fmt='str')
+        json_test = self.ts_mult.to_json(dt_fmt="str")
 
         self.maxDiff = None
 
         self.assertDictEqual(
-            json.loads(json_test)['header'],
+            json.loads(json_test)["header"],
             {
                 "end_of_period": True,
                 "key": "ts_mult_key",
                 "columns": [],
-                "frequency": "d"
-            })
+                "frequency": "d",
+            },
+        )
 
         self.assertListEqual(
-            json.loads(json_test)['data'],
+            json.loads(json_test)["data"],
             [
                 ["2015-12-31", [0.0, 1.0]],
                 ["2016-01-01", [2.0, 3.0]],
                 ["2016-01-02", [4.0, 5.0]],
                 ["2016-01-03", [6.0, 7.0]],
-                ["2016-01-04", [8.0, 9.0]]
-            ])
+                ["2016-01-04", [8.0, 9.0]],
+            ],
+        )
 
     def test_timeseries_from_json(self):
         """
@@ -269,9 +265,9 @@ class TestTimeseries(unittest.TestCase):
         ts_tmp.from_json(json_test)
 
         # header
-        self.assertEqual(ts_tmp.key, 'test_key')
-        self.assertListEqual(ts_tmp.columns, ['test'])
-        self.assertEqual(ts_tmp.frequency, 'd')
+        self.assertEqual(ts_tmp.key, "test_key")
+        self.assertListEqual(ts_tmp.columns, ["test"])
+        self.assertEqual(ts_tmp.frequency, "d")
         self.assertTrue(ts_tmp.end_of_period)
 
         # dseries
@@ -282,17 +278,14 @@ class TestTimeseries(unittest.TestCase):
                 "2016-01-01",
                 "2016-01-02",
                 "2016-01-03",
-                "2016-01-04"])
+                "2016-01-04",
+            ],
+        )
 
         self.assertListEqual(
             ts_tmp.tseries.tolist(),
-            [
-                [0.0, 1.0],
-                [2.0, 3.0],
-                [4.0, 5.0],
-                [6.0, 7.0],
-                [8.0, 9.0]
-            ])
+            [[0.0, 1.0], [2.0, 3.0], [4.0, 5.0], [6.0, 7.0], [8.0, 9.0]],
+        )
 
     def test_timeseries_extend(self):
         """Tests adding rows to a timeseries."""
@@ -306,9 +299,7 @@ class TestTimeseries(unittest.TestCase):
 
         ts_copy = self.ts.clone()
 
-        self.assertRaises(
-            ValueError,
-            self.ts.extend, ts, overlay=False)
+        self.assertRaises(ValueError, self.ts.extend, ts, overlay=False)
 
         # [ 0.  1.  2.  3.  4.  5.  6.  7.  8.  9.]
         #
@@ -368,9 +359,18 @@ class TestTimeseries(unittest.TestCase):
         self.assertListEqual(
             ts_new1.tseries.tolist(),
             [
-                [0., 0.], [4., 4.], [8., 8.], [12., 12.], [16., 16.],
-                [10., 10.], [12., 12.], [14., 14.], [16., 16.], [18., 18.]
-            ])
+                [0.0, 0.0],
+                [4.0, 4.0],
+                [8.0, 8.0],
+                [12.0, 12.0],
+                [16.0, 16.0],
+                [10.0, 10.0],
+                [12.0, 12.0],
+                [14.0, 14.0],
+                [16.0, 16.0],
+                [18.0, 18.0],
+            ],
+        )
 
     def test_timeseries_replace(self):
         """Tests replacing values in a timeseries."""
@@ -439,7 +439,8 @@ class TestTimeseries(unittest.TestCase):
 
         # combine with shorter timeseries discard=False pad=None
         self.assertRaises(
-            ValueError, ts.combine, ts_short, discard=False, pad=None)
+            ValueError, ts.combine, ts_short, discard=False, pad=None
+        )
 
         # combine with shorter timeseries discard=False pad=0
         ts_new = self.ts.combine(ts_short, discard=False, pad=0)
@@ -463,7 +464,8 @@ class TestTimeseries(unittest.TestCase):
 
         # combine with longer timeseries discard=False pad=None
         self.assertRaises(
-            ValueError, ts.combine, ts_long, discard=False, pad=None)
+            ValueError, ts.combine, ts_long, discard=False, pad=None
+        )
 
         # combine with longer timeseries discard=False pad=0
         ts_new = self.ts.combine(ts_long, discard=False, pad=0.0)
@@ -480,26 +482,26 @@ class TestTimeseries(unittest.TestCase):
         #   Day types
         self.assertEqual(self.ts.get_date_series_type(), TS_ORDINAL)
 
-        self.ts.frequeny = 'w'
+        self.ts.frequeny = "w"
         self.assertEqual(self.ts.get_date_series_type(), TS_ORDINAL)
 
-        self.ts.frequeny = 'm'
+        self.ts.frequeny = "m"
         self.assertEqual(self.ts.get_date_series_type(), TS_ORDINAL)
 
-        self.ts.frequeny = 'q'
+        self.ts.frequeny = "q"
         self.assertEqual(self.ts.get_date_series_type(), TS_ORDINAL)
 
-        self.ts.frequeny = 'y'
+        self.ts.frequeny = "y"
         self.assertEqual(self.ts.get_date_series_type(), TS_ORDINAL)
 
         #   Intraday types
-        self.ts.frequency = 'h'
+        self.ts.frequency = "h"
         self.assertEqual(self.ts.get_date_series_type(), TS_TIMESTAMP)
 
-        self.ts.frequency = 'min'
+        self.ts.frequency = "min"
         self.assertEqual(self.ts.get_date_series_type(), TS_TIMESTAMP)
 
-        self.ts.frequency = 'sec'
+        self.ts.frequency = "sec"
         self.assertEqual(self.ts.get_date_series_type(), TS_TIMESTAMP)
 
     def test_date_string_series(self):
@@ -508,14 +510,14 @@ class TestTimeseries(unittest.TestCase):
         # ordinal default fmt
         str_series = self.ts.date_string_series()
 
-        self.assertEqual(str_series[0], '2015-12-31')
-        self.assertEqual(str_series[1], '2016-01-01')
-        self.assertEqual(str_series[2], '2016-01-02')
-        self.assertEqual(str_series[3], '2016-01-03')
-        self.assertEqual(str_series[4], '2016-01-04')
+        self.assertEqual(str_series[0], "2015-12-31")
+        self.assertEqual(str_series[1], "2016-01-01")
+        self.assertEqual(str_series[2], "2016-01-02")
+        self.assertEqual(str_series[3], "2016-01-03")
+        self.assertEqual(str_series[4], "2016-01-04")
 
         # timestamp default fmt
-        ts = Timeseries(frequency='sec')
+        ts = Timeseries(frequency="sec")
 
         ts.dseries = datetime(2016, 1, 1, 0, 0, 0).timestamp() + np.arange(10)
         ts.tseries = np.arange(10)
@@ -523,20 +525,20 @@ class TestTimeseries(unittest.TestCase):
 
         str_series = ts.date_string_series()
 
-        self.assertEqual(str_series[0], '2016-01-01 00:00:00')
-        self.assertEqual(str_series[1], '2016-01-01 00:00:01')
-        self.assertEqual(str_series[2], '2016-01-01 00:00:02')
-        self.assertEqual(str_series[3], '2016-01-01 00:00:03')
-        self.assertEqual(str_series[4], '2016-01-01 00:00:04')
+        self.assertEqual(str_series[0], "2016-01-01 00:00:00")
+        self.assertEqual(str_series[1], "2016-01-01 00:00:01")
+        self.assertEqual(str_series[2], "2016-01-01 00:00:02")
+        self.assertEqual(str_series[3], "2016-01-01 00:00:03")
+        self.assertEqual(str_series[4], "2016-01-01 00:00:04")
 
         # ordinal custom fmt
-        str_series = self.ts.date_string_series('%Y-%b-%d')
+        str_series = self.ts.date_string_series("%Y-%b-%d")
 
-        self.assertEqual(str_series[0], '2015-Dec-31')
-        self.assertEqual(str_series[1], '2016-Jan-01')
-        self.assertEqual(str_series[2], '2016-Jan-02')
-        self.assertEqual(str_series[3], '2016-Jan-03')
-        self.assertEqual(str_series[4], '2016-Jan-04')
+        self.assertEqual(str_series[0], "2015-Dec-31")
+        self.assertEqual(str_series[1], "2016-Jan-01")
+        self.assertEqual(str_series[2], "2016-Jan-02")
+        self.assertEqual(str_series[3], "2016-Jan-03")
+        self.assertEqual(str_series[4], "2016-Jan-04")
 
     def test_timeseries_shape(self):
         """Tests returning the .shape of the tseries array."""
@@ -544,7 +546,8 @@ class TestTimeseries(unittest.TestCase):
         self.assertTupleEqual(self.ts.shape(), self.ts.tseries.shape)
 
         self.assertTupleEqual(
-            self.ts.combine(self.ts).shape(), (self.ts.tseries.shape[0], 2))
+            self.ts.combine(self.ts).shape(), (self.ts.tseries.shape[0], 2)
+        )
 
     def test_sort_by_date(self):
         """Tests sorting the data by date."""
@@ -563,8 +566,8 @@ class TestTimeseries(unittest.TestCase):
         self.ts.sort_by_date(reverse=False)
 
         self.assertEqual(
-            self.ts.dseries[0],
-            datetime(2015, 12, 31).toordinal())
+            self.ts.dseries[0], datetime(2015, 12, 31).toordinal()
+        )
         self.assertEqual(self.ts.dseries[1], datetime(2016, 1, 1).toordinal())
         self.assertEqual(self.ts.dseries[2], datetime(2016, 1, 2).toordinal())
         self.assertEqual(self.ts.dseries[3], datetime(2016, 1, 3).toordinal())
@@ -591,8 +594,8 @@ class TestTimeseries(unittest.TestCase):
         self.ts.sort_by_date(reverse=False, force=True)
 
         self.assertEqual(
-            self.ts.dseries[0],
-            datetime(2015, 12, 31).toordinal())
+            self.ts.dseries[0], datetime(2015, 12, 31).toordinal()
+        )
         self.assertEqual(self.ts.dseries[1], datetime(2016, 1, 1).toordinal())
         self.assertEqual(self.ts.dseries[2], datetime(2016, 1, 2).toordinal())
         self.assertEqual(self.ts.dseries[3], datetime(2016, 1, 3).toordinal())
@@ -690,8 +693,8 @@ class TestTimeseries(unittest.TestCase):
         ts = self.ts.get_diffs()
 
         self.assertListEqual(
-            ts.tseries.tolist(),
-            [1., 1., 1., 1., 1., 1., 1., 1., 1.])
+            ts.tseries.tolist(), [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+        )
 
         self.assertEqual(len(ts.tseries), len(self.ts.tseries) - 1)
 
@@ -704,11 +707,11 @@ class TestTimeseries(unittest.TestCase):
         ts.tseries += 1
         ts1 = ts.get_pcdiffs()
 
-        self.assertAlmostEqual(ts1.tseries[0], 100.)
-        self.assertAlmostEqual(ts1.tseries[1], 50.)
+        self.assertAlmostEqual(ts1.tseries[0], 100.0)
+        self.assertAlmostEqual(ts1.tseries[1], 50.0)
         self.assertAlmostEqual(ts1.tseries[2], 33.33333333)
-        self.assertAlmostEqual(ts1.tseries[3], 25.)
-        self.assertAlmostEqual(ts1.tseries[4], 20.)
+        self.assertAlmostEqual(ts1.tseries[3], 25.0)
+        self.assertAlmostEqual(ts1.tseries[4], 20.0)
         self.assertAlmostEqual(ts1.tseries[5], 16.66666667)
 
         self.assertEqual(len(ts1.tseries), len(ts.tseries) - 1)
@@ -757,9 +760,9 @@ class TestTimeseries(unittest.TestCase):
 
         ts.make_arrays()
 
-        date1 = datetime(2016, 1, 7)    # existing date within date series
-        date2 = datetime(2016, 1, 25)   # existing date within date series
-        date3 = datetime(2016, 1, 16)   # date falling on a weekend
+        date1 = datetime(2016, 1, 7)  # existing date within date series
+        date2 = datetime(2016, 1, 25)  # existing date within date series
+        date3 = datetime(2016, 1, 16)  # date falling on a weekend
 
         # date as datetime
         ts1 = ts.clone()
@@ -834,10 +837,10 @@ class TestTimeseries(unittest.TestCase):
 
         ts.make_arrays()
 
-        date1 = datetime(2016, 1, 7)    # existing date within date series
-        date2 = datetime(2016, 1, 16)   # date falling on a weekend
-        date3 = datetime(2015, 6, 16)   # date prior to start of date series
-        date4 = datetime(2016, 3, 8)    # date after to end of date series
+        date1 = datetime(2016, 1, 7)  # existing date within date series
+        date2 = datetime(2016, 1, 16)  # date falling on a weekend
+        date3 = datetime(2015, 6, 16)  # date prior to start of date series
+        date4 = datetime(2016, 3, 8)  # date after to end of date series
 
         # as datetime
         row_no = ts.row_no(rowdate=date1, closest=0, no_error=False)
@@ -845,13 +848,14 @@ class TestTimeseries(unittest.TestCase):
 
         # as ordinal
         row_no = ts.row_no(
-            rowdate=date1.toordinal(), closest=0, no_error=False)
+            rowdate=date1.toordinal(), closest=0, no_error=False
+        )
         self.assertEqual(row_no, 5)
 
         # as datetime but date not in series
         self.assertRaises(
-            ValueError,
-            ts.row_no, rowdate=date2, closest=0, no_error=False)
+            ValueError, ts.row_no, rowdate=date2, closest=0, no_error=False
+        )
 
         row_no = ts.row_no(rowdate=date2, closest=0, no_error=True)
         self.assertEqual(row_no, -1)
@@ -866,13 +870,13 @@ class TestTimeseries(unittest.TestCase):
 
         # as datetime but date not in series, look for earlier date
         self.assertRaises(
-            ValueError,
-            ts.row_no, rowdate=date3, closest=-1, no_error=False)
+            ValueError, ts.row_no, rowdate=date3, closest=-1, no_error=False
+        )
 
         # as datetime but date not in series, look for later date
         self.assertRaises(
-            ValueError,
-            ts.row_no, rowdate=date4, closest=1, no_error=False)
+            ValueError, ts.row_no, rowdate=date4, closest=1, no_error=False
+        )
 
         # now change series direction
         ts.reverse()
@@ -883,13 +887,14 @@ class TestTimeseries(unittest.TestCase):
 
         # as ordinal
         row_no = ts.row_no(
-            rowdate=date1.toordinal(), closest=0, no_error=False)
+            rowdate=date1.toordinal(), closest=0, no_error=False
+        )
         self.assertEqual(row_no, 22)
 
         # as datetime but date not in series
         self.assertRaises(
-            ValueError,
-            ts.row_no, rowdate=date2, closest=0, no_error=False)
+            ValueError, ts.row_no, rowdate=date2, closest=0, no_error=False
+        )
 
         row_no = ts.row_no(rowdate=date2, closest=0, no_error=True)
         self.assertEqual(row_no, -1)
@@ -904,13 +909,13 @@ class TestTimeseries(unittest.TestCase):
 
         # as datetime but date not in series, look for earlier date
         self.assertRaises(
-            ValueError,
-            ts.row_no, rowdate=date3, closest=-1, no_error=False)
+            ValueError, ts.row_no, rowdate=date3, closest=-1, no_error=False
+        )
 
         # as datetime but date not in series, look for later date
         self.assertRaises(
-            ValueError,
-            ts.row_no, rowdate=date4, closest=1, no_error=False)
+            ValueError, ts.row_no, rowdate=date4, closest=1, no_error=False
+        )
 
     def test_timeseries_datetime_series(self):
         """ Tests returning a date series converted to date/datetime objects. """
@@ -920,10 +925,9 @@ class TestTimeseries(unittest.TestCase):
 
         ts = Timeseries()
         ts.dseries = ord_list
-        ts.tseries = np.arange(20)      # gilding the lily
+        ts.tseries = np.arange(20)  # gilding the lily
 
-        dt_list = [
-            date(2016, 1, 1) + timedelta(days=i) for i in range(20)]
+        dt_list = [date(2016, 1, 1) + timedelta(days=i) for i in range(20)]
 
         self.assertListEqual(ts.datetime_series(), dt_list)
 
@@ -932,7 +936,8 @@ class TestTimeseries(unittest.TestCase):
         ts.tseries = np.arange(20)
 
         dt_list = [
-            datetime(2016, 1, 1) + timedelta(seconds=i) for i in range(20)]
+            datetime(2016, 1, 1) + timedelta(seconds=i) for i in range(20)
+        ]
 
         self.assertListEqual(ts.datetime_series(), dt_list)
 
@@ -941,39 +946,41 @@ class TestTimeseries(unittest.TestCase):
         # ordinal date default format
         ts = Timeseries()
         str_date = ts.fmt_date(
-            datetime(2016, 3, 1).toordinal(),
-            dt_type=TS_ORDINAL)
+            datetime(2016, 3, 1).toordinal(), dt_type=TS_ORDINAL
+        )
 
-        self.assertEqual(str_date, '2016-03-01')
+        self.assertEqual(str_date, "2016-03-01")
 
         # ordinal date custom format
         str_date = ts.fmt_date(
             datetime(2016, 3, 1).toordinal(),
             dt_type=TS_ORDINAL,
-            dt_fmt='%g %b %d')
+            dt_fmt="%g %b %d",
+        )
 
-        self.assertEqual(str_date, '16 Mar 01')
+        self.assertEqual(str_date, "16 Mar 01")
 
         # timestamp date default format
         ts = Timeseries(frequency=FREQ_SEC)
         str_date = ts.fmt_date(
-            datetime(2016, 3, 1).timestamp(),
-            dt_type=TS_TIMESTAMP)
+            datetime(2016, 3, 1).timestamp(), dt_type=TS_TIMESTAMP
+        )
 
-        self.assertEqual(str_date, '2016-03-01 00:00:00')
+        self.assertEqual(str_date, "2016-03-01 00:00:00")
 
         # timestamp date custom format
         str_date = ts.fmt_date(
             datetime(2016, 3, 1, 10, 5, 23, 45).timestamp(),
             dt_type=TS_TIMESTAMP,
-            dt_fmt='%F at %H:%M and %S seconds')
+            dt_fmt="%F at %H:%M and %S seconds",
+        )
 
-        self.assertEqual(str_date, '2016-03-01 at 10:05 and 23 seconds')
+        self.assertEqual(str_date, "2016-03-01 at 10:05 and 23 seconds")
 
         # invalid date type
         self.assertRaises(
-            ValueError,
-            ts.fmt_date, datetime.now(), dt_type=None, dt_fmt='%F')
+            ValueError, ts.fmt_date, datetime.now(), dt_type=None, dt_fmt="%F"
+        )
 
     def test_timeseries__repr__(self):
         """
@@ -985,25 +992,25 @@ class TestTimeseries(unittest.TestCase):
         end-of-period: True
         shape: (10,)
         """
-        str_ts = str(self.ts).split('\n')
-        self.assertEqual('<Timeseries>', str_ts[0])
-        self.assertEqual('key: Test Key', str_ts[1])
+        str_ts = str(self.ts).split("\n")
+        self.assertEqual("<Timeseries>", str_ts[0])
+        self.assertEqual("key: Test Key", str_ts[1])
         self.assertEqual("columns: ['F1']", str_ts[2])
-        self.assertEqual('frequency: d', str_ts[3])
+        self.assertEqual("frequency: d", str_ts[3])
         self.assertEqual("daterange: ('2015-12-31', '2016-01-09')", str_ts[4])
-        self.assertEqual('end-of-period: True', str_ts[5])
-        self.assertEqual('shape: (10,)', str_ts[6])
+        self.assertEqual("end-of-period: True", str_ts[5])
+        self.assertEqual("shape: (10,)", str_ts[6])
 
         # test blank Timeseries
         ts = Timeseries()
-        str_ts = str(ts).split('\n')
-        self.assertEqual('<Timeseries>', str_ts[0])
-        self.assertEqual('key: ', str_ts[1])
+        str_ts = str(ts).split("\n")
+        self.assertEqual("<Timeseries>", str_ts[0])
+        self.assertEqual("key: ", str_ts[1])
         self.assertEqual("columns: []", str_ts[2])
-        self.assertEqual('frequency: d', str_ts[3])
+        self.assertEqual("frequency: d", str_ts[3])
         self.assertEqual("daterange: (None, None)", str_ts[4])
-        self.assertEqual('end-of-period: True', str_ts[5])
-        self.assertEqual('shape: None', str_ts[6])
+        self.assertEqual("end-of-period: True", str_ts[5])
+        self.assertEqual("shape: None", str_ts[6])
 
     def test_timeseries_set_zeros(self):
         """ This function tests whether the timeseries can be set to zeros. """
@@ -1037,10 +1044,12 @@ class TestTimeseries(unittest.TestCase):
         self.assertDictEqual(
             header_dict,
             {
-                'frequency': 'd',
-                'key': 'Test Key',
-                'columns': ['F1'],
-                'end_of_period': True})
+                "frequency": "d",
+                "key": "Test Key",
+                "columns": ["F1"],
+                "end_of_period": True,
+            },
+        )
 
     def test_timeseries_daterange(self):
         """Tests returning the starting and ending dates in various formats."""
@@ -1049,16 +1058,20 @@ class TestTimeseries(unittest.TestCase):
             self.ts.daterange(),
             (
                 datetime(2015, 12, 31).toordinal(),
-                datetime(2016, 1, 9).toordinal()))
+                datetime(2016, 1, 9).toordinal(),
+            ),
+        )
 
         # ordinal daterange as string
         self.assertTupleEqual(
-            self.ts.daterange('str'), ('2015-12-31', '2016-01-09'))
+            self.ts.daterange("str"), ("2015-12-31", "2016-01-09")
+        )
 
         # ordinal daterange as datetimes
         self.assertTupleEqual(
-            self.ts.daterange('datetime'),
-            (date(2015, 12, 31), date(2016, 1, 9)))
+            self.ts.daterange("datetime"),
+            (date(2015, 12, 31), date(2016, 1, 9)),
+        )
 
         # timestamp
         tstamp_list = datetime(2016, 1, 1).timestamp() + np.arange(20)
@@ -1073,26 +1086,27 @@ class TestTimeseries(unittest.TestCase):
             ts.daterange(),
             (
                 datetime(2016, 1, 1).timestamp(),
-                datetime(2016, 1, 1, 0, 0, 19).timestamp()))
+                datetime(2016, 1, 1, 0, 0, 19).timestamp(),
+            ),
+        )
 
         # timestamp daterange as string
         self.assertTupleEqual(
-            ts.daterange('str'),
-            ('2016-01-01 00:00:00', '2016-01-01 00:00:19'))
+            ts.daterange("str"), ("2016-01-01 00:00:00", "2016-01-01 00:00:19")
+        )
 
         # timestamp daterange as datetimes
         self.assertTupleEqual(
-            ts.daterange('datetime'),
-            (
-                datetime(2016, 1, 1, 0, 0, 0),
-                datetime(2016, 1, 1, 0, 0, 19)))
+            ts.daterange("datetime"),
+            (datetime(2016, 1, 1, 0, 0, 0), datetime(2016, 1, 1, 0, 0, 19)),
+        )
 
         # test blank Timeseries
         ts = Timeseries()
         self.assertTupleEqual(ts.daterange(), (None, None))
 
         # test invalid format flag
-        self.assertRaises(ValueError, self.ts.daterange, fmt='wrong')
+        self.assertRaises(ValueError, self.ts.daterange, fmt="wrong")
 
     def test_timeseries_years(self):
         """Tests returning the ending values by years in a dict."""
@@ -1102,8 +1116,8 @@ class TestTimeseries(unittest.TestCase):
         ts.tseries = np.arange(1000)
 
         self.assertDictEqual(
-            ts.years(),
-            {2016: 366, 2017: 731, 2018: 999, 2015: 0})
+            ts.years(), {2016: 366, 2017: 731, 2018: 999, 2015: 0}
+        )
 
     def test_timeseries_months(self):
         """Tests returning the ending values by months in a dict."""
@@ -1114,18 +1128,42 @@ class TestTimeseries(unittest.TestCase):
         self.assertDictEqual(
             ts.months(),
             {
-                '2015-12': 0, '2016-01': 31, '2016-02': 60,
-                '2016-03': 91, '2016-04': 121, '2016-05': 152,
-                '2016-06': 182, '2016-07': 213, '2016-08': 244,
-                '2016-09': 274, '2016-10': 305, '2016-11': 335,
-                '2016-12': 366, '2017-01': 397, '2017-02': 425,
-                '2017-03': 456, '2017-04': 486, '2017-05': 517,
-                '2017-06': 547, '2017-07': 578, '2017-08': 609,
-                '2017-09': 639, '2017-10': 670, '2017-11': 700,
-                '2017-12': 731, '2018-01': 762, '2018-02': 790,
-                '2018-03': 821, '2018-04': 851, '2018-05': 882,
-                '2018-06': 912, '2018-07': 943, '2018-08': 974,
-                '2018-09': 999})
+                "2015-12": 0,
+                "2016-01": 31,
+                "2016-02": 60,
+                "2016-03": 91,
+                "2016-04": 121,
+                "2016-05": 152,
+                "2016-06": 182,
+                "2016-07": 213,
+                "2016-08": 244,
+                "2016-09": 274,
+                "2016-10": 305,
+                "2016-11": 335,
+                "2016-12": 366,
+                "2017-01": 397,
+                "2017-02": 425,
+                "2017-03": 456,
+                "2017-04": 486,
+                "2017-05": 517,
+                "2017-06": 547,
+                "2017-07": 578,
+                "2017-08": 609,
+                "2017-09": 639,
+                "2017-10": 670,
+                "2017-11": 700,
+                "2017-12": 731,
+                "2018-01": 762,
+                "2018-02": 790,
+                "2018-03": 821,
+                "2018-04": 851,
+                "2018-05": 882,
+                "2018-06": 912,
+                "2018-07": 943,
+                "2018-08": 974,
+                "2018-09": 999,
+            },
+        )
 
     def test_timeseries_closest_date(self):
         """Tests returning the closest date in the series to the input date."""
@@ -1144,10 +1182,10 @@ class TestTimeseries(unittest.TestCase):
 
         ts.make_arrays()
 
-        date1 = datetime(2016, 1, 7)    # existing date within date series
-        date2 = datetime(2016, 1, 16)   # date falling on a weekend
-        date3 = datetime(2015, 6, 16)   # date prior to start of date series
-        date4 = datetime(2016, 3, 8)    # date after to end of date series
+        date1 = datetime(2016, 1, 7)  # existing date within date series
+        date2 = datetime(2016, 1, 16)  # date falling on a weekend
+        date3 = datetime(2015, 6, 16)  # date prior to start of date series
+        date4 = datetime(2016, 3, 8)  # date after to end of date series
 
         # as datetime and in the series
         test_date = ts.closest_date(rowdate=date1, closest=1)
@@ -1166,13 +1204,13 @@ class TestTimeseries(unittest.TestCase):
 
         # as datetime but date not in series, look for earlier date
         self.assertRaises(
-            ValueError,
-            ts.closest_date, rowdate=date3, closest=-1)
+            ValueError, ts.closest_date, rowdate=date3, closest=-1
+        )
 
         # as datetime but date not in series, look for later date
         self.assertRaises(
-            ValueError,
-            ts.closest_date, rowdate=date4, closest=1)
+            ValueError, ts.closest_date, rowdate=date4, closest=1
+        )
 
     def test_timeseries_get_duped_dates(self):
         """Test the dupes works properly."""
@@ -1180,7 +1218,7 @@ class TestTimeseries(unittest.TestCase):
 
         ts.dseries[3] = ts.dseries[4]
 
-        ts = Timeseries(frequency='sec')
+        ts = Timeseries(frequency="sec")
 
         ts.dseries = datetime(2015, 12, 31).timestamp() + np.arange(10)
         ts.tseries = np.arange(10)
@@ -1201,10 +1239,11 @@ class TestTimeseries(unittest.TestCase):
             (date(2016, 1, 6), 6.0),
             (date(2016, 1, 7), 7.0),
             (date(2016, 1, 8), 8.0),
-            (date(2016, 1, 9), 9.0)]
+            (date(2016, 1, 9), 9.0),
+        ]
 
         self.assertListEqual(self.ts.items(), items)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

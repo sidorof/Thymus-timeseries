@@ -3,4 +3,5 @@ dist
 *.egg*
 *.pyc
 *.pyo
+venv
 
