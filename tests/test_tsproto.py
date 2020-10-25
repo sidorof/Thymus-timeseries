@@ -14,6 +14,7 @@ class TestTsProto(unittest.TestCase):
     """
     This class tests the base class TsProto.
     """
+
     def setUp(self):
 
         # three timeseries
@@ -54,28 +55,64 @@ class TestTsProto(unittest.TestCase):
         ts = self.ts.clone()
 
         flist = [
-            '__pow__', '__add__', '__rsub__', '__rtruediv__',
-            '__divmod__', '__sub__', '__eq__',
-            '__floordiv__', '__truediv__', '__ge__',
-            '__gt__', '__le__', '__lt__', '__mod__', '__mul__',
-            '__ne__', '__radd__', '__rdivmod__',
-            '__rfloordiv__', '__rmod__', '__rmul__',
-            '__rpow__']
+            "__pow__",
+            "__add__",
+            "__rsub__",
+            "__rtruediv__",
+            "__divmod__",
+            "__sub__",
+            "__eq__",
+            "__floordiv__",
+            "__truediv__",
+            "__ge__",
+            "__gt__",
+            "__le__",
+            "__lt__",
+            "__mod__",
+            "__mul__",
+            "__ne__",
+            "__radd__",
+            "__rdivmod__",
+            "__rfloordiv__",
+            "__rmod__",
+            "__rmul__",
+            "__rpow__",
+        ]
 
-        unary_flist = ['__abs__', '__pos__', '__neg__']
+        unary_flist = ["__abs__", "__pos__", "__neg__"]
 
-        special_flist = ['__invert__']
+        special_flist = ["__invert__"]
 
         flist1 = [
-            '__and__', '__or__', '__ror__', '__rand__', '__rxor__', '__xor__',
-            '__rshift__', '__rlshift__', '__lshift__', '__rrshift__']
+            "__and__",
+            "__or__",
+            "__ror__",
+            "__rand__",
+            "__rxor__",
+            "__xor__",
+            "__rshift__",
+            "__rlshift__",
+            "__lshift__",
+            "__rrshift__",
+        ]
 
         iflist = [
-            '__iadd__', '__ifloordiv__', '__imod__', '__imul__', '__ipow__',
-            '__isub__', '__itruediv__']
+            "__iadd__",
+            "__ifloordiv__",
+            "__imod__",
+            "__imul__",
+            "__ipow__",
+            "__isub__",
+            "__itruediv__",
+        ]
 
         iflist1 = [
-            '__iand__', '__ilshift__', '__ior__', '__irshift__', '__ixor__']
+            "__iand__",
+            "__ilshift__",
+            "__ior__",
+            "__irshift__",
+            "__ixor__",
+        ]
 
         ts_other = self.ts.clone() * 4 + 3
         for func in flist:
@@ -115,8 +152,9 @@ class TestTsProto(unittest.TestCase):
             ts.tseries = np.array(ts.tseries, np.int32)
             self.assertTrue(
                 np.array_equal(
-                    getattr(ts, func)().tseries,
-                    getattr(ts.tseries, func)()))
+                    getattr(ts, func)().tseries, getattr(ts.tseries, func)()
+                )
+            )
 
         ts_other = self.ts.clone() * 4
         ts_other.tseries = np.array(ts_other.tseries, np.int64)
@@ -138,8 +176,8 @@ class TestTsProto(unittest.TestCase):
 
         for func in iflist:
             for other in [3, self.ts.clone() + 2.5]:
-                ts = self.ts.clone() + 4.
-                ts1 = self.ts.clone() + 4.
+                ts = self.ts.clone() + 4.0
+                ts1 = self.ts.clone() + 4.0
 
                 ts_a = getattr(ts, func)(other)
                 a_series = ts_a.tseries
@@ -387,8 +425,7 @@ class TestTsProto(unittest.TestCase):
 
         ts.make_arrays()
 
-        self.assertTrue(
-            np.array_equal(ts.dseries, np.arange(100)))
+        self.assertTrue(np.array_equal(ts.dseries, np.arange(100)))
 
         self.assertTrue(isinstance(ts.dseries[0], np.int32))
         self.assertTrue(isinstance(ts.tseries[0], np.float64))
@@ -403,8 +440,7 @@ class TestTsProto(unittest.TestCase):
 
         ts.make_arrays()
 
-        self.assertTrue(
-            np.array_equal(ts.dseries, np.arange(100)))
+        self.assertTrue(np.array_equal(ts.dseries, np.arange(100)))
 
         self.assertTrue(isinstance(ts.dseries[0], np.float64))
         self.assertTrue(isinstance(ts.tseries[0], np.float64))
@@ -426,15 +462,13 @@ class TestTsProto(unittest.TestCase):
         new_array = ts._make_array(convert_list, numtype=np.float64)
 
         # verify structure, does not verify type
-        self.assertTrue(
-            np.array_equal(new_array, np.array(convert_list)))
+        self.assertTrue(np.array_equal(new_array, np.array(convert_list)))
 
         self.assertTrue(isinstance(new_array[0], np.float64))
 
         new_array = ts._make_array(convert_list, numtype=np.int32)
 
-        self.assertTrue(
-            np.array_equal(new_array, np.array(convert_list)))
+        self.assertTrue(np.array_equal(new_array, np.array(convert_list)))
 
         self.assertTrue(isinstance(new_array[0], np.int32))
 
@@ -455,5 +489,5 @@ class TestTsProto(unittest.TestCase):
         self.assertEqual(ts.end_of_period, self.ts.end_of_period)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

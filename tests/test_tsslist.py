@@ -13,12 +13,13 @@ from thymus.tsslist import TssList
 
 class TestTssList(unittest.TestCase):
     """ This class tests the class TssList. """
+
     def setUp(self):
 
         # three timeseries
         self.ts = Timeseries()
-        self.ts.key = 'Test Key'
-        self.ts.columns = ['F1']
+        self.ts.key = "Test Key"
+        self.ts.columns = ["F1"]
 
         start_date = datetime(2015, 12, 31).toordinal()
         self.ts.dseries = start_date + np.arange(10)
@@ -62,7 +63,7 @@ class TestTssList(unittest.TestCase):
 
     def test_tsslist_min_date(self):
         """Tests min date """
-        self.assertEqual(self.tss.min_date(), self.ts.start_date('datetime'))
+        self.assertEqual(self.tss.min_date(), self.ts.start_date("datetime"))
 
         tmp_ts0 = Timeseries()
 
@@ -102,8 +103,8 @@ class TestTssList(unittest.TestCase):
 
         # shape corresponds to the shortest length
         self.assertEqual(
-            ts_new.tseries.shape[0],
-            self.ts_short.tseries.shape[0])
+            ts_new.tseries.shape[0], self.ts_short.tseries.shape[0]
+        )
 
         self.assertEqual(ts_new.tseries.shape[1], 3)
 
@@ -112,8 +113,8 @@ class TestTssList(unittest.TestCase):
 
         # shape corresponds to the longest length
         self.assertEqual(
-            ts_new.tseries.shape[0],
-            self.ts_long.tseries.shape[0])
+            ts_new.tseries.shape[0], self.ts_long.tseries.shape[0]
+        )
 
         self.assertEqual(ts_new.tseries.shape[1], 3)
 
@@ -128,8 +129,8 @@ class TestTssList(unittest.TestCase):
     def test_tsslist_get_values(self):
         """ Tests the ability to locate the correct row of data. """
 
-        date1 = datetime(2016, 1, 4)    # existing date within date series
-        date2 = datetime(2016, 1, 16)   # date falling on a weekend
+        date1 = datetime(2016, 1, 4)  # existing date within date series
+        date2 = datetime(2016, 1, 16)  # date falling on a weekend
 
         # get data from existing date
         self.assertTupleEqual(self.tss.get_values(date=date1), (4.0, 4.0, 4.0))
@@ -139,7 +140,8 @@ class TestTssList(unittest.TestCase):
 
         # attempt to get data from date not present, no notify
         self.assertTupleEqual(
-            self.tss.get_values(date=date2), (None, 16.0, None))
+            self.tss.get_values(date=date2), (None, 16.0, None)
+        )
 
     def test_clone(self):
         """Verifies that a copy is made."""
@@ -192,7 +194,7 @@ class TestTssList(unittest.TestCase):
         test_dict = {}
         for i in range(len(self.tss)):
             ts = self.tss[i]
-            ts.key = 'key_%i' % (i)
+            ts.key = "key_%i" % (i)
             test_dict[ts.key] = ts
 
         self.assertDictEqual(self.tss.as_dict(), test_dict)
@@ -235,5 +237,5 @@ class TestTssList(unittest.TestCase):
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

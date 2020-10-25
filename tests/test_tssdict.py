@@ -15,12 +15,13 @@ from thymus.tssdict import TssDict
 
 class TestTssDict(unittest.TestCase):
     """ This class tests the class TssDict. """
+
     def setUp(self):
 
         # three timeseries
         self.ts = Timeseries()
-        self.ts.key = 'Main'
-        self.ts.columns = ['F1']
+        self.ts.key = "Main"
+        self.ts.columns = ["F1"]
 
         start_date = datetime(2015, 12, 31).toordinal()
         self.ts.dseries = start_date + np.arange(10)
@@ -29,7 +30,7 @@ class TestTssDict(unittest.TestCase):
 
         # longer timeseries
         self.ts_long = Timeseries()
-        self.ts_long.key = 'Long'
+        self.ts_long.key = "Long"
         start_date = datetime(2015, 12, 31).toordinal()
         self.ts_long.dseries = start_date + np.arange(20)
         self.ts_long.tseries = np.arange(20)
@@ -37,7 +38,7 @@ class TestTssDict(unittest.TestCase):
 
         # shorter timeseries
         self.ts_short = Timeseries()
-        self.ts_short.key = 'Short'
+        self.ts_short.key = "Short"
         start_date = datetime(2015, 12, 31).toordinal()
         self.ts_short.dseries = start_date + np.arange(5)
         self.ts_short.tseries = np.arange(5)
@@ -54,9 +55,9 @@ class TestTssDict(unittest.TestCase):
         tmp_ts1 = Timeseries()
         tmp_ts2 = Timeseries()
 
-        tmp_ts0.key = 'ts0'
-        tmp_ts1.key = 'ts1'
-        tmp_ts2.key = 'ts2'
+        tmp_ts0.key = "ts0"
+        tmp_ts1.key = "ts1"
+        tmp_ts2.key = "ts2"
 
         tssdict = TssDict([tmp_ts0, tmp_ts1, tmp_ts2])
 
@@ -64,16 +65,15 @@ class TestTssDict(unittest.TestCase):
 
         tssdict = TssDict()
 
-        tssdict['ts0'] = tmp_ts0
-        tssdict['ts1'] = tmp_ts1
-        tssdict['ts2'] = tmp_ts2
+        tssdict["ts0"] = tmp_ts0
+        tssdict["ts1"] = tmp_ts1
+        tssdict["ts2"] = tmp_ts2
 
         self.assertEqual(len(tssdict), 3)
 
-        tssdict = TssDict({
-            tmp_ts0.key: tmp_ts0,
-            tmp_ts1.key: tmp_ts1,
-            tmp_ts2.key: tmp_ts2})
+        tssdict = TssDict(
+            {tmp_ts0.key: tmp_ts0, tmp_ts1.key: tmp_ts1, tmp_ts2.key: tmp_ts2}
+        )
 
         self.assertEqual(len(tssdict), 3)
 
@@ -82,7 +82,7 @@ class TestTssDict(unittest.TestCase):
 
         # First add a timeseries that is earlier than the others
         tmp_ts0 = Timeseries()
-        tmp_ts0.key = 'First'
+        tmp_ts0.key = "First"
 
         tmp_ts0.dseries = datetime(2014, 12, 31).toordinal() - np.arange(10)
         tmp_ts0.tseries = np.arange(10)
@@ -91,13 +91,15 @@ class TestTssDict(unittest.TestCase):
         self.tssdict[tmp_ts0.key] = tmp_ts0
 
         self.assertTupleEqual(
-            self.tssdict.min_date(), (date(2014, 12, 22), 'First'))
+            self.tssdict.min_date(), (date(2014, 12, 22), "First")
+        )
 
     def test_tssdict_max_date(self):
         """Tests max date """
 
         self.assertTupleEqual(
-            self.tssdict.max_date(), (date(2016, 1, 19), 'Long'))
+            self.tssdict.max_date(), (date(2016, 1, 19), "Long")
+        )
 
     def test_tssdict_combine(self):
         """
@@ -112,8 +114,8 @@ class TestTssDict(unittest.TestCase):
 
         # shape corresponds to the shortest length
         self.assertEqual(
-            ts_new.tseries.shape[0],
-            self.ts_short.tseries.shape[0])
+            ts_new.tseries.shape[0], self.ts_short.tseries.shape[0]
+        )
 
         self.assertEqual(ts_new.tseries.shape[1], 3)
 
@@ -122,21 +124,21 @@ class TestTssDict(unittest.TestCase):
 
         # shape corresponds to the longest length
         self.assertEqual(
-            ts_new.tseries.shape[0],
-            self.ts_long.tseries.shape[0])
+            ts_new.tseries.shape[0], self.ts_long.tseries.shape[0]
+        )
 
         self.assertEqual(ts_new.tseries.shape[1], 3)
 
         # test with TssList
         tmp_ts0 = Timeseries()
-        tmp_ts0.key = 'First'
+        tmp_ts0.key = "First"
 
         tmp_ts0.dseries = datetime(2014, 12, 31).toordinal() - np.arange(10)
         tmp_ts0.tseries = np.arange(10)
         tmp_ts0.make_arrays()
 
         tmp_ts1 = Timeseries()
-        tmp_ts1.key = 'Second'
+        tmp_ts1.key = "Second"
 
         tmp_ts1.dseries = datetime(2014, 12, 31).toordinal() - np.arange(10)
         tmp_ts1.tseries = np.arange(10)
@@ -157,25 +159,29 @@ class TestTssDict(unittest.TestCase):
     def test_tssdict_get_values(self):
         """ Tests the ability to locate the correct row of data. """
 
-        date1 = datetime(2016, 1, 4)    # existing date within date series
-        date2 = datetime(2016, 1, 16)   # date falling on a weekend
+        date1 = datetime(2016, 1, 4)  # existing date within date series
+        date2 = datetime(2016, 1, 16)  # date falling on a weekend
 
         # get data from existing date
         self.assertTupleEqual(
             self.tssdict.get_values(
-                date=date1, keys=['Main', 'Long', 'Short']),
-            ((4.0, 4.0, 4.0), ('Main', 'Long', 'Short')))
+                date=date1, keys=["Main", "Long", "Short"]
+            ),
+            ((4.0, 4.0, 4.0), ("Main", "Long", "Short")),
+        )
 
         # attempt to get data from date not present, with notify
         self.assertRaises(
-            ValueError,
-            self.tssdict.get_values, date2, notify=True)
+            ValueError, self.tssdict.get_values, date2, notify=True
+        )
 
         # attempt to get data from date not present, no notify
         self.assertTupleEqual(
             self.tssdict.get_values(
-                date=date2, keys=['Main', 'Long', 'Short']),
-            ((None, 16.0, None), ('Main', 'Long', 'Short')))
+                date=date2, keys=["Main", "Long", "Short"]
+            ),
+            ((None, 16.0, None), ("Main", "Long", "Short")),
+        )
 
     def test_clone(self):
         """Verifies that a copy is made."""
@@ -217,14 +223,14 @@ class TestTssDict(unittest.TestCase):
 
         self.assertEqual(len(tssdict), 3)
 
-        self.assertTupleEqual(tssdict['Main'].shape(), self.ts.shape())
-        self.assertTupleEqual(tssdict['Long'].shape(), self.ts_long.shape())
-        self.assertTupleEqual(tssdict['Short'].shape(), self.ts_short.shape())
+        self.assertTupleEqual(tssdict["Main"].shape(), self.ts.shape())
+        self.assertTupleEqual(tssdict["Long"].shape(), self.ts_long.shape())
+        self.assertTupleEqual(tssdict["Short"].shape(), self.ts_short.shape())
 
     def test_tssdict_do_func(self):
         """Placeholder for future function."""
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

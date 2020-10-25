@@ -19,6 +19,7 @@ class TestFreqConversions(unittest.TestCase):
     """
     This class tests conversions of timeseries.
     """
+
     def setUp(self):
 
         # sample timeseries
@@ -40,7 +41,7 @@ class TestFreqConversions(unittest.TestCase):
         self.ts_ord.make_arrays()
 
         # timestamp based timeseries
-        self.ts_seconds = Timeseries(frequency='sec')
+        self.ts_seconds = Timeseries(frequency="sec")
         start_date = datetime(2016, 1, 1, 0, 0)
         end_date = datetime(2016, 1, 4, 0, 0)
 
@@ -114,7 +115,9 @@ class TestFreqConversions(unittest.TestCase):
         self.assertRaises(
             ValueError,
             convert,
-            convert(self.ts_ord, new_freq=FREQ_Y), new_freq=FREQ_W)
+            convert(self.ts_ord, new_freq=FREQ_Y),
+            new_freq=FREQ_W,
+        )
 
     def test_convweekly_period_end(self):
         """
@@ -183,7 +186,9 @@ class TestFreqConversions(unittest.TestCase):
         self.assertRaises(
             ValueError,
             convert,
-            convert(self.ts_ord, new_freq=FREQ_Y), new_freq=FREQ_W)
+            convert(self.ts_ord, new_freq=FREQ_Y),
+            new_freq=FREQ_W,
+        )
 
     def test_convmonthly_period_start(self):
         """
@@ -246,7 +251,9 @@ class TestFreqConversions(unittest.TestCase):
         self.assertRaises(
             ValueError,
             convert,
-            convert(self.ts_ord, new_freq="y"), new_freq=FREQ_M)
+            convert(self.ts_ord, new_freq="y"),
+            new_freq=FREQ_M,
+        )
 
         # timestamp conversion goes here
 
@@ -308,7 +315,9 @@ class TestFreqConversions(unittest.TestCase):
         self.assertRaises(
             ValueError,
             convert,
-            convert(self.ts_ord, new_freq=FREQ_Y), new_freq=FREQ_M)
+            convert(self.ts_ord, new_freq=FREQ_Y),
+            new_freq=FREQ_M,
+        )
 
         # timestamp conversion goes here
 
@@ -391,7 +400,9 @@ class TestFreqConversions(unittest.TestCase):
         self.assertRaises(
             ValueError,
             convert,
-            convert(self.ts_ord, new_freq=FREQ_Y), new_freq=FREQ_Q)
+            convert(self.ts_ord, new_freq=FREQ_Y),
+            new_freq=FREQ_Q,
+        )
 
         # timestamp conversion goes here
 
@@ -471,7 +482,9 @@ class TestFreqConversions(unittest.TestCase):
         self.assertRaises(
             ValueError,
             convert,
-            convert(self.ts_ord, new_freq=FREQ_Y), new_freq=FREQ_Q)
+            convert(self.ts_ord, new_freq=FREQ_Y),
+            new_freq=FREQ_Q,
+        )
 
         # timestamp conversion goes here
 
@@ -586,13 +599,17 @@ class TestFreqConversions(unittest.TestCase):
         ts1 = convert(ts, new_freq=FREQ_MIN)
 
         self.assertEqual(
-            ts1.dseries[0], datetime(2016, 1, 1, 0, 0, 0).timestamp())
+            ts1.dseries[0], datetime(2016, 1, 1, 0, 0, 0).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[1], datetime(2016, 1, 1, 0, 1, 0).timestamp())
+            ts1.dseries[1], datetime(2016, 1, 1, 0, 1, 0).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[2], datetime(2016, 1, 1, 0, 2, 0).timestamp())
+            ts1.dseries[2], datetime(2016, 1, 1, 0, 2, 0).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[3], datetime(2016, 1, 1, 0, 3, 0).timestamp())
+            ts1.dseries[3], datetime(2016, 1, 1, 0, 3, 0).timestamp()
+        )
 
     @unittest.skip
     def test_convminutes_period_end(self):
@@ -608,17 +625,23 @@ class TestFreqConversions(unittest.TestCase):
         ts1 = convert(ts, new_freq=FREQ_MIN)
 
         self.assertEqual(
-            ts1.dseries[0], datetime(2016, 1, 1, 0, 0, 59).timestamp())
+            ts1.dseries[0], datetime(2016, 1, 1, 0, 0, 59).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[1], datetime(2016, 1, 1, 0, 1, 59).timestamp())
+            ts1.dseries[1], datetime(2016, 1, 1, 0, 1, 59).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[2], datetime(2016, 1, 1, 0, 2, 59).timestamp())
+            ts1.dseries[2], datetime(2016, 1, 1, 0, 2, 59).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[3], datetime(2016, 1, 1, 0, 3, 59).timestamp())
+            ts1.dseries[3], datetime(2016, 1, 1, 0, 3, 59).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[4], datetime(2016, 1, 1, 0, 4, 59).timestamp())
+            ts1.dseries[4], datetime(2016, 1, 1, 0, 4, 59).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[5], datetime(2016, 1, 1, 0, 5, 59).timestamp())
+            ts1.dseries[5], datetime(2016, 1, 1, 0, 5, 59).timestamp()
+        )
 
     def test_convhours_period_start(self):
         """
@@ -633,17 +656,23 @@ class TestFreqConversions(unittest.TestCase):
         ts1 = convert(ts, new_freq=FREQ_H)
 
         self.assertEqual(
-            ts1.dseries[0], datetime(2016, 1, 1, 0, 0, 0).timestamp())
+            ts1.dseries[0], datetime(2016, 1, 1, 0, 0, 0).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[1], datetime(2016, 1, 1, 1, 0, 0).timestamp())
+            ts1.dseries[1], datetime(2016, 1, 1, 1, 0, 0).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[2], datetime(2016, 1, 1, 2, 0, 0).timestamp())
+            ts1.dseries[2], datetime(2016, 1, 1, 2, 0, 0).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[3], datetime(2016, 1, 1, 3, 0, 0).timestamp())
+            ts1.dseries[3], datetime(2016, 1, 1, 3, 0, 0).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[4], datetime(2016, 1, 1, 4, 0, 0).timestamp())
+            ts1.dseries[4], datetime(2016, 1, 1, 4, 0, 0).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[5], datetime(2016, 1, 1, 5, 0, 0).timestamp())
+            ts1.dseries[5], datetime(2016, 1, 1, 5, 0, 0).timestamp()
+        )
 
     @unittest.skip
     def test_convhours_period_end(self):
@@ -664,17 +693,23 @@ class TestFreqConversions(unittest.TestCase):
         ts1 = convert(ts, new_freq=FREQ_H)
 
         self.assertEqual(
-            ts1.dseries[0], datetime(2016, 1, 1, 0, 0, 0).timestamp())
+            ts1.dseries[0], datetime(2016, 1, 1, 0, 0, 0).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[1], datetime(2016, 1, 1, 1, 0, 0).timestamp())
+            ts1.dseries[1], datetime(2016, 1, 1, 1, 0, 0).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[2], datetime(2016, 1, 1, 2, 0, 0).timestamp())
+            ts1.dseries[2], datetime(2016, 1, 1, 2, 0, 0).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[3], datetime(2016, 1, 1, 3, 0, 0).timestamp())
+            ts1.dseries[3], datetime(2016, 1, 1, 3, 0, 0).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[4], datetime(2016, 1, 1, 4, 0, 0).timestamp())
+            ts1.dseries[4], datetime(2016, 1, 1, 4, 0, 0).timestamp()
+        )
         self.assertEqual(
-            ts1.dseries[5], datetime(2016, 1, 1, 5, 0, 0).timestamp())
+            ts1.dseries[5], datetime(2016, 1, 1, 5, 0, 0).timestamp()
+        )
 
     @unittest.skip
     def test_conv_days(self):
@@ -692,13 +727,17 @@ class TestFreqConversions(unittest.TestCase):
         ts1 = convert(ts, new_freq=FREQ_D)
 
         self.assertEqual(
-            ts1.dseries[0], datetime(2016, 1, 1, 0, 0, 0).toordinal())
+            ts1.dseries[0], datetime(2016, 1, 1, 0, 0, 0).toordinal()
+        )
         self.assertEqual(
-            ts1.dseries[1], datetime(2016, 1, 2, 0, 0, 0).toordinal())
+            ts1.dseries[1], datetime(2016, 1, 2, 0, 0, 0).toordinal()
+        )
         self.assertEqual(
-            ts1.dseries[2], datetime(2016, 1, 3, 0, 0, 0).toordinal())
+            ts1.dseries[2], datetime(2016, 1, 3, 0, 0, 0).toordinal()
+        )
         self.assertEqual(
-            ts1.dseries[3], datetime(2016, 1, 4, 0, 0, 0).toordinal())
+            ts1.dseries[3], datetime(2016, 1, 4, 0, 0, 0).toordinal()
+        )
 
         ts = self.ts_seconds.clone()
         ts.end_of_period = True
@@ -706,14 +745,18 @@ class TestFreqConversions(unittest.TestCase):
         ts1 = convert(ts, new_freq=FREQ_D)
 
         self.assertEqual(
-            ts1.dseries[0], datetime(2016, 1, 1, 0, 0, 0).toordinal())
+            ts1.dseries[0], datetime(2016, 1, 1, 0, 0, 0).toordinal()
+        )
         self.assertEqual(
-            ts1.dseries[1], datetime(2016, 1, 2, 0, 0, 0).toordinal())
+            ts1.dseries[1], datetime(2016, 1, 2, 0, 0, 0).toordinal()
+        )
         self.assertEqual(
-            ts1.dseries[2], datetime(2016, 1, 3, 0, 0, 0).toordinal())
+            ts1.dseries[2], datetime(2016, 1, 3, 0, 0, 0).toordinal()
+        )
         self.assertEqual(
-            ts1.dseries[3], datetime(2016, 1, 4, 0, 0, 0).toordinal())
+            ts1.dseries[3], datetime(2016, 1, 4, 0, 0, 0).toordinal()
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
