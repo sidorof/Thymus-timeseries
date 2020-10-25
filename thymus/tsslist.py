@@ -22,15 +22,16 @@ class TssList(list):
 
 
     """
+
     def __init__(self, tss=None):
 
-        list.__init__(self)   # only did this to satisfy pylint
+        list.__init__(self)  # only did this to satisfy pylint
         if tss is None:
             pass
         elif isinstance(tss, list):
             self.extend(tss)
         else:
-            raise ValueError('Initialization requires either a list or None')
+            raise ValueError("Initialization requires either a list or None")
 
     def min_date(self):
         """
@@ -42,8 +43,8 @@ class TssList(list):
         """
 
         dates = [
-            ts.start_date('datetime') for ts in self
-            if ts.dseries is not None]
+            ts.start_date("datetime") for ts in self if ts.dseries is not None
+        ]
 
         if dates:
             return min(dates)
@@ -57,8 +58,8 @@ class TssList(list):
         """
 
         dates = [
-            ts.end_date('datetime') for ts in self
-            if ts.dseries is not None]
+            ts.end_date("datetime") for ts in self if ts.dseries is not None
+        ]
 
         if dates:
             return max(dates)
@@ -79,8 +80,9 @@ class TssList(list):
                 values.append(ts_tmp.tseries[ts_tmp.row_no(date)])
             except ValueError:
                 if notify:
-                    raise ValueError("ts %s does not have a value on %s" % (
-                        idx, date))
+                    raise ValueError(
+                        "ts %s does not have a value on %s" % (idx, date)
+                    )
                 else:
                     values.append(None)
 
@@ -118,13 +120,12 @@ class TssList(list):
         """
 
         for ts_tmp in self:
-            if ts_tmp.key == '' or ts_tmp.key is None:
-                raise ValueError(
-                    "There must be a key for each timeseries.")
+            if ts_tmp.key == "" or ts_tmp.key is None:
+                raise ValueError("There must be a key for each timeseries.")
 
         return dict([(ts_tmp.key, ts_tmp) for ts_tmp in self])
 
-    def to_list(self, dt_fmt='str', data_list=True):
+    def to_list(self, dt_fmt="str", data_list=True):
         """
         This function builds a list of timeseries that are in the form of
         dict objects for use when build JSON formatted file.
@@ -137,7 +138,7 @@ class TssList(list):
 
         return outlist
 
-    def to_json(self, indent=2, dt_fmt='str', data_list=True):
+    def to_json(self, indent=2, dt_fmt="str", data_list=True):
         """
         This function returns the timeseries list in JSON format.
 
@@ -154,8 +155,8 @@ class TssList(list):
 
         """
         return json.dumps(
-            self.to_list(dt_fmt=dt_fmt, data_list=data_list),
-            indent=indent)
+            self.to_list(dt_fmt=dt_fmt, data_list=data_list), indent=indent
+        )
 
     def from_json(self, json_str):
         """

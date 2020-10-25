@@ -28,8 +28,8 @@ def _weekday_test(date, kwargs):
     Computes weekly indicators.
     """
 
-    if 'weekday' in kwargs:
-        weekday = kwargs['weekday']
+    if "weekday" in kwargs:
+        weekday = kwargs["weekday"]
 
         if date.weekday() == weekday:
             return 1
@@ -50,14 +50,16 @@ def _filter_dates(dates, freq, kwargs):
         # no special behavior
         indicators = np.fromiter(
             [date.__getattribute__(indicator) for date in dates],
-            dtype=np.int32)
+            dtype=np.int32,
+        )
 
         return np.argwhere(indicators[1:] - indicators[:-1] > 0)
 
     else:
         # apply a function
         indicators = np.fromiter(
-            [indicator(date, kwargs) for date in dates], dtype=np.int32)
+            [indicator(date, kwargs) for date in dates], dtype=np.int32
+        )
 
         return np.argwhere(indicators[1:] - indicators[:-1] > 0)
 
@@ -73,7 +75,8 @@ def _filter_idates(dates, freq, end_of_period, **kwargs):
         # no special behavior
         indicators = np.fromiter(
             [date.__getattribute__(indicator) for date in dates],
-            dtype=np.int32)
+            dtype=np.int32,
+        )
 
         selected = np.argwhere(indicators[1:] - indicators[:-1] > 0)
 
@@ -89,19 +92,20 @@ def _filter_idates(dates, freq, end_of_period, **kwargs):
         # apply a function -- here for completeness at the moment
         # could apply to 5 minute data for example
         return np.fromiter(
-            [indicator(date, kwargs) for date in dates], dtype=np.int32)
+            [indicator(date, kwargs) for date in dates], dtype=np.int32
+        )
 
 
 DATETIME_DICT = {
     # 'sec': 'second',
-    'min': 'second',
-    'h': 'minute',
-    'd': 'hour',
-    'w': _weekday_test,
-    'm': 'day',
-    'q': _q_test,
-    'y': 'month',
-    }
+    "min": "second",
+    "h": "minute",
+    "d": "hour",
+    "w": _weekday_test,
+    "m": "day",
+    "q": _q_test,
+    "y": "month",
+}
 
 
 def convert(ts, new_freq, include_partial=True, **kwargs):
@@ -124,7 +128,8 @@ def convert(ts, new_freq, include_partial=True, **kwargs):
     if freq_idx > new_idx:
 
         raise ValueError(
-            "Cannot convert from %s to %s." % (ts.frequency, new_freq))
+            "Cannot convert from %s to %s." % (ts.frequency, new_freq)
+        )
 
     dates = new_ts.datetime_series()
 
@@ -133,7 +138,8 @@ def convert(ts, new_freq, include_partial=True, **kwargs):
         selected = _filter_dates(dates, new_freq, kwargs)
     elif date_series_type == TS_TIMESTAMP:
         selected = _filter_idates(
-            dates, new_freq, end_of_period=ts.end_of_period)
+            dates, new_freq, end_of_period=ts.end_of_period
+        )
     else:
         raise ValueError("Invalid date series type: %s" % (date_series_type))
 
@@ -145,7 +151,7 @@ def convert(ts, new_freq, include_partial=True, **kwargs):
         if include_partial or freq_idx > daily_idx:
             if selected[0] != 0:
                 # insert most recent date
-                #selected = np.insert(selected, 0, 0)
+                # selected = np.insert(selected, 0, 0)
                 # np.insert(arr, obj, values, axis=None)
                 selected = np.insert(selected, 0, 0)
 
@@ -162,7 +168,8 @@ def convert(ts, new_freq, include_partial=True, **kwargs):
         # convert dates from timestamp to ordinal
         new_ts.dseries = np.fromiter(
             [date.toordinal() for date in np.array(dates)[selected]],
-            dtype=np.int32)
+            dtype=np.int32,
+        )
     else:
         new_ts.dseries = new_ts.dseries[selected]
 

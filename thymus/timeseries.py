@@ -34,7 +34,7 @@ class Timeseries(TsProto):
             key='',             an optional key for naming the timeseries
             columns=None        optional columns for naming columns of the
                                 values
-            )
+        )
     """
 
     def __init__(
@@ -160,7 +160,7 @@ class Timeseries(TsProto):
             self.to_dict(dt_fmt=None, data_list=False)
 
         This has been reworked to include all fields of the timeseries
-        rather than just dates and times, So header informtion is now included.
+        rather than just dates and times, so header informtion is now included.
 
         Also, for flexibility, the date can be formatted in various ways:
             dt_fmt=None       -- native format depending on frequency
@@ -169,7 +169,7 @@ class Timeseries(TsProto):
             dt_fmt='str'      -- converts dates to string using
                                  FMT_DATE or FMT_IDATE, depending on the
                                  timeseries type
-        The point of data_list is to signal whether dates should be used
+        The boolean, data_list, signals whether dates should be used
         as keys in a dict for the values, or whether the dates and values
         are output as a list.
 
