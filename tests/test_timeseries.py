@@ -179,9 +179,48 @@ class TestTimeseries(unittest.TestCase):
             },
         )
 
-        # NOTE: to_dict: needs test for header
         # NOTE: to_dict: needs test for datetime series
         # NOTE: 'to_dict: needs test for string dates
+
+    def test_header(self):
+        """Tests whether header data is complete."""
+
+        ts = Timeseries(
+            key="test",
+            columns=["this", "is", "a", "test"],
+            frequency="d",
+            end_of_period=True,
+        )
+
+        self.assertDictEqual(
+            ts.header(),
+            {
+                "key": "test",
+                "columns": ["this", "is", "a", "test"],
+                "frequency": "d",
+                "end_of_period": True,
+            },
+        )
+
+        # add extraneous descriptive data
+        ts = Timeseries(
+            key="test",
+            columns=["this", "is", "a", "test"],
+            frequency="d",
+            end_of_period=True,
+        )
+        ts.description = "Here is a description of the timeseries."
+
+        self.assertDictEqual(
+            ts.header(),
+            {
+                "key": "test",
+                "columns": ["this", "is", "a", "test"],
+                "frequency": "d",
+                "end_of_period": True,
+                "description": "Here is a description of the timeseries.",
+            },
+        )
 
     def test_timeseries_to_list(self):
         """Tests conversion of dates and values to a list."""

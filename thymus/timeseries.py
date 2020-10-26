@@ -1018,13 +1018,22 @@ class Timeseries(TsProto):
             return tmp_ts
 
     def header(self):
-        """This function returns a dict of the non-timeseries data."""
-        return {
-            "key": self.key,
-            "columns": self.columns,
-            "frequency": self.frequency,
-            "end_of_period": self.end_of_period,
-        }
+        """
+        This function returns a dict of the non-timeseries data.
+
+        Changed:
+        Non-timeseries data is determined as an element of __dict__ that is
+        not tseries or dseries.
+
+        This enables more descriptive data to be included in the header.
+        """
+        return dict(
+            [
+                (key, value)
+                for key, value in self.__dict__.items()
+                if key not in ["tseries", "dseries"]
+            ]
+        )
 
     def date_native(self, date):
         """
