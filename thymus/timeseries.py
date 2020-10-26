@@ -220,8 +220,19 @@ class Timeseries(TsProto):
                     [date1, value1],
                     [date2, value2]
                 ]
+            }
 
-        Or, data can be in the form of a dict with the date as the key.
+        Or,
+            {
+                "header": {
+                    items
+                },
+                "data": {
+                    date1: values,
+                    date2: values,
+                }
+            }
+
         The date formatting uses the same rules as creation in self.to_dict.
 
         If the data portion is a dict rather than a list, the timeseries is
