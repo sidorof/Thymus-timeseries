@@ -842,8 +842,8 @@ class Timeseries(TsProto):
         Shows the row in the timeseries
 
         Usage:
-            ts.row(rowdate=<datetime>)
-            ts.row(rowdate=<date as either ordinal or timestamp>)
+            ts.row_no(rowdate=<datetime>)
+            ts.row_no(rowdate=<date as either ordinal or timestamp>)
 
         Returns an error if the date is not found in the index
 
