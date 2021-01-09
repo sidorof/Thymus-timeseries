@@ -901,8 +901,8 @@ ts.common\_length(ts1, ts2)
 
 ::
 
-        This static method trims the lengths of two timeseries and returns two
-        timeseries with the same length.
+        This static method trims the lengths of timeseries and returns the
+        timeseries trimmed to the same length.
 
         The idea is that in order to do array operations there must be a
         common length for each timeseries.
@@ -913,6 +913,7 @@ ts.common\_length(ts1, ts2)
 
         Usage:
             ts1_new, ts2_new = self.common_length(ts1, ts2)
+            [ts1, ts2, ..., ts_n] = self.common_length(*ts)
 
 ts.convert(new\_freq, include\_partial=True, \*\*kwargs)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

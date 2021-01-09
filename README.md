@@ -59,7 +59,7 @@ that it can used. For this example, we will use daily data.
     end-of-period: True (this is a default indicating that the data is as of
                             the end of the data. This only comes into play when
                             converting from one frequency to another and will
-                            be ignored for the moment.) 
+                            be ignored for the moment.)
 ```
 While normal usage of the timeseries object would involve pulling data from a
 database and inserting data into the timeseries object, we will use a
@@ -74,7 +74,7 @@ objects. Because it is daily data, ordinals will be used for this example.
     ts.dseries = start_date + np.arange(10)
     ts.tseries = np.arange(10)
 
-    ts.make_arrays() 
+    ts.make_arrays()
 ```
 We created an initial timeseries object. It starts at the end of
 2015 and continues for 10 days. Setting the values in **dseries** and
@@ -92,12 +92,12 @@ The completed timeseries object is:
     print(ts)
 
     <Timeseries>
-    key: 
+    key:
     columns: []
     frequency: d
     daterange: ('2015-12-31', '2016-01-09')
     end-of-period: True
-    shape: (10,)    
+    shape: (10,)
 ```
 You can see the date range contained in the date series. The shape refers
 to the shape of the **tseries** array. **key** and **columns** are free-form,
@@ -111,18 +111,18 @@ Selection of elements is the same as numpy arrays. Currently, our sample has
 ```
     print(ts[:5])
     <Timeseries>
-    key: 
+    key:
     columns: []
     frequency: d
     daterange: ('2015-12-31', '2016-01-04')
     end-of-period: True
-    shape: (5,)    
+    shape: (5,)
 ```
 Note how the date range above reflects the selected elements.
 ```
     ts1 = ts % 2 == 0
     ts1.tseries
-    [ True False  True False  True False  True False  True False]    
+    [ True False  True False  True False  True False  True False]
 ```
 We can isolate the dates of even numbers:
 ```
@@ -139,7 +139,7 @@ We can isolate the dates of even numbers:
     ('2016-01-02', '[2.0]')
     ('2016-01-04', '[4.0]')
     ('2016-01-06', '[6.0]')
-    ('2016-01-08', '[8.0]')    
+    ('2016-01-08', '[8.0]')
 ```
 ## Date-based Selection
 
@@ -156,14 +156,14 @@ use random values to ensure uselessness.
     ts.make_arrays()
 
     print(ts)
-    
+
     <Timeseries>
-    key: 
+    key:
     columns: []
     frequency: d
     daterange: ('2015-12-31', '2018-09-25')
     end-of-period: True
-    shape: (1000, 2) 
+    shape: (1000, 2)
 ```
 
 You can select on the basis of date ranges, but first we will use a row number
@@ -187,14 +187,14 @@ function, **truncdate()**.
         new=True)
 
     print(ts1)
-    
+
     <Timeseries>
-    key: 
+    key:
     columns: []
     frequency: d
     daterange: ('2017-01-01', '2017-12-31')
     end-of-period: True
-    shape: (365, 2) 
+    shape: (365, 2)
 ```
 As you might expect, the timeseries object has a date range of all the days
 during 2017. But see how this is slightly different than slicing. When you use
@@ -244,7 +244,7 @@ leading up to the last year. The default includes it. However, when unwanted the
 
     ('2015-12-31', '[[0.2288539210230056, 0.288320541664724]]')
     ('2016-12-31', '[[0.5116274142615629, 0.21680312154651182]]')
-    ('2017-12-31', '[[0.4731393617405252, 0.630488855197775]]') 
+    ('2017-12-31', '[[0.4731393617405252, 0.630488855197775]]')
 ```
 ## Combining Timeseries
 
@@ -357,7 +357,7 @@ We will use the long and short timeseries from the previous example.
     # this will work
     ts_added = ts_short.add(ts_long, match=False)
 
-    [ 1.  1.  1.  1.  1.  1.  1.  1.  1.  1.]    
+    [ 1.  1.  1.  1.  1.  1.  1.  1.  1.  1.]
 ```
 The **add()** function checks to see if the number of columns match. If they do
 not an error is raised. If the **match** flag is True, then it also checks
@@ -410,7 +410,7 @@ to sort them latest date to earliest date using the function
 
     # of course not just addition
     5 * ts.tseries
-    [  0.   5.  10.  15.  20.  25.  30.  35.  40.  45.]    
+    [  0.   5.  10.  15.  20.  25.  30.  35.  40.  45.]
 ```
 Also, in-place operations. But first, we will make a copy.
 ```
@@ -452,7 +452,7 @@ Also, in-place operations. But first, we will make a copy.
     1000000.0
     10000000.0
     100000000.0
-    1000000000.0]  
+    1000000000.0]
 ```
 
 In other words, the normal container functions you can use with numpy arrays
@@ -471,7 +471,7 @@ arrays are supported.
     __iadd__ __ifloordiv__ __imod__ __imul__ __ipow__ __isub__
     __itruediv__]
 
-    __iand__ __ilshift__ __ior__ __irshift__ __ixor__ 
+    __iand__ __ilshift__ __ior__ __irshift__ __ixor__
 ```
 ### Functions of Arrays Not Supported
 
@@ -518,7 +518,7 @@ ts.tseries.conj          ts.tseries.item          ts.tseries.resize        ts.ts
 ts.tseries.conjugate     ts.tseries.itemset       ts.tseries.round         ts.tseries.transpose
 ts.tseries.copy          ts.tseries.itemsize      ts.tseries.searchsorted  ts.tseries.var
 ts.tseries.ctypes        ts.tseries.max           ts.tseries.setfield      ts.tseries.view
-ts.tseries.cumprod       ts.tseries.mean          ts.tseries.setflags      
+ts.tseries.cumprod       ts.tseries.mean          ts.tseries.setflags
 ```
 ### Other Date Functions
 
@@ -663,7 +663,7 @@ We will create a sample timeseries to illustrate.
     ts.closest_date(rowdate=date3, closest=-1)
 
     # this will fail -- date is outside the date series
-    ts.closest_date(rowdate=date4, closest=1) 
+    ts.closest_date(rowdate=date4, closest=1)
 ```
 ## Functions by Category
 
@@ -787,10 +787,10 @@ We will create a sample timeseries to illustrate.
 
         Returns the new ts.
 
-#### ts.common_length(ts1, ts2)
+#### ts.common_length(*ts)
 
-        This static method trims the lengths of two timeseries and returns two
-        timeseries with the same length.
+        This static method trims the lengths of timeseries and returns the
+        timeseries trimmed to the same length.
 
         The idea is that in order to do array operations there must be a
         common length for each timeseries.
@@ -801,6 +801,7 @@ We will create a sample timeseries to illustrate.
 
         Usage:
             ts1_new, ts2_new = self.common_length(ts1, ts2)
+            [ts1, ts2, ..., ts_n] = self.common_length(*ts)
 
 #### ts.convert(new_freq, include_partial=True, **kwargs)
 

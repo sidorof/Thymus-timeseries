@@ -376,9 +376,9 @@ class TsProto(object):
         return deepcopy(self)
 
     @staticmethod
-    def common_length(ts1, ts2):
+    def common_length(*ts):
         """
-        This function trims the lengths of two timeseries and returns two
+        This function trims the lengths of timeseries and returns all
         timeseries with the same length.
 
         The idea is that in order to do array operations there must be a
@@ -388,21 +388,23 @@ class TsProto(object):
         earlier info, truncation takes place at the end of the array. That
         way older less important values are removed if necessary.
 
+        This function does not alter the timeseries passed in. The list of
+        timeseries returned are clones of the originals.
+
+        Changed:
+
         Usage:
+            [ts1, ts2, ..., ts_n] = self.common_length(*ts)
+
+        Formerly:
             ts1_new, ts2_new = self.common_length(ts1, ts2)
+
 
         """
 
-        length1 = len(ts1.tseries)
-        length2 = len(ts2.tseries)
+        min_length = min([len(ts_tmp.tseries) for ts_tmp in ts])
 
-        if length1 == length2:
-            # do nothing except return a copy
-            return ts1.clone(), ts2.clone()
-        else:
-            length = min(length1, length2)
-
-            return (ts1[:length], ts2[:length])
+        return [ts_tmp[:min_length] for ts_tmp in ts]
 
     def shape(self):
         """

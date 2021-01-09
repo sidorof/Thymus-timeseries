@@ -8,6 +8,7 @@ import numpy as np
 
 from thymus.constants import FREQ_D, FREQ_SEC
 from thymus.tsproto import TsProto
+from thymus.tsslist import TssList
 
 
 class TestTsProto(unittest.TestCase):
@@ -377,8 +378,11 @@ class TestTsProto(unittest.TestCase):
         ts1, ts2 = self.ts.common_length(self.ts, self.ts_long)
         self.assertEqual(len(ts1.tseries), len(ts2.tseries))
 
-        ts1, ts2 = self.ts.common_length(self.ts, self.ts_short)
+        ts1, ts2, ts3 = self.ts.common_length(
+            self.ts, self.ts_short, self.ts_long
+        )
         self.assertEqual(len(ts1.tseries), len(ts2.tseries))
+        self.assertEqual(len(ts1.tseries), len(ts3.tseries))
 
     def test_timeseries_shape(self):
         """Tests returning the shape of the tseries."""
