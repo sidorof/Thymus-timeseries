@@ -61,6 +61,15 @@ class TestTssList(unittest.TestCase):
         # could expand this to verifying the contents of the list
         self.assertRaises(ValueError, TssList, 3)
 
+        # from tuple
+        tss = TssList(
+            (
+                Timeseries(),
+                Timeseries(),
+                Timeseries()
+            )
+        )
+
     def test_tsslist_min_date(self):
         """Tests min date """
         self.assertEqual(self.tss.min_date(), self.ts.start_date("datetime"))
@@ -74,6 +83,10 @@ class TestTssList(unittest.TestCase):
         self.tss.append(tmp_ts0)
 
         self.assertEqual(self.tss.min_date(), date(2014, 12, 31))
+
+        tss = TssList()
+
+        self.assertIsNone(tss.min_date())
 
     def test_tsslist_max_date(self):
         """Tests max date """
@@ -89,6 +102,10 @@ class TestTssList(unittest.TestCase):
         self.tss.append(tmp_ts0)
 
         self.assertEqual(self.tss.max_date(), date(2018, 12, 31))
+
+        tss = TssList()
+
+        self.assertIsNone(tss.max_date())
 
     def test_tsslist_combine(self):
         """
@@ -198,6 +215,18 @@ class TestTssList(unittest.TestCase):
             test_dict[ts.key] = ts
 
         self.assertDictEqual(self.tss.as_dict(), test_dict)
+
+        tss = TssList()
+        # no key
+        ts = Timeseries()
+        ts.tseries = np.arange(5)
+        ts.dseries = [date.today().toordinal() + i for i in range(5)]
+        ts.make_arrays()
+
+        tss.append(ts)
+
+        self.assertRaises(ValueError, tss.as_dict)
+
 
     def test_to_json(self):
         """

@@ -342,6 +342,9 @@ class TssDict(dict):
     def from_dict(self, tssdict):
         """
         This function loads from a dict.
+
+        The format of the dict of timeseries is assumed to use the form from
+        Timeseries.to_dict(dt_fmt='str')
         """
         self.clear()
 
@@ -379,11 +382,10 @@ class TssDict(dict):
         tss_tmp = json.loads(json_str)
 
         if isinstance(tss_tmp, dict):
-
             for key, value in tss_tmp.items():
                 self[key] = Timeseries().from_dict(value)
 
         else:
-            ValueError("Incoming JSON string does not start with a dict.")
+            raise ValueError("Incoming JSON string does not start with a dict.")
 
         return self

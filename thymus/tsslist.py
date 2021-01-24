@@ -30,6 +30,8 @@ class TssList(list):
             pass
         elif isinstance(tss, list):
             self.extend(tss)
+        elif isinstance(tss, tuple):
+            self.extend(tss)
         else:
             raise ValueError("Initialization requires either a list or None")
 

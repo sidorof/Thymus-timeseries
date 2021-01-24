@@ -209,6 +209,24 @@ class TestTssDict(unittest.TestCase):
 
         self.assertIsInstance(json.loads(json_str), dict)
 
+    def test_from_dict(self):
+        """
+        This function tests creating a TssDict instance from a dict of timeseries.
+
+        The format of the incoming timeseries is to_dict(dt_fmt='str')
+        """
+        tssdict = TssDict().from_dict(
+            {
+                self.ts.key: self.ts.to_dict(dt_fmt='str'),
+                self.ts_long.key: self.ts_long.to_dict(dt_fmt='str'),
+                self.ts_short.key: self.ts_short.to_dict(dt_fmt='str')
+            }
+        )
+        self.assertListEqual(
+            list(self.tssdict.keys()),
+            [self.ts.key, self.ts_long.key, self.ts_short.key]
+        )
+
     def test_from_json(self):
         """
         This function tests building back a tsslist from json fmt string.
@@ -226,6 +244,10 @@ class TestTssDict(unittest.TestCase):
         self.assertTupleEqual(tssdict["Main"].shape(), self.ts.shape())
         self.assertTupleEqual(tssdict["Long"].shape(), self.ts_long.shape())
         self.assertTupleEqual(tssdict["Short"].shape(), self.ts_short.shape())
+
+        test = json.dumps(["test"])
+
+        self.assertRaises(ValueError, tssdict.from_json, json.dumps(["test"]))
 
     def test_tssdict_do_func(self):
         """Placeholder for future function."""
