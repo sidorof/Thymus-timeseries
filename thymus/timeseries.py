@@ -14,6 +14,7 @@ from .constants import FREQ_DAYTYPES, FREQ_IDAYTYPES
 from .freq_conversions import convert
 
 from .tsproto import TsProto
+from .point import Point
 
 FMT_DATE = "%Y-%m-%d"
 FMT_IDATE = "%Y-%m-%d %H:%M:%S"
@@ -37,13 +38,15 @@ class Timeseries(TsProto):
         )
     """
 
+    point_class = Point
+
     def __init__(
         self,
         frequency=FREQ_D,
-        end_of_period=None,
+        end_of_period=True,
         key="",
         columns=None,
-        **kwargs
+        **kwargs,
     ):
 
         TsProto.__init__(self)
@@ -52,24 +55,22 @@ class Timeseries(TsProto):
         self.key = key
 
         if "tseries" in kwargs:
-            self.tseries = kwargs["tseries"]
+            self.tseries = kwargs.get("tseries", None)
 
         if "dseries" in kwargs:
-            self.dseries = kwargs["dseries"]
+            self.dseries = kwargs.get("dseries", None)
 
-        if end_of_period is not None:
-            self.end_of_period = end_of_period
+        self.end_of_period = end_of_period
 
-        if key:
-            self.key = key
-
-        if columns is not None:
-            self.columns = columns
+        self.columns = columns
 
     def series_direction(self):
         """
-        if a lower row is a lower date, then 1 for ascending
-        if a lower row is a higher date then -1 for descending
+        if a lower row is an earlier date, then 1 for ascending
+        if a lower row is a later date then -1 for descending
+
+        Related functions:
+        reverse, sort_by_date
         """
         if len(self.dseries) > 1:
             if self.dseries[0] < self.dseries[-1]:
@@ -736,6 +737,43 @@ class Timeseries(TsProto):
                 for date, value in zip(self.datetime_series(), self.tseries)
             ]
 
+    def get_point(self, rowdate=None, row_no=None):
+        """
+        This function gets both date and timeseries values for a particular
+        row. It packages the results into an object. If the timeseries uses
+        columns, those column names become object attributes.
+
+        This should be viewed as a window into a particular row. Updating the
+        point values updates the timeseries row values.
+
+        Changing the row number on the point automatically updates the point
+        for the new values.
+
+        A point object can therefore be used in an interation of timeseries as
+        part of an updating process.
+
+        Usage:
+            get_point(rowdate=None, row_no=None)
+
+        Parameters:
+            rowdate: (None|int|float|datetime) : As with ts.row_no, the date can be
+                either the ordinal/timestamp or datetime object.
+            row_no: (None:int) : The row number of the timeseries.
+
+            Either a rowdate or row_no must be selected.
+
+        Returns:
+            point : (object) : Object of Point class
+
+        """
+        if rowdate:
+            return self.point_class(self, self.row_no(rowdate=rowdate))
+
+        if row_no is not None:
+            return self.point_class(self, row_no)
+
+        raise ValueError("Must use parameter 'rowdate' or 'row_no'")
+
     def trunc(self, start=None, finish=None, new=False):
         """
         This function truncates in place, typically.
@@ -953,13 +991,13 @@ class Timeseries(TsProto):
         """
         output = "\n".join(
             [
-                "<Timeseries>",
-                "key: " + self.key,
-                "columns: %s" % self.columns,
-                "frequency: %s" % self.frequency,
-                "daterange: %s" % str(self.daterange("str")),
-                "end-of-period: %s" % self.end_of_period,
-                "shape: %s" % str(self.shape()),
+                f"<{self.__class__.__name__}>",
+                f"key: {self.key}",
+                f"columns: {self.columns}",
+                f"frequency: {self.frequency}",
+                f"daterange: {str(self.daterange('str'))}",
+                f"end-of-period: {self.end_of_period}",
+                f"shape: {str(self.shape())}",
             ]
         )
 
