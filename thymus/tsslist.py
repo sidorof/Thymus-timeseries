@@ -23,6 +23,8 @@ class TssList(list):
 
     """
 
+    timeseries_class = Timeseries
+
     def __init__(self, tss=None):
 
         list.__init__(self)  # only did this to satisfy pylint
@@ -169,6 +171,6 @@ class TssList(list):
         tss_tmp = json.loads(json_str)
 
         for item in tss_tmp:
-            self.append(Timeseries().from_dict(item))
+            self.append(self.timeseries_class().from_dict(item))
 
         return self

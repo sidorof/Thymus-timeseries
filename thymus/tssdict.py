@@ -29,6 +29,8 @@ class TssDict(dict):
 
     """
 
+    timeseries_class = Timeseries
+
     def __init__(self, values=None):
 
         dict.__init__(self)  # only did this to satisfy pylint
@@ -349,7 +351,7 @@ class TssDict(dict):
         self.clear()
 
         for key, value in tssdict.items():
-            self[key] = Timeseries().from_dict(value)
+            self[key] = self.timeseries_class().from_dict(value)
 
         return self
 
@@ -383,9 +385,11 @@ class TssDict(dict):
 
         if isinstance(tss_tmp, dict):
             for key, value in tss_tmp.items():
-                self[key] = Timeseries().from_dict(value)
+                self[key] = self.timeseries_class().from_dict(value)
 
         else:
-            raise ValueError("Incoming JSON string does not start with a dict.")
+            raise ValueError(
+                "Incoming JSON string does not start with a dict."
+            )
 
         return self
