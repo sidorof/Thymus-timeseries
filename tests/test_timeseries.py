@@ -56,7 +56,7 @@ class TestTimeseries(unittest.TestCase):
         # this may change back to lists
         # self.assertIsInstance(tmp_ts.dseries, list)
         # self.assertIsInstance(tmp_ts.tseries, list)
-        self.assertIsInstance(tmp_ts.columns, list)
+        self.assertIsNone(tmp_ts.columns)
         self.assertEqual(tmp_ts.frequency, "d")
 
         # no particular error checking on frequency values
@@ -259,7 +259,7 @@ class TestTimeseries(unittest.TestCase):
             {
                 "end_of_period": True,
                 "key": "ts_mult_key",
-                "columns": [],
+                "columns": None,
                 "frequency": "d",
             },
         )
@@ -323,7 +323,13 @@ class TestTimeseries(unittest.TestCase):
 
         self.assertListEqual(
             ts_tmp.tseries.tolist(),
-            [[0.0, 1.0], [2.0, 3.0], [4.0, 5.0], [6.0, 7.0], [8.0, 9.0]],
+            [
+                [0.0, 1.0],
+                [2.0, 3.0],
+                [4.0, 5.0],
+                [6.0, 7.0],
+                [8.0, 9.0],
+            ],
         )
 
     def test_timeseries_extend(self):
@@ -585,7 +591,8 @@ class TestTimeseries(unittest.TestCase):
         self.assertTupleEqual(self.ts.shape(), self.ts.tseries.shape)
 
         self.assertTupleEqual(
-            self.ts.combine(self.ts).shape(), (self.ts.tseries.shape[0], 2)
+            self.ts.combine(self.ts).shape(),
+            (self.ts.tseries.shape[0], 2),
         )
 
     def test_sort_by_date(self):
@@ -732,7 +739,8 @@ class TestTimeseries(unittest.TestCase):
         ts = self.ts.get_diffs()
 
         self.assertListEqual(
-            ts.tseries.tolist(), [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+            ts.tseries.tolist(),
+            [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
         )
 
         self.assertEqual(len(ts.tseries), len(self.ts.tseries) - 1)
@@ -893,7 +901,11 @@ class TestTimeseries(unittest.TestCase):
 
         # as datetime but date not in series
         self.assertRaises(
-            ValueError, ts.row_no, rowdate=date2, closest=0, no_error=False
+            ValueError,
+            ts.row_no,
+            rowdate=date2,
+            closest=0,
+            no_error=False,
         )
 
         row_no = ts.row_no(rowdate=date2, closest=0, no_error=True)
@@ -909,12 +921,20 @@ class TestTimeseries(unittest.TestCase):
 
         # as datetime but date not in series, look for earlier date
         self.assertRaises(
-            ValueError, ts.row_no, rowdate=date3, closest=-1, no_error=False
+            ValueError,
+            ts.row_no,
+            rowdate=date3,
+            closest=-1,
+            no_error=False,
         )
 
         # as datetime but date not in series, look for later date
         self.assertRaises(
-            ValueError, ts.row_no, rowdate=date4, closest=1, no_error=False
+            ValueError,
+            ts.row_no,
+            rowdate=date4,
+            closest=1,
+            no_error=False,
         )
 
         # now change series direction
@@ -932,7 +952,11 @@ class TestTimeseries(unittest.TestCase):
 
         # as datetime but date not in series
         self.assertRaises(
-            ValueError, ts.row_no, rowdate=date2, closest=0, no_error=False
+            ValueError,
+            ts.row_no,
+            rowdate=date2,
+            closest=0,
+            no_error=False,
         )
 
         row_no = ts.row_no(rowdate=date2, closest=0, no_error=True)
@@ -948,12 +972,20 @@ class TestTimeseries(unittest.TestCase):
 
         # as datetime but date not in series, look for earlier date
         self.assertRaises(
-            ValueError, ts.row_no, rowdate=date3, closest=-1, no_error=False
+            ValueError,
+            ts.row_no,
+            rowdate=date3,
+            closest=-1,
+            no_error=False,
         )
 
         # as datetime but date not in series, look for later date
         self.assertRaises(
-            ValueError, ts.row_no, rowdate=date4, closest=1, no_error=False
+            ValueError,
+            ts.row_no,
+            rowdate=date4,
+            closest=1,
+            no_error=False,
         )
 
     def test_timeseries_datetime_series(self):
@@ -1018,7 +1050,11 @@ class TestTimeseries(unittest.TestCase):
 
         # invalid date type
         self.assertRaises(
-            ValueError, ts.fmt_date, datetime.now(), dt_type=None, dt_fmt="%F"
+            ValueError,
+            ts.fmt_date,
+            datetime.now(),
+            dt_type=None,
+            dt_fmt="%F",
         )
 
     def test_timeseries__repr__(self):
@@ -1045,7 +1081,7 @@ class TestTimeseries(unittest.TestCase):
         str_ts = str(ts).split("\n")
         self.assertEqual("<Timeseries>", str_ts[0])
         self.assertEqual("key: ", str_ts[1])
-        self.assertEqual("columns: []", str_ts[2])
+        self.assertEqual("columns: None", str_ts[2])
         self.assertEqual("frequency: d", str_ts[3])
         self.assertEqual("daterange: (None, None)", str_ts[4])
         self.assertEqual("end-of-period: True", str_ts[5])
@@ -1131,13 +1167,17 @@ class TestTimeseries(unittest.TestCase):
 
         # timestamp daterange as string
         self.assertTupleEqual(
-            ts.daterange("str"), ("2016-01-01 00:00:00", "2016-01-01 00:00:19")
+            ts.daterange("str"),
+            ("2016-01-01 00:00:00", "2016-01-01 00:00:19"),
         )
 
         # timestamp daterange as datetimes
         self.assertTupleEqual(
             ts.daterange("datetime"),
-            (datetime(2016, 1, 1, 0, 0, 0), datetime(2016, 1, 1, 0, 0, 19)),
+            (
+                datetime(2016, 1, 1, 0, 0, 0),
+                datetime(2016, 1, 1, 0, 0, 19),
+            ),
         )
 
         # test blank Timeseries
@@ -1155,8 +1195,14 @@ class TestTimeseries(unittest.TestCase):
         ts.tseries = np.arange(1000)
 
         self.assertDictEqual(
-            ts.years(), {2016: 366, 2017: 731, 2018: 999, 2015: 0}
+            ts.years(), {
+                2015: 0,
+                2016: 366,
+                2017: 731,
+                2018: 999,
+            }
         )
+
 
     def test_timeseries_months(self):
         """Tests returning the ending values by months in a dict."""
