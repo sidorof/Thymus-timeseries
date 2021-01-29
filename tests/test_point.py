@@ -120,6 +120,9 @@ class TestPoint(unittest.TestCase):
             },
         )
 
+        # invalid date format
+        self.assertRaises(ValueError, Point(self.ts, 0).to_dict, dt_fmt="test")
+
 
 if __name__ == "__main__":
     unittest.main()
