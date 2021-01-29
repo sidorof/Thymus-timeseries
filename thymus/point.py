@@ -4,12 +4,6 @@ This module implements the Point class.
 """
 
 
-def make_set(name, idx):
-    return f"""def set_{name}(self, value):
-    self.values[idx] = value
-    """
-
-
 class Point(object):
     """
     This class enables a combined look at a specific point in a
