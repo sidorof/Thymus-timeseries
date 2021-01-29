@@ -72,7 +72,11 @@ class TestTssDict(unittest.TestCase):
         self.assertEqual(len(tssdict), 3)
 
         tssdict = TssDict(
-            {tmp_ts0.key: tmp_ts0, tmp_ts1.key: tmp_ts1, tmp_ts2.key: tmp_ts2}
+            {
+                tmp_ts0.key: tmp_ts0,
+                tmp_ts1.key: tmp_ts1,
+                tmp_ts2.key: tmp_ts2,
+            }
         )
 
         self.assertEqual(len(tssdict), 3)
@@ -217,14 +221,14 @@ class TestTssDict(unittest.TestCase):
         """
         tssdict = TssDict().from_dict(
             {
-                self.ts.key: self.ts.to_dict(dt_fmt='str'),
-                self.ts_long.key: self.ts_long.to_dict(dt_fmt='str'),
-                self.ts_short.key: self.ts_short.to_dict(dt_fmt='str')
+                self.ts.key: self.ts.to_dict(dt_fmt="str"),
+                self.ts_long.key: self.ts_long.to_dict(dt_fmt="str"),
+                self.ts_short.key: self.ts_short.to_dict(dt_fmt="str"),
             }
         )
         self.assertListEqual(
             list(self.tssdict.keys()),
-            [self.ts.key, self.ts_long.key, self.ts_short.key]
+            [self.ts.key, self.ts_long.key, self.ts_short.key],
         )
 
     def test_from_json(self):

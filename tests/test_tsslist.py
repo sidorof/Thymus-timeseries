@@ -28,12 +28,13 @@ class TestTssList(unittest.TestCase):
 
         # longer timeseries
         self.ts_long = Timeseries()
+        self.ts.columns = ["F1"]
         start_date = datetime(2015, 12, 31).toordinal()
         self.ts_long.dseries = start_date + np.arange(20)
         self.ts_long.tseries = np.arange(20)
         self.ts_long.make_arrays()
 
-        # shorter timeseries
+        # shorter timeseries  with no columns
         self.ts_short = Timeseries()
         start_date = datetime(2015, 12, 31).toordinal()
         self.ts_short.dseries = start_date + np.arange(5)
@@ -62,13 +63,7 @@ class TestTssList(unittest.TestCase):
         self.assertRaises(ValueError, TssList, 3)
 
         # from tuple
-        tss = TssList(
-            (
-                Timeseries(),
-                Timeseries(),
-                Timeseries()
-            )
-        )
+        tss = TssList((Timeseries(), Timeseries(), Timeseries()))
 
     def test_tsslist_min_date(self):
         """Tests min date """
@@ -190,7 +185,7 @@ class TestTssList(unittest.TestCase):
         self.assertEqual(ts_copy.frequency, ts_orig.frequency)
         self.assertTrue(np.array_equal(ts_copy.tseries, ts_orig.tseries))
         self.assertTrue(np.array_equal(ts_copy.dseries, ts_orig.dseries))
-        self.assertListEqual(ts_copy.columns, ts_orig.columns)
+        self.assertEqual(ts_copy.columns, ts_orig.columns)
         self.assertEqual(ts_copy.end_of_period, ts_orig.end_of_period)
 
         ts_orig = self.tss[2]
@@ -200,7 +195,7 @@ class TestTssList(unittest.TestCase):
         self.assertEqual(ts_copy.frequency, ts_orig.frequency)
         self.assertTrue(np.array_equal(ts_copy.tseries, ts_orig.tseries))
         self.assertTrue(np.array_equal(ts_copy.dseries, ts_orig.dseries))
-        self.assertListEqual(ts_copy.columns, ts_orig.columns)
+        self.assertEqual(ts_copy.columns, ts_orig.columns)
         self.assertEqual(ts_copy.end_of_period, ts_orig.end_of_period)
 
     def test_as_dict(self):
@@ -226,7 +221,6 @@ class TestTssList(unittest.TestCase):
         tss.append(ts)
 
         self.assertRaises(ValueError, tss.as_dict)
-
 
     def test_to_json(self):
         """
