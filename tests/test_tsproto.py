@@ -153,7 +153,8 @@ class TestTsProto(unittest.TestCase):
             ts.tseries = np.array(ts.tseries, np.int32)
             self.assertTrue(
                 np.array_equal(
-                    getattr(ts, func)().tseries, getattr(ts.tseries, func)()
+                    getattr(ts, func)().tseries,
+                    getattr(ts.tseries, func)(),
                 )
             )
 
