@@ -49,7 +49,12 @@ class Point(object):
         self.ts = ts
         self.row_no = row_no
 
-        if ts.columns and len(ts.columns) == ts.tseries.shape[1]:
+        if len(self.ts.tseries.shape) == 2:
+            shape = self.ts.tseries.shape
+        else:
+            shape = (self.ts.tseries.shape, 1)
+
+        if ts.columns and len(ts.columns) == shape[1]:
 
             for idx, column in enumerate(ts.columns):
 
@@ -85,7 +90,14 @@ class Point(object):
         If the line of column/values will be over 60 characters, the
         output will be vertical for easier viewing.
         """
-        if self.ts.columns:
+        if len(self.ts.tseries.shape) == 1:
+            # wrong shape
+            if self.ts.columns:
+                values = f"{self.ts.columns[0]}: {self.values}"
+            else:
+                values = self.values
+
+        elif self.ts.columns:
             values = ", ".join(
                 [
                     f"{column}: {value}"

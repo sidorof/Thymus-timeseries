@@ -81,6 +81,21 @@ class TestPoint(unittest.TestCase):
         self.assertTrue(output.startswith("<NewPoint"))
         self.assertTrue(output.endswith("/>"))
 
+        # format question
+        ts = self.ts[:, 1]
+        point = Point(ts, 3)
+
+        self.assertEqual(
+            repr(point),
+            "<Point: row_no: 3, date: 2021-02-01, 0.968054211035818 />")
+
+        ts.columns = ["test"]
+        point = Point(ts, 3)
+
+        self.assertEqual(
+            repr(point),
+            "<Point: row_no: 3, date: 2021-02-01, test: 0.968054211035818 />")
+
     def test_to_dict(self):
         """ Test formatting for a dictionary. """
 
