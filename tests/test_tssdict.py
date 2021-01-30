@@ -3,7 +3,7 @@ This module tests the TssList class
 """
 import unittest
 
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import json
 import numpy as np
 
@@ -98,12 +98,76 @@ class TestTssDict(unittest.TestCase):
             self.tssdict.min_date(), (date(2014, 12, 22), "First")
         )
 
+        tmp_nodata = Timeseries()
+        tmp_nodata.key = "nothing"
+        tssdict = TssDict()
+        tssdict[tmp_nodata.key] = tmp_nodata
+
+        self.assertTupleEqual(tssdict.min_date(), (None, 'nothing'))
+
+        tssdict = TssDict()
+
+        # none timeseries list
+        tssdict["test"] = [
+            date(2014, 12, 31) + timedelta(days=i) for i in range(10)
+        ]
+        tssdict["test1"] = [
+            date(2013, 12, 31) + timedelta(days=i) for i in range(10)
+        ]
+        self.assertRaises(ValueError, tssdict.min_date)
+
     def test_tssdict_max_date(self):
         """Tests max date """
 
         self.assertTupleEqual(
             self.tssdict.max_date(), (date(2016, 1, 19), "Long")
         )
+
+        tssdict = TssDict()
+
+        # none timeseries list
+        tssdict["test"] = [
+            date(2014, 12, 31) + timedelta(days=i) for i in range(10)
+        ]
+        tssdict["test1"] = [
+            date(2013, 12, 31) + timedelta(days=i) for i in range(10)
+        ]
+        self.assertRaises(ValueError, tssdict.max_date)
+
+    def test_tssdict_longest_ts(self):
+        """
+        This test tests for the longest timeseries.
+        """
+        length, key = self.tssdict.longest_ts()
+
+        self.assertTupleEqual(
+            (length, key),
+            (self.ts_long.tseries.shape[0], "Long")
+        )
+
+        self.tssdict["test"] = "something else"
+        self.assertRaises(ValueError, self.tssdict.longest_ts)
+
+    def test_tssdict_shortest_ts(self):
+        """
+        This test tests for the shortest timeseries.
+        """
+        length, key = self.tssdict.shortest_ts()
+
+        self.assertTupleEqual(
+            (length, key),
+            (self.ts_short.tseries.shape[0], "Short")
+        )
+
+        # zero length
+        self.tssdict["nothing"] = Timeseries()
+        self.assertIsNone(self.tssdict.shortest_ts())
+
+        del self.tssdict["nothing"]
+
+        # bad data
+        self.tssdict["bad"] = "something else"
+        self.assertRaises(ValueError, self.tssdict.shortest_ts)
 
     def test_tssdict_combine(self):
         """

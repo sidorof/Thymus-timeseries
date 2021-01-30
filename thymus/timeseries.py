@@ -72,13 +72,13 @@ class Timeseries(TsProto):
         Related functions:
         reverse, sort_by_date
         """
-        if len(self.dseries) > 1:
-            if self.dseries[0] < self.dseries[-1]:
-                return 1
-            else:
-                return -1
-        else:
-            return 0
+        if self.dseries is not None:
+            if len(self.dseries) > 1:
+                if self.dseries[0] < self.dseries[-1]:
+                    return 1
+                else:
+                    return -1
+        return 0
 
     def start_date(self, fmt=None):
         """
@@ -95,6 +95,8 @@ class Timeseries(TsProto):
         Note: look at consolidating return date formats:
             end_date, get_datetime
         """
+        if self.dseries is None:
+            return None
         if self.series_direction() == 1:
             row_no = 0
         else:
@@ -146,12 +148,8 @@ class Timeseries(TsProto):
         date_series_type = self.get_date_series_type()
         if date_series_type == TS_ORDINAL:
             return dt.date.fromordinal(date)
-        elif date_series_type == TS_TIMESTAMP:
-            return dt.datetime.fromtimestamp(date)
-        else:
-            raise ValueError(
-                "Unknown, dateseries type. %s" % (date_series_type)
-            )
+        # must be timestamp
+        return dt.datetime.fromtimestamp(date)
 
     def to_dict(self, dt_fmt=None, data_list=False):
         """

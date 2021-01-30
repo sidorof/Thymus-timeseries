@@ -65,6 +65,12 @@ class TestTimeseries(unittest.TestCase):
 
         self.assertEqual(tmp_ts.frequency, "m")
 
+        # no tseries, dseries
+        ts = Timeseries(dseries=np.arange(10), tseries=np.arange(10))
+
+        self.assertListEqual(ts.tseries.tolist(), np.arange(10).tolist())
+        self.assertListEqual(ts.dseries.tolist(), np.arange(10).tolist())
+
     @unittest.skip
     def test_setup(self):
         """Attempts to prove numpy arrays are created."""
@@ -80,6 +86,11 @@ class TestTimeseries(unittest.TestCase):
 
         self.ts.reverse()
         self.assertEqual(self.ts.series_direction(), -1)
+
+        # one row timeseries
+        ts = Timeseries(dseries=[1], tseries=[1])
+
+        self.assertEqual(ts.series_direction(), 0)
 
     def test_timeseries_start_date(self):
         """Tests start date regardless of date sorts and types."""
@@ -109,6 +120,13 @@ class TestTimeseries(unittest.TestCase):
 
         # get as datetime from timestamp
         self.assertEqual(date(2015, 12, 31), self.ts.start_date("datetime"))
+
+        # string date
+        self.assertEqual(self.ts.start_date('str'), "2015-12-31")
+
+        # bad format
+        self.assertRaises(ValueError, self.ts.start_date, 'bad')
+
 
     def test_timeseries_end_date(self):
         """Tests end date regardless of date sorts and types."""
@@ -143,6 +161,12 @@ class TestTimeseries(unittest.TestCase):
         self.assertEqual(
             datetime(2015, 12, 31, 0, 0, 9), ts.end_date("datetime")
         )
+
+        # string date
+        self.assertEqual(self.ts.end_date('str'), "2016-01-09")
+
+        # bad format
+        self.assertRaises(ValueError, self.ts.end_date, 'bad')
 
     def test_timeseries_get_datetime(self):
         """Tests conversion to datetime from ordinal/timestamps"""
@@ -689,6 +713,9 @@ class TestTimeseries(unittest.TestCase):
 
         self.assertEqual(ts_monthly.dseries[-1], 736962)
         self.assertEqual(ts_monthly.tseries[-1], 999)
+
+        # bad frequency
+        self.assertRaises(ValueError, ts.convert, new_freq="bad", include_partial=True)
 
     def test_timeseries_reverse(self):
         """Tests reversing the order of both the dates and values."""
@@ -1329,6 +1356,38 @@ class TestTimeseries(unittest.TestCase):
 
         self.assertListEqual(self.ts.items(), items)
 
+        self.assertListEqual(self.ts.items('str'),
+            [
+                (date, values)
+                for date, values in zip(
+                    self.ts.date_string_series(), self.ts.tseries)
+            ]
+        )
+
+    def test_get_point(self):
+        """
+        This function tests getting a point object from a timeseries row.
+        """
+
+        point = self.ts.get_point(row_no=0)
+
+        self.assertEqual(point.row_no, 0)
+        self.assertEqual(point.date, self.ts.dseries[0])
+        self.assertEqual(point.values, self.ts.tseries[0])
+
+        self.ts.tseries = self.ts.tseries.reshape((-1, 1))
+
+        point = self.ts.get_point(row_no=0)
+        self.assertListEqual(point.values.tolist(), self.ts.tseries[0].tolist())
+
+        # by rowdate
+        point = self.ts.get_point(rowdate=self.ts.start_date())
+        self.assertEqual(point.row_no, 0)
+        self.assertEqual(point.date, self.ts.dseries[0])
+        self.assertEqual(point.values, self.ts.tseries[0])
+
+        # no params
+        self.assertRaises(ValueError, self.ts.get_point)
 
 if __name__ == "__main__":
     unittest.main()

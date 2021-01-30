@@ -65,26 +65,6 @@ class TssDict(dict):
                     min_date = date
                     min_key = key
 
-            elif isinstance(values, list):
-                if min_date is not None:
-                    date = values.min_date()
-                    if date < min_date:
-                        min_date = date
-                        min_key = key
-                else:
-                    min_date = TssList(values).min_date()
-                    min_key = key
-
-            elif isinstance(values, TssDict):
-                if min_date is not None:
-                    date = values.min_date()
-                    if date < min_date:
-                        min_date = date
-                        min_key = key
-                else:
-                    min_date, _ = values.min_date()
-                    min_key = key
-
             else:
                 # what is it?
                 raise ValueError("Unsupported values in dict")
@@ -114,26 +94,6 @@ class TssDict(dict):
                     max_date = date
                     max_key = key
 
-            elif isinstance(values, list):
-                if max_date is not None:
-                    date = values.max_date()
-                    if date > max_date:
-                        max_date = date
-                        max_key = key
-                else:
-                    max_date = TssList(values).max_date()
-                    max_key = key
-
-            elif isinstance(values, TssDict):
-                if max_date is not None:
-                    date = values.max_date()
-                    if date > max_date:
-                        max_date = date
-                        max_key = key
-                else:
-                    max_date, _ = values.max_date()
-                    max_key = key
-
             else:
                 # what is it?
                 raise ValueError("Unsupported values in dict")
@@ -148,25 +108,14 @@ class TssDict(dict):
         max_length = 0
         max_key = None
 
-        for key, values in self.items():
+        for key, ts in self.items():
 
-            if isinstance(values, Timeseries):
-                length = values.tseries.shape[0]
-                if length > max_length:
-                    max_length = length
-                    max_key = key
-
-            elif isinstance(values, list):
-                length = max([ts.tseries.shape[0] for ts in values])
-                if length > max_length:
-                    max_length = length
-                    max_key = key
-
-            elif isinstance(values, TssDict):
-                length, _ = values.longest_ts()
-                if length > max_length:
-                    max_length = length
-                    max_key = key
+            if isinstance(ts, Timeseries):
+                if ts.tseries is not None:
+                    length = ts.tseries.shape[0]
+                    if length > max_length:
+                        max_length = length
+                        max_key = key
 
             else:
                 # what is it?
@@ -179,28 +128,21 @@ class TssDict(dict):
         This function returns item with the shortest timeseries.
 
         """
-        min_length = 0
+        min_length = None
         min_key = None
 
-        for key, values in self.items():
+        for key, ts in self.items():
+            if isinstance(ts, Timeseries):
+                if ts.tseries is None:
+                    return None
 
-            if isinstance(values, Timeseries):
-                length = values.tseries.shape[0]
-                if length < min_length:
+                length = ts.tseries.shape[0]
+                if min_length is None:
                     min_length = length
-                    min_key = key
-
-            elif isinstance(values, list):
-                length = min([ts.tseries.shape[0] for ts in values])
-                if length < min_length:
-                    min_length = length
-                    min_key = key
-
-            elif isinstance(values, TssDict):
-                length, _ = values.longest_ts()
-                if length < min_length:
-                    min_length = length
-                    min_key = key
+                else:
+                    if length < min_length:
+                        min_length = length
+                        min_key = key
 
             else:
                 # what is it?
@@ -226,14 +168,7 @@ class TssDict(dict):
 
             tmp = self[key]
 
-            if isinstance(tmp, TssList):
-                all_values.append(tmp.get_values(date, notify=notify))
-
-            elif isinstance(tmp, list):
-
-                all_values.append(TssList(tmp).get_values(date, notify=notify))
-
-            elif isinstance(tmp, Timeseries):
+            if isinstance(tmp, Timeseries):
 
                 try:
                     all_values.append(tmp.tseries[tmp.row_no(date)])
@@ -246,10 +181,7 @@ class TssDict(dict):
                         all_values.append(None)
 
             else:
-
-                # thinking about doing TssDict but not sure about passing up
-                # the values and keys back up.
-                pass
+                raise ValueError("Unsupported values in dict")
 
         return (tuple(all_values), tuple(keys))
 
