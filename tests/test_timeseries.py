@@ -1079,7 +1079,7 @@ class TestTimeseries(unittest.TestCase):
         self.assertRaises(
             ValueError,
             ts.fmt_date,
-            datetime.now(),
+            datetime(2020, 1, 29),
             dt_type=None,
             dt_fmt="%F",
         )

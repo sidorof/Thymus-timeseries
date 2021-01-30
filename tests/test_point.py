@@ -22,7 +22,7 @@ class TestPoint(unittest.TestCase):
         self.ts.key = "Test Key"
         self.ts.columns = ["dog", "cat", "squirrel"]
 
-        self.start_date = datetime.now().toordinal()
+        self.start_date = datetime(2021, 1, 29).toordinal()
         self.ts.dseries = self.start_date + np.arange(5)
         self.ts.tseries = np.arange(15).reshape((5, 3)) / 10.33
         self.ts.make_arrays()
@@ -104,7 +104,7 @@ class TestPoint(unittest.TestCase):
             Point(self.ts, 3).to_dict(),
             {
                 "row_no": 3,
-                "date": datetime.now().toordinal() + 3,
+                "date": datetime(2021, 1, 29).toordinal() + 3,
                 "dog": 0.8712487899322362,
                 "cat": 0.968054211035818,
                 "squirrel": 1.0648596321393997,
@@ -116,7 +116,7 @@ class TestPoint(unittest.TestCase):
             Point(self.ts, 0).to_dict(dt_fmt="str"),
             {
                 "row_no": 0,
-                "date": datetime.now().strftime("%F"),
+                "date": datetime(2021, 1, 29).strftime("%F"),
                 "dog": 0.0,
                 "cat": 0.0968054211035818,
                 "squirrel": 0.1936108422071636,
@@ -128,7 +128,7 @@ class TestPoint(unittest.TestCase):
             Point(self.ts, 0).to_dict(dt_fmt="datetime"),
             {
                 "row_no": 0,
-                "date": datetime.now().date(),
+                "date": datetime(2021, 1, 29).date(),
                 "dog": 0.0,
                 "cat": 0.0968054211035818,
                 "squirrel": 0.1936108422071636,
