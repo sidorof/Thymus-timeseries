@@ -1033,18 +1033,14 @@ If discard: Will truncate all timeseries lengths down to the shortest
 timeseries.
 
 if discard is False: An error will be raised if the all the lengths do
-not match
+not match unless:
 
-::
-
-   unless:
-       if pad is not None:
-           the shorter timeseries will be padded with the value pad.
+If pad is not None, the shorter timeseries will be padded with the value pad.
 
 Returns the new ts.
 
-ts.common_length(*ts)
-^^^^^^^^^^^^^^^^^^^^^
+ts.common_length(\*ts)
+^^^^^^^^^^^^^^^^^^^^^^
 
 This static method trims the lengths of timeseries and returns the
 timeseries trimmed to the same length.
@@ -1057,7 +1053,7 @@ earlier info, truncation takes place at the end of the array. That way
 older less important values are removed if necessary.
 
 Usage: ts1_new, ts2_new = self.common_length(ts1, ts2) [ts1, ts2, …,
-ts_n] = self.common_length(*ts)
+ts_n] = self.common_length(\*ts)
 
 ts.convert(new_freq, include_partial=True, \**kwargs)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1327,14 +1323,14 @@ ts.make_arrays()
 
 Convert the date and time series lists (if so) to numpy arrays
 
-ts.get_fromDB(**kwargs)
-^^^^^^^^^^^^^^^^^^^^^^^
+ts.get_fromDB(\**kwargs)
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 This is just a stub to suggest a viable name for getting data from a
 database.
 
-ts.save_toDB(**kwargs):
-^^^^^^^^^^^^^^^^^^^^^^^
+ts.save_toDB(\**kwargs):
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 This is just a stub to suggest a viable name for saving data to a
 database.
