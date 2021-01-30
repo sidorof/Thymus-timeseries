@@ -122,11 +122,10 @@ class TestTimeseries(unittest.TestCase):
         self.assertEqual(date(2015, 12, 31), self.ts.start_date("datetime"))
 
         # string date
-        self.assertEqual(self.ts.start_date('str'), "2015-12-31")
+        self.assertEqual(self.ts.start_date("str"), "2015-12-31")
 
         # bad format
-        self.assertRaises(ValueError, self.ts.start_date, 'bad')
-
+        self.assertRaises(ValueError, self.ts.start_date, "bad")
 
     def test_timeseries_end_date(self):
         """Tests end date regardless of date sorts and types."""
@@ -163,10 +162,10 @@ class TestTimeseries(unittest.TestCase):
         )
 
         # string date
-        self.assertEqual(self.ts.end_date('str'), "2016-01-09")
+        self.assertEqual(self.ts.end_date("str"), "2016-01-09")
 
         # bad format
-        self.assertRaises(ValueError, self.ts.end_date, 'bad')
+        self.assertRaises(ValueError, self.ts.end_date, "bad")
 
     def test_timeseries_get_datetime(self):
         """Tests conversion to datetime from ordinal/timestamps"""
@@ -715,7 +714,9 @@ class TestTimeseries(unittest.TestCase):
         self.assertEqual(ts_monthly.tseries[-1], 999)
 
         # bad frequency
-        self.assertRaises(ValueError, ts.convert, new_freq="bad", include_partial=True)
+        self.assertRaises(
+            ValueError, ts.convert, new_freq="bad", include_partial=True
+        )
 
     def test_timeseries_reverse(self):
         """Tests reversing the order of both the dates and values."""
@@ -1222,14 +1223,14 @@ class TestTimeseries(unittest.TestCase):
         ts.tseries = np.arange(1000)
 
         self.assertDictEqual(
-            ts.years(), {
+            ts.years(),
+            {
                 2015: 0,
                 2016: 366,
                 2017: 731,
                 2018: 999,
-            }
+            },
         )
-
 
     def test_timeseries_months(self):
         """Tests returning the ending values by months in a dict."""
@@ -1356,12 +1357,14 @@ class TestTimeseries(unittest.TestCase):
 
         self.assertListEqual(self.ts.items(), items)
 
-        self.assertListEqual(self.ts.items('str'),
+        self.assertListEqual(
+            self.ts.items("str"),
             [
                 (date, values)
                 for date, values in zip(
-                    self.ts.date_string_series(), self.ts.tseries)
-            ]
+                    self.ts.date_string_series(), self.ts.tseries
+                )
+            ],
         )
 
     def test_get_point(self):
@@ -1378,7 +1381,9 @@ class TestTimeseries(unittest.TestCase):
         self.ts.tseries = self.ts.tseries.reshape((-1, 1))
 
         point = self.ts.get_point(row_no=0)
-        self.assertListEqual(point.values.tolist(), self.ts.tseries[0].tolist())
+        self.assertListEqual(
+            point.values.tolist(), self.ts.tseries[0].tolist()
+        )
 
         # by rowdate
         point = self.ts.get_point(rowdate=self.ts.start_date())
@@ -1388,6 +1393,7 @@ class TestTimeseries(unittest.TestCase):
 
         # no params
         self.assertRaises(ValueError, self.ts.get_point)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -103,7 +103,7 @@ class TestTssDict(unittest.TestCase):
         tssdict = TssDict()
         tssdict[tmp_nodata.key] = tmp_nodata
 
-        self.assertTupleEqual(tssdict.min_date(), (None, 'nothing'))
+        self.assertTupleEqual(tssdict.min_date(), (None, "nothing"))
 
         tssdict = TssDict()
 
@@ -141,8 +141,7 @@ class TestTssDict(unittest.TestCase):
         length, key = self.tssdict.longest_ts()
 
         self.assertTupleEqual(
-            (length, key),
-            (self.ts_long.tseries.shape[0], "Long")
+            (length, key), (self.ts_long.tseries.shape[0], "Long")
         )
 
         self.tssdict["test"] = "something else"
@@ -155,8 +154,7 @@ class TestTssDict(unittest.TestCase):
         length, key = self.tssdict.shortest_ts()
 
         self.assertTupleEqual(
-            (length, key),
-            (self.ts_short.tseries.shape[0], "Short")
+            (length, key), (self.ts_short.tseries.shape[0], "Short")
         )
 
         # zero length

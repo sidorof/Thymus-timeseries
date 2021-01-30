@@ -87,14 +87,16 @@ class TestPoint(unittest.TestCase):
 
         self.assertEqual(
             repr(point),
-            "<Point: row_no: 3, date: 2021-02-01, 0.968054211035818 />")
+            "<Point: row_no: 3, date: 2021-02-01, 0.968054211035818 />",
+        )
 
         ts.columns = ["test"]
         point = Point(ts, 3)
 
         self.assertEqual(
             repr(point),
-            "<Point: row_no: 3, date: 2021-02-01, test: 0.968054211035818 />")
+            "<Point: row_no: 3, date: 2021-02-01, test: 0.968054211035818 />",
+        )
 
     def test_to_dict(self):
         """ Test formatting for a dictionary. """

@@ -81,11 +81,7 @@ class TssList(list):
         for idx, ts_tmp in enumerate(self):
 
             try:
-                values.append(
-                    ts_tmp.tseries[
-                        ts_tmp.row_no(rowdate=date)
-                    ]
-                )
+                values.append(ts_tmp.tseries[ts_tmp.row_no(rowdate=date)])
             except ValueError:
                 if notify:
                     raise ValueError(
