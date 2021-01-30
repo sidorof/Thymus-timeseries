@@ -18,6 +18,7 @@ setup(
 
     description='An intuitive library tracking dates and timeseries in common using NumPy arrays. ',
     long_description=long_description,
+    long_description_content_type="text/markdown",
 
     url='https://sidorof.github.io/Thymus-timeseries/',
 
