@@ -81,6 +81,41 @@ class TestTssDict(unittest.TestCase):
 
         self.assertEqual(len(tssdict), 3)
 
+    def test_tssdict_from_split_ts(self):
+
+        ts = Timeseries()
+
+        ts.tseries = np.arange(100).reshape((10, 10))
+        ts.dseries = date.today().toordinal() + np.arange(10)
+
+        self.assertRaises(ValueError, TssDict.split_timeseries, ts)
+
+        ts.columns = [f"Col{i}" for i in range(5)]
+
+        self.assertRaises(ValueError, TssDict.split_timeseries, ts)
+
+        ts.columns = [f"Col{i}" for i in range(10)]
+
+        tssdict = TssDict(split=ts)
+
+        self.assertListEqual(list(tssdict.keys()), ts.columns)
+
+        for idx, (key, ts_tmp) in enumerate(tssdict.items()):
+            self.assertListEqual(
+                ts.dseries.tolist(),
+                ts_tmp.dseries.tolist()
+            )
+
+            self.assertListEqual(
+                ts.tseries[:, idx].tolist(),
+                ts_tmp.tseries.flatten().tolist()
+            )
+
+            self.assertEqual(
+                ts.columns[idx],
+                ts_tmp.columns[0]
+            )
+
     def test_tssdict_min_date(self):
         """Tests min date """
 
