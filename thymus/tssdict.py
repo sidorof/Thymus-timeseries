@@ -31,7 +31,7 @@ class TssDict(dict):
 
     timeseries_class = Timeseries
 
-    def __init__(self, values=None):
+    def __init__(self, values=None, split=None):
 
         dict.__init__(self)  # only did this to satisfy pylint
 
@@ -45,6 +45,39 @@ class TssDict(dict):
         else:
             # nothing to do.
             pass
+
+        if split:
+            if isinstance(split, Timeseries):
+                for key, values in self.split_timeseries(split):
+                    self[key] = values
+
+    @staticmethod
+    def split_timeseries(ts):
+        """
+        Splits up a timeseries so that each column is a separate timeseries
+        within a tssdict.
+
+        The only caveat is that there must be a column in ts.columns for each
+        column in the timeseries. Since that is discretionary, it must be
+        checked.
+        """
+        error = "The number of column names must match tseries.shape[1]."
+        if ts.columns is None:
+            raise ValueError(error)
+        if len(ts.columns) != ts.tseries.shape[1]:
+            raise ValueError(error)
+
+        tmp_list = []
+        for col in range(len(ts.columns)):
+            tmp_ts = Timeseries()
+            tmp_ts.dseries = ts.dseries
+            tmp_ts.tseries = ts.tseries[:, col]
+            tmp_ts.columns = [ts.columns[col]]
+
+            tmp_list.append((ts.columns[col], tmp_ts))
+
+        return tmp_list
+
 
     def min_date(self):
         """
