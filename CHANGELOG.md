@@ -1,4 +1,10 @@
 # Changelog
+## (0.2.6)
+### Changed
+* With a frequency conversion, if the asking frequency is the same as the current frequency, the return harmlessly returns the current timeseries.
+### Added
+* Added a parameter to TssDict for initializing with a parameter `split`, which can be timeseries with multiple columns. It then becomes a tssdict with each row becoming a separate timeseries, keyed on the column name.
+
 ## (0.2.5)
 ### Added
 * Added a Point class
