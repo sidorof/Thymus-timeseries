@@ -162,6 +162,18 @@ class TssList(list):
             self.to_list(dt_fmt=dt_fmt, data_list=data_list), indent=indent
         )
 
+    def from_dict(self, tsslist):
+        """
+        This function loads a list of dicts that will be converted to
+        time series objects.
+        """
+        self.clear()
+
+        for item in tsslist:
+            self.append(self.timeseries_class().from_dict(item))
+
+        return self
+
     def from_json(self, json_str):
         """
         This function loads a JSON string and applies it to the object.
