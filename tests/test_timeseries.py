@@ -718,6 +718,19 @@ class TestTimeseries(unittest.TestCase):
             ValueError, ts.convert, new_freq="bad", include_partial=True
         )
 
+        # if frequency is the same, do not do a second conversion
+        ts = Timeseries()
+
+        ts.tseries = np.arange(1000).reshape((-1, 1))
+        ts.dseries = date.today().toordinal() + np.arange(1000)
+
+        self.assertEqual(ts.frequency, "d")
+
+        ts_m = ts.convert("m")
+
+        self.assertEqual(ts_m.frequency, "m")
+        self.assertDictEqual(ts_m.to_dict(), ts_m.convert("m").to_dict())
+
     def test_timeseries_reverse(self):
         """Tests reversing the order of both the dates and values."""
 

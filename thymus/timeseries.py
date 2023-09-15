@@ -240,6 +240,12 @@ class Timeseries(TsProto):
         It loads in-place, but also returns self for use with chaining.
         """
         # header
+        keys = list(ts_dict.keys())
+        if "header" not in keys:
+            raise ValueError(f"Missing header key 'header':  {keys}")
+        if "data" not in keys:
+            raise ValueError(f"Missing header key 'data':  {keys}")
+
         header = ts_dict["header"]
         for key, value in header.items():
             self.__setattr__(key, value)
@@ -668,6 +674,9 @@ class Timeseries(TsProto):
         """
         if new_freq not in FREQ_IDAYTYPES + FREQ_DAYTYPES:
             raise ValueError("Invalid new frequency: %s" % new_freq)
+
+        if self.frequency == new_freq:
+            return self
 
         return convert(
             self, new_freq, include_partial=include_partial, **kwargs
