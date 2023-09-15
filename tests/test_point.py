@@ -8,8 +8,8 @@ from datetime import date, datetime
 import json
 import numpy as np
 
-from thymus.timeseries import Timeseries
-from thymus.point import Point
+from src.timeseries import Timeseries
+from src.point import Point
 
 
 class TestPoint(unittest.TestCase):

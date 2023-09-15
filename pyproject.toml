@@ -1,0 +1,11 @@
+[project]
+name="Thymus-timeseries"
+description='An intuitive library tracking dates and timeseries in common using NumPy arrays. '
+version="0.3.0"
+authors=[{name="Don Smiley", email="dsmiley@sidorof.com"}]
+
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+

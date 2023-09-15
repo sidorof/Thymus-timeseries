@@ -7,8 +7,8 @@ from datetime import date, datetime
 import json
 import numpy as np
 
-from thymus.timeseries import Timeseries
-from thymus.tsslist import TssList
+from src.timeseries import Timeseries
+from src.tsslist import TssList
 
 
 class TestTssList(unittest.TestCase):

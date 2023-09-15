@@ -8,11 +8,11 @@ import numpy as np
 
 import unittest
 
-from thymus.timeseries import Timeseries
-from thymus.constants import FREQ_D, FREQ_W, FREQ_M, FREQ_Q, FREQ_Y
-from thymus.constants import FREQ_H, FREQ_MIN
+from src.timeseries import Timeseries
+from src.constants import FREQ_D, FREQ_W, FREQ_M, FREQ_Q, FREQ_Y
+from src.constants import FREQ_H, FREQ_MIN
 
-from thymus.freq_conversions import convert
+from src.freq_conversions import convert
 
 
 class TestFreqConversions(unittest.TestCase):

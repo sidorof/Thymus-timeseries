@@ -8,9 +8,9 @@ import json
 import numpy as np
 
 
-from thymus.timeseries import Timeseries
-from thymus.tsslist import TssList
-from thymus.tssdict import TssDict
+from src.timeseries import Timeseries
+from src.tsslist import TssList
+from src.tssdict import TssDict
 
 
 class TestTssDict(unittest.TestCase):
