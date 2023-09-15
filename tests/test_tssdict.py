@@ -14,10 +14,9 @@ from thymus.tssdict import TssDict
 
 
 class TestTssDict(unittest.TestCase):
-    """ This class tests the class TssDict. """
+    """This class tests the class TssDict."""
 
     def setUp(self):
-
         # three timeseries
         self.ts = Timeseries()
         self.ts.key = "Main"
@@ -82,7 +81,6 @@ class TestTssDict(unittest.TestCase):
         self.assertEqual(len(tssdict), 3)
 
     def test_tssdict_from_split_ts(self):
-
         ts = Timeseries()
 
         ts.tseries = np.arange(100).reshape((10, 10))
@@ -101,23 +99,16 @@ class TestTssDict(unittest.TestCase):
         self.assertListEqual(list(tssdict.keys()), ts.columns)
 
         for idx, (key, ts_tmp) in enumerate(tssdict.items()):
-            self.assertListEqual(
-                ts.dseries.tolist(),
-                ts_tmp.dseries.tolist()
-            )
+            self.assertListEqual(ts.dseries.tolist(), ts_tmp.dseries.tolist())
 
             self.assertListEqual(
-                ts.tseries[:, idx].tolist(),
-                ts_tmp.tseries.flatten().tolist()
+                ts.tseries[:, idx].tolist(), ts_tmp.tseries.flatten().tolist()
             )
 
-            self.assertEqual(
-                ts.columns[idx],
-                ts_tmp.columns[0]
-            )
+            self.assertEqual(ts.columns[idx], ts_tmp.columns[0])
 
     def test_tssdict_min_date(self):
-        """Tests min date """
+        """Tests min date"""
 
         # First add a timeseries that is earlier than the others
         tmp_ts0 = Timeseries()
@@ -152,7 +143,7 @@ class TestTssDict(unittest.TestCase):
         self.assertRaises(ValueError, tssdict.min_date)
 
     def test_tssdict_max_date(self):
-        """Tests max date """
+        """Tests max date"""
 
         self.assertTupleEqual(
             self.tssdict.max_date(), (date(2016, 1, 19), "Long")
@@ -258,7 +249,7 @@ class TestTssDict(unittest.TestCase):
         self.assertTupleEqual(ts.tseries.shape, (10, 2))
 
     def test_tssdict_get_values(self):
-        """ Tests the ability to locate the correct row of data. """
+        """Tests the ability to locate the correct row of data."""
 
         date1 = datetime(2016, 1, 4)  # existing date within date series
         date2 = datetime(2016, 1, 16)  # date falling on a weekend

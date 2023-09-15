@@ -13,10 +13,9 @@ from thymus.timeseries import Timeseries, TS_TIMESTAMP, TS_ORDINAL
 
 
 class TestTimeseries(unittest.TestCase):
-    """ This class tests the base class of Timeseries. """
+    """This class tests the base class of Timeseries."""
 
     def setUp(self):
-
         # three timeseries
         self.ts = Timeseries()
         self.ts.key = "Test Key"
@@ -444,7 +443,7 @@ class TestTimeseries(unittest.TestCase):
         """Tests replacing values in a timeseries."""
 
         ts = self.ts_short.clone()
-        ts.tseries = ts.tseries ** 2
+        ts.tseries = ts.tseries**2
 
         ts_new = self.ts.replace(ts)
 
@@ -842,7 +841,6 @@ class TestTimeseries(unittest.TestCase):
         for i in range(40):
             date = start_date + timedelta(days=i)
             if date.weekday() not in [5, 6]:
-
                 ts.dseries.append(date.toordinal())
                 ts.tseries.append(i)
 
@@ -910,7 +908,7 @@ class TestTimeseries(unittest.TestCase):
         self.assertTrue(np.array_equal(ts2.dseries, ts.dseries[5:12]))
 
     def test_timeseries_row_no(self):
-        """ Tests the ability to locate the correct row. """
+        """Tests the ability to locate the correct row."""
         ts = Timeseries()
         ts.dseries = []
         ts.tseries = []
@@ -919,7 +917,6 @@ class TestTimeseries(unittest.TestCase):
         for i in range(40):
             date = start_date + timedelta(days=i)
             if date.weekday() not in [5, 6]:
-
                 ts.dseries.append(date.toordinal())
                 ts.tseries.append(i)
 
@@ -1030,7 +1027,7 @@ class TestTimeseries(unittest.TestCase):
         )
 
     def test_timeseries_datetime_series(self):
-        """ Tests returning a date series converted to date/datetime objects. """
+        """Tests returning a date series converted to date/datetime objects."""
 
         ord_list = datetime(2016, 1, 1).toordinal() + np.arange(20)
         tstamp_list = datetime(2016, 1, 1).timestamp() + np.arange(20)
@@ -1129,7 +1126,7 @@ class TestTimeseries(unittest.TestCase):
         self.assertEqual("shape: None", str_ts[6])
 
     def test_timeseries_set_zeros(self):
-        """ This function tests whether the timeseries can be set to zeros. """
+        """This function tests whether the timeseries can be set to zeros."""
         ts = self.ts.clone()
         shape = ts.shape()
 
@@ -1141,7 +1138,7 @@ class TestTimeseries(unittest.TestCase):
         self.assertTrue(np.array_equal(ts1.tseries, np.zeros(shape)))
 
     def test_timeseries_set_ones(self):
-        """ This function tests whether the timeseries can be set to ones. """
+        """This function tests whether the timeseries can be set to ones."""
         ts = self.ts.clone()
         shape = ts.shape()
 
@@ -1302,7 +1299,6 @@ class TestTimeseries(unittest.TestCase):
         for i in range(40):
             date = start_date + timedelta(days=i)
             if date.weekday() not in [5, 6]:
-
                 ts.dseries.append(date.toordinal())
                 ts.tseries.append(i)
 

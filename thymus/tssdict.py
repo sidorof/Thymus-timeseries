@@ -32,7 +32,6 @@ class TssDict(dict):
     timeseries_class = Timeseries
 
     def __init__(self, values=None, split=None):
-
         dict.__init__(self)  # only did this to satisfy pylint
 
         if isinstance(values, dict):
@@ -78,7 +77,6 @@ class TssDict(dict):
 
         return tmp_list
 
-
     def min_date(self):
         """
         Returns the earliest date as a tuple(datetime, key in the group).
@@ -87,7 +85,6 @@ class TssDict(dict):
         min_key = None
 
         for key, values in self.items():
-
             if isinstance(values, Timeseries):
                 date = values.start_date("datetime")
                 if min_date is not None:
@@ -115,7 +112,6 @@ class TssDict(dict):
         max_key = None
 
         for key, values in self.items():
-
             if isinstance(values, Timeseries):
                 date = values.end_date("datetime")
                 if max_date is not None:
@@ -142,7 +138,6 @@ class TssDict(dict):
         max_key = None
 
         for key, ts in self.items():
-
             if isinstance(ts, Timeseries):
                 if ts.tseries is not None:
                     length = ts.tseries.shape[0]
@@ -198,11 +193,9 @@ class TssDict(dict):
         all_values = []
 
         for key in keys:
-
             tmp = self[key]
 
             if isinstance(tmp, Timeseries):
-
                 try:
                     all_values.append(tmp.tseries[tmp.row_no(date)])
                 except ValueError:
@@ -231,30 +224,26 @@ class TssDict(dict):
         """
 
         def iter_combine(ts1, item, discard=discard, pad=pad):
-            """This function combines an item with an existing timeseries. """
+            """This function combines an item with an existing timeseries."""
             if isinstance(item, TssList):
-
                 if ts1 is None:
                     ts1 = item.combine(discard=discard, pad=pad)
                 else:
                     ts1.combine(item, discard=discard, pad=pad)
 
             elif isinstance(item, list):
-
                 if ts1 is None:
                     ts1 = TssList(item).combine(discard=discard, pad=pad)
                 else:
                     ts1.combine(item, discard=discard, pad=pad)
 
             elif isinstance(item, Timeseries):
-
                 if ts1 is None:
                     ts1 = item.clone()
                 else:
                     ts1 = ts1.combine(item, discard=discard, pad=pad)
 
             elif isinstance(item, TssDict):
-
                 if ts1 is None:
                     ts1, _ = item.combine(discard=discard, pad=pad)
                 else:

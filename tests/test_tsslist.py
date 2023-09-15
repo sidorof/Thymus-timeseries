@@ -12,10 +12,9 @@ from thymus.tsslist import TssList
 
 
 class TestTssList(unittest.TestCase):
-    """ This class tests the class TssList. """
+    """This class tests the class TssList."""
 
     def setUp(self):
-
         # three timeseries
         self.ts = Timeseries()
         self.ts.key = "Test Key"
@@ -66,7 +65,7 @@ class TestTssList(unittest.TestCase):
         tss = TssList((Timeseries(), Timeseries(), Timeseries()))
 
     def test_tsslist_min_date(self):
-        """Tests min date """
+        """Tests min date"""
         self.assertEqual(self.tss.min_date(), self.ts.start_date("datetime"))
 
         tmp_ts0 = Timeseries()
@@ -84,7 +83,7 @@ class TestTssList(unittest.TestCase):
         self.assertIsNone(tss.min_date())
 
     def test_tsslist_max_date(self):
-        """Tests max date """
+        """Tests max date"""
 
         self.assertEqual(self.tss.max_date(), date(2016, 1, 19))
 
@@ -139,7 +138,7 @@ class TestTssList(unittest.TestCase):
         self.assertListEqual(ts_new.dseries.tolist(), self.ts.dseries.tolist())
 
     def test_tsslist_get_values(self):
-        """ Tests the ability to locate the correct row of data. """
+        """Tests the ability to locate the correct row of data."""
 
         date1 = datetime(2016, 1, 4)  # existing date within date series
         date2 = datetime(2016, 1, 16)  # date falling on a weekend

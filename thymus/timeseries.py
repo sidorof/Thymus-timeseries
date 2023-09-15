@@ -48,7 +48,6 @@ class Timeseries(TsProto):
         columns=None,
         **kwargs,
     ):
-
         TsProto.__init__(self)
 
         self.frequency = frequency
@@ -282,7 +281,7 @@ class Timeseries(TsProto):
         return self
 
     def to_list(self):
-        """ Returns the timeseries as a list. """
+        """Returns the timeseries as a list."""
 
         return [
             (str(self.dseries[i]), deepcopy(self.tseries[i]))
@@ -409,7 +408,6 @@ class Timeseries(TsProto):
         tmp_ts = ts.clone()
         shape = tmp_ts.shape()
         if match:
-
             if len(self_ts.tseries) != len(tmp_ts.tseries):
                 raise ValueError("Timeseries do not have the same length.")
 
@@ -569,7 +567,6 @@ class Timeseries(TsProto):
                         # put it back
                         tss[i] = tmp_ts
         else:
-
             length = min([len(tmp_ts.tseries) for tmp_ts in tss])
             for tmp_ts in tss:
                 tmp_ts.trunc(finish=length)
@@ -763,8 +760,9 @@ class Timeseries(TsProto):
             get_point(rowdate=None, row_no=None)
 
         Parameters:
-            rowdate: (None|int|float|datetime) : As with ts.row_no, the date can be
-                either the ordinal/timestamp or datetime object.
+            rowdate: (None|int|float|datetime) : As with ts.row_no,
+                the date can be either the ordinal/timestamp or datetime
+                object.
             row_no: (None:int) : The row number of the timeseries.
 
             Either a rowdate or row_no must be selected.
@@ -845,7 +843,6 @@ class Timeseries(TsProto):
             tmp_ts = self.clone()
 
         if start and finish:
-
             start = min(start, finish)
             finish = max(start, finish)
 
@@ -916,7 +913,6 @@ class Timeseries(TsProto):
             raise ValueError("Invalid closest value: %s" % (closest))
 
         if closest == 0:
-
             selected = np.argwhere(self.dseries == rdate)
 
             if selected.shape[0] == 0:

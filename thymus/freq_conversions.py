@@ -126,7 +126,6 @@ def convert(ts, new_freq, include_partial=True, **kwargs):
     daily_idx = HIERARCHY.index(FREQ_D)
 
     if freq_idx > new_idx:
-
         raise ValueError(
             "Cannot convert from %s to %s." % (ts.frequency, new_freq)
         )
@@ -144,7 +143,6 @@ def convert(ts, new_freq, include_partial=True, **kwargs):
         raise ValueError("Invalid date series type: %s" % (date_series_type))
 
     if selected.shape[0] > 0:
-
         if new_ts.end_of_period:
             selected += 1  # shift to start of next period
 

@@ -21,7 +21,6 @@ class TestFreqConversions(unittest.TestCase):
     """
 
     def setUp(self):
-
         # sample timeseries
         self.ts_ord = Timeseries()
         start_date = datetime(2015, 12, 31)
@@ -52,7 +51,7 @@ class TestFreqConversions(unittest.TestCase):
         self.ts_seconds.make_arrays()
 
     def test_convweekly_period_start(self):
-        """ Test timeseries conversion to weekly with start-of-period data. """
+        """Test timeseries conversion to weekly with start-of-period data."""
         ts = self.ts_ord.clone()
         ts.end_of_period = False
 

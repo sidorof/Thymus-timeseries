@@ -55,7 +55,6 @@ class Point(object):
             shape = (self.ts.tseries.shape, 1)
 
         if ts.columns and len(ts.columns) == shape[1]:
-
             for idx, column in enumerate(ts.columns):
 
                 def get_value(self, idx=idx):
@@ -82,7 +81,7 @@ class Point(object):
 
     @property
     def date(self):
-        """ The date found at ts.dseries[row_no]. """
+        """The date found at ts.dseries[row_no]."""
         return self.ts.dseries[self.row_no]
 
     def __repr__(self, line_break=60):

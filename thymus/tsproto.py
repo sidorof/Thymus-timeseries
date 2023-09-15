@@ -21,7 +21,6 @@ class TsProto(object):
     """
 
     def __init__(self):
-
         self.frequency = FREQ_D
 
         self.tseries = None

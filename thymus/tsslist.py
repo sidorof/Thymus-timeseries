@@ -26,7 +26,6 @@ class TssList(list):
     timeseries_class = Timeseries
 
     def __init__(self, tss=None):
-
         list.__init__(self)  # only did this to satisfy pylint
         if tss is None:
             pass
@@ -79,7 +78,6 @@ class TssList(list):
 
         values = []
         for idx, ts_tmp in enumerate(self):
-
             try:
                 values.append(ts_tmp.tseries[ts_tmp.row_no(rowdate=date)])
             except ValueError:

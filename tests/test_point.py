@@ -13,10 +13,9 @@ from thymus.point import Point
 
 
 class TestPoint(unittest.TestCase):
-    """ This class tests the class Point. """
+    """This class tests the class Point."""
 
     def setUp(self):
-
         # three timeseries
         self.ts = Timeseries()
         self.ts.key = "Test Key"
@@ -50,7 +49,7 @@ class TestPoint(unittest.TestCase):
         self.assertEqual(point.squirrel, point.values[2])
 
     def test__repr__(self):
-        """ Test the appearance. """
+        """Test the appearance."""
         point = Point(self.ts, 3)
 
         output = repr(point)
@@ -99,7 +98,7 @@ class TestPoint(unittest.TestCase):
         )
 
     def test_to_dict(self):
-        """ Test formatting for a dictionary. """
+        """Test formatting for a dictionary."""
 
         # native date format
         self.assertDictEqual(

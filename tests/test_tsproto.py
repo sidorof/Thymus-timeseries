@@ -17,7 +17,6 @@ class TestTsProto(unittest.TestCase):
     """
 
     def setUp(self):
-
         # three timeseries
         self.ts = TsProto()
         start_date = datetime(2015, 12, 31).toordinal()
@@ -118,7 +117,6 @@ class TestTsProto(unittest.TestCase):
         ts_other = self.ts.clone() * 4 + 3
         for func in flist:
             for other in [3, ts_other]:
-
                 ts = self.ts.clone()
                 ts.tseries += 1
 
@@ -289,7 +287,7 @@ class TestTsProto(unittest.TestCase):
         self.assertRaises(ValueError, ts1.__iadd__, ts2)
 
     def test_column_checks(self):
-        """Tests verification of similar columns """
+        """Tests verification of similar columns"""
         ts1 = self.ts.clone()
         ts1.tseries = np.arange(10).reshape((-1, 1))
         ts1.make_arrays()
