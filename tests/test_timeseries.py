@@ -8,8 +8,8 @@ import numpy as np
 
 import unittest
 
-from src.constants import FREQ_SEC, FREQ_M
-from src.timeseries import Timeseries, TS_TIMESTAMP, TS_ORDINAL
+from thymus.constants import FREQ_SEC, FREQ_M
+from thymus.timeseries import Timeseries, TS_TIMESTAMP, TS_ORDINAL
 
 
 class TestTimeseries(unittest.TestCase):

@@ -1,4 +1,12 @@
 # Changelog
+## (0.3.1)
+## Changed
+* Corrected mistakes in packaging
+
+## (0.3.0)
+## Changed
+* Updated packaging
+
 ## (0.2.6)
 ### Changed
 * With a frequency conversion, if the asking frequency is the same as the current frequency, the return harmlessly returns the current timeseries.

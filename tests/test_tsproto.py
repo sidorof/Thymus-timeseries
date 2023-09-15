@@ -6,9 +6,9 @@ import unittest
 from datetime import datetime
 import numpy as np
 
-from src.constants import FREQ_D, FREQ_SEC
-from src.tsproto import TsProto
-from src.tsslist import TssList
+from thymus.constants import FREQ_D, FREQ_SEC
+from thymus.tsproto import TsProto
+from thymus.tsslist import TssList
 
 
 class TestTsProto(unittest.TestCase):
