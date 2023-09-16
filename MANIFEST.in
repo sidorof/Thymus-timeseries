@@ -3,7 +3,7 @@ include README.md
 include README.html
 
 
-recursive-include thymus *
+recursive-include src/thymus *
 recursive-include tests *
 
 recursive-exclude thymus .coverage
