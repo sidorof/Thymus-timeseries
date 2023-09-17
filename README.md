@@ -45,8 +45,8 @@ ts = Timeseries()
 
 * **end-of-period:**  Defaults to True indicating that the data is as of the end of the period. This only comes into play when converting from one frequency to another and will be ignored for the moment.
 
-
 While normal usage of the timeseries object would involve pulling data from a database and inserting data into the timeseries object, we will use a quick-and-dirty method of inputting some data. Dates are stored as either ordinals or timestamps, avoiding clogging up memory with large sets of datetime objects. Because it is daily data, ordinals will be used for this example.
+
 ```
 ts = Timeseries()
 
