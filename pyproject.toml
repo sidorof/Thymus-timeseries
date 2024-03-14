@@ -1,3 +1,20 @@
+[project]
+name = "Thymus-timeseries"
+description="An intuitive library tracking dates and timeseries in common using NumPy arrays."
+readme = "README.md"
+version="0.3.2"
+authors=[{name="Don Smiley", email="dsmiley@sidorof.com"}]
+dependencies=[
+  "numpy",
+]
+
+license = {text = "MIT License"}
+
+[project.urls]
+Homepage = "https://github.com/pypa/sampleproject"
+url = "https://sidorof.github.io/Thymus-timeseries/"
+
 [build-system]
-requires = ["setuptools>=48", "wheel >= 0.41"]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
+
