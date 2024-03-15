@@ -1,14 +1,14 @@
 [project]
 name = "Thymus-timeseries"
 description="An intuitive library tracking dates and timeseries in common using NumPy arrays."
-readme = "README.md"
-version="0.3.3"
+
+version="0.3.4"
 authors=[{name="Don Smiley", email="dsmiley@sidorof.com"}]
 dependencies=[
   "numpy",
 ]
-
 license = {text = "MIT License"}
+requires-python = ">= 3.10"
 
 [project.urls]
 Homepage = "https://github.com/pypa/sampleproject"
