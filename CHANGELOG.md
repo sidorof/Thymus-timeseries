@@ -1,4 +1,8 @@
 # Changelog
+## (0.3.4)
+## Changed
+* Updated packaging. Removed setup files. Now it only uses pyproject.toml.
+
 ## (0.3.1)
 ## Changed
 * Corrected mistakes in packaging
