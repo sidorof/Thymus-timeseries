@@ -1,4 +1,8 @@
 # Changelog
+## (0.3.5)
+## Changed
+* Corrected erroneous home page url.
+
 ## (0.3.4)
 ## Changed
 * Updated packaging. Removed setup files. Now it only uses pyproject.toml.
